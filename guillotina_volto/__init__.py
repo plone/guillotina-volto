@@ -16,6 +16,18 @@ app_settings = {
     ],
     "available_blocks": {},
     "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
+    "controlpanels": {
+        "image_settings": {
+            "title": "Image settings",
+            "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
+            "group": "General"
+        },
+        "validation_settings": {
+            "title": "Image settings",
+            "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
+            "group": "General"
+        }
+    },
     "available_roles": [
         "guillotina.Contributor",
         "guillotina.Editor",

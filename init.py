@@ -24,28 +24,29 @@ resp = requests.post("http://localhost:8081/db/volto/@addons", json={"id": "cms"
 print(resp)
 
 resp = requests.post(
-    "http://localhost:8081/db/volto/users",
+    "http://localhost:8081/db/volto/groups",
     json={
-        "@type": "User",
-        "username": "admin",
-        "email": "foo@bar.com",
-        "password": "admin",
+        "@type": "Group",
+        "id": "Managers",
+        "user_roles": ["guillotina.Manager", "guillotina.ContainerAdmin", "guillotina.Owner"],
     },
     auth=auth,
 )
 print(resp)
 
 resp = requests.post(
-    "http://localhost:8081/db/volto/groups",
+    "http://localhost:8081/db/volto/users",
     json={
-        "@type": "Group",
-        "id": "Managers",
-        "user_roles": ["guillotina.Manager", "guillotina.ContainerAdmin", "guillotina.Owner"],
-        "users": ["admin"]
+        "@type": "User",
+        "username": "admin",
+        "email": "foo@bar.com",
+        "password": "admin",
+        "groups": ["Managers"]
     },
     auth=auth,
 )
 print(resp)
+
 
 resp = requests.post("http://localhost:8081/db/volto/@workflow/retire", json={}, auth=auth)
 resp = requests.post("http://localhost:8081/db/volto/@workflow/publish", json={}, auth=auth)
