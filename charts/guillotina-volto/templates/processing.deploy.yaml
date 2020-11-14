@@ -1,0 +1,62 @@
+{{- if .Values.processing.enabled -}}
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: {{ template "fullname" . }}-processing
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+    role: processing
+spec:
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  replicas: {{ .Values.processing.replicaCount }}
+  template:
+    metadata:
+      name: {{ template "fullname" . }}-processing
+      labels:
+        app: {{ template "name" . }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+        role: processing
+    spec:
+      dnsPolicy: ClusterFirst
+      affinity:
+{{ toYaml .Values.processing.affinity | indent 8 }}
+      tolerations:
+{{ toYaml .Values.processing.tolerations | indent 8 }}
+      containers:
+      - name: processing
+        image: "{{ .Values.processing.image }}"
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.processing.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 90
+          periodSeconds: 60
+        readinessProbe:
+          httpGet:
+            path: /
+            port: {{ .Values.processing.service.internalPort }}
+          initialDelaySeconds: 30
+          timeoutSeconds: 90
+          periodSeconds: 60
+        volumeMounts:
+        - mountPath: /app/config.yml
+          name: config
+          subPath: config.yml
+        ports:
+        - name: processing
+          containerPort: {{ .Values.api.service.internalPort }}
+          protocol: {{ .Values.api.service.protocol }}
+        resources:
+{{ toYaml .Values.processing.resources | indent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ template "fullname" . }}-config
+{{- end -}}

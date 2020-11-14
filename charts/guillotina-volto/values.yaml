@@ -1,0 +1,299 @@
+revisionHistoryLimit: 2
+
+api:
+  image: plone/guillotina_cms:latest
+  service:
+    type: LoadBalancer
+    externalPort: 8080
+    internalPort: 8080
+    protocol: TCP
+    externalUrl: http://localhost:8080/db/cms
+  resources:
+    limits:
+      memory: "400Mi"
+      cpu: "300m"
+  root_passwd: root
+  token_expiration: 3660
+  jwtsecret: secret
+  replicaCount: 1
+
+front:
+  enabled: true
+  image: plone/volto:latest
+  resources:
+    limits:
+      memory: "400Mi"
+      cpu: "300m"
+  service:
+    type: LoadBalancer
+    externalPort: 3003
+    internalPort: 3000
+    protocol: TCP
+    externalUrl: http://localhost:3000
+
+
+processing:
+  enabled: true
+  image: ramonnb/guillotina_processing:latest
+  resources:
+    limits:
+      memory: "600Mi"
+      cpu: "400m"
+  service:
+    type: LoadBalancer
+    externalPort: 8888
+    internalPort: 8888
+    protocol: TCP
+
+global:
+  postgresql:
+    postgresqlPassword: secret
+    postgresqlUsername: postgres
+    postgresqlDatabase: guillotina
+
+cms:
+  workflows:
+    myworkflow:
+      initial_state: private
+      states:
+        pending:
+          actions:
+            publish:
+              title: Publish
+              to: published
+              check_permission: guillotina.ReviewContent
+            reject:
+              title: Send back
+              to: private
+              check_permission: guillotina.ReviewContent
+            retract:
+              title: Retract
+              to: private
+              check_permission: guillotina.RequestReview
+          set_permission:
+            perminhe:
+            - setting: Deny
+              permission: guillotina.AccessContent
+            - setting: Deny
+              permission: guillotina.ModifyContent
+            - setting: Deny
+              permission: guillotina.ViewContent
+            roleperm:
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Reader
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Reviewer
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.ContainerAdmin
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Reviewer
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.ContainerAdmin
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Reader
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Reviewer
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.ContainerAdmin
+        private:
+          actions:
+            publish:
+              title: Publish
+              to: published
+              check_permission: guillotina.ReviewContent
+            submit:
+              title: Submit
+              to: pending
+              check_permission: guillotina.RequestReview
+          set_permission:
+            perminhe:
+            - setting: Deny
+              permission: guillotina.AccessContent
+            - setting: Deny
+              permission: guillotina.ModifyContent
+            - setting: Deny
+              permission: guillotina.ViewContent
+            roleperm:
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Reader
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.ContainerAdmin
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.ContainerAdmin
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Reader
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.ContainerAdmin
+        published:
+          actions:
+            retract_pending:
+              title: Back to review
+              to: pending
+              check_permission: guillotina.ReviewContent
+            reject:
+              title: Send back
+              to: private
+              check_permission: guillotina.ReviewContent
+            retract:
+              title: Retract
+              to: private
+              check_permission: guillotina.RequestReview
+          set_permission:
+            perminhe:
+            - setting: Deny
+              permission: guillotina.AccessContent
+            - setting: Deny
+              permission: guillotina.ModifyContent
+            - setting: Deny
+              permission: guillotina.ViewContent
+            roleperm:
+            - setting: Allow
+              permission: guillotina.AccessContent
+              role: guillotina.Anonymous
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Owner
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.ContainerAdmin
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Manager
+            - setting: Allow
+              permission: guillotina.ModifyContent
+              role: guillotina.Editor
+            - setting: Allow
+              permission: guillotina.ViewContent
+              role: guillotina.Anonymous
+  global_disallowed_types:
+  - User
+  - UserManager
+  - Group
+  - GroupManager
+  - Item
+  - Container
+  - Folder
+  layouts:
+    CMSFolder:
+      - listing_view
+      - tabular_view
+      - summary_view
+      - layout_view
+      - full_view
+      - album_view
+      - event_listing
+      - document_view
+    Document:
+      - document_view
+      - layout_view
+    Container:
+      - document_view
+      - layout_view
+    News:
+      - document_view
+      - layout_view
+    Event:
+      - document_view
+      - layout_view
+    Link:
+      - document_view
+      - layout_view
+    File:
+      - document_view
+      - layout_view
+  default_blocks:
+    Document:
+      blocks:
+        tile1:
+          '@type': title
+        tile2:
+          '@type': text
+          text: null
+      blocks_layout:
+        items:
+          - tile1
+          - tile2
+    Container:
+      blocks:
+        tile1:
+          '@type': title
+        tile2:
+          '@type': text
+          text: null
+      blocks_layout:
+        items:
+          - tile1
+          - tile2
+    CMSFolder:
+      blocks:
+        tile1:
+          '@type': title
+        tile2:
+          '@type': text
+          text: null
+      blocks_layout:
+        items:
+          - tile1
+          - tile2
+  default_allow_discussion: true

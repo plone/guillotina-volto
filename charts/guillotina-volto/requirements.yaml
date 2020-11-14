@@ -1,0 +1,6 @@
+dependencies:
+- name: postgresql
+  version: "5.3.9"
+  repository: "@stable"
+  tags:
+    - guillotina-db

@@ -1,0 +1,21 @@
+{{- if .Values.processing.enabled -}}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "name" . }}-processing
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.processing.service.type }}
+  ports:
+  - name: processing
+    port: {{ .Values.processing.service.externalPort }}
+    targetPort: {{ .Values.processing.service.internalPort }}
+    protocol: {{ .Values.processing.service.protocol }}
+  selector:
+    app: {{ template "name" . }}
+    role: processing
+{{- end -}}

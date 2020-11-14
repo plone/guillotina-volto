@@ -1,0 +1,21 @@
+{{- if .Values.front.enabled -}}
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "name" . }}-volto
+  labels:
+    app: {{ template "name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  type: {{ .Values.front.service.type }}
+  ports:
+  - name: front
+    port: {{ .Values.front.service.externalPort }}
+    targetPort: {{ .Values.front.service.internalPort }}
+    protocol: {{ .Values.front.service.protocol }}
+  selector:
+    app: {{ template "name" . }}
+    role: volto
+{{- end -}}
