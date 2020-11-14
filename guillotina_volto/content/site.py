@@ -1,20 +1,17 @@
 # -*- encoding: utf-8 -*-
+from guillotina_volto.interfaces.content import ISite
 from guillotina import configure
-from guillotina.content import Folder
-from guillotina.directives import index
-from guillotina_volto.interfaces import IDocument
+from guillotina.content import Container
 
 
 @configure.contenttype(
-    type_name="Document",
-    schema=IDocument,
+    type_name="Site",
+    schema=ISite,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina_volto.interfaces.base.ICMSBehavior",
         "guillotina_volto.interfaces.blocks.IBlocks",
     ],
-    allowed_types=["Image", "File"],  # dynamically calculated
 )
-class Document(Folder):
+class Site(Container):
     pass
-

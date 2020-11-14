@@ -5,7 +5,7 @@ from guillotina import app_settings
 from guillotina import configure
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import ISchemaSerializeToJson
 from guillotina.response import HTTPNotFound
 from guillotina.utils import resolve_dotted_name
@@ -14,7 +14,7 @@ from guillotina_volto.interfaces import ILayoutComponents
 
 
 @configure.service(
-    context=IContainer, method='GET',
+    context=ISite, method='GET',
     permission='guillotina.AccessContent', name='@blocks',
     summary='Get available blocks')
 async def get_blocks(context, request):
@@ -29,7 +29,7 @@ async def get_blocks(context, request):
 
 
 @configure.service(
-    context=IContainer, method='GET',
+    context=ISite, method='GET',
     permission='guillotina.AccessContent', name='@layout_components',
     summary='Get available layout components')
 async def get_layout_components(context, request):
@@ -39,7 +39,7 @@ async def get_layout_components(context, request):
 
 
 @configure.service(
-    context=IContainer, method='GET',
+    context=ISite, method='GET',
     permission='guillotina.AccessContent', name='@blocks/{key}',
     summary='Get specific block')
 async def get_block_schema(context, request):

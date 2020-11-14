@@ -16,6 +16,13 @@ app_settings = {
     ],
     "available_blocks": {},
     "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
+    "available_roles": [
+        "guillotina.Contributor",
+        "guillotina.Editor",
+        "guillotina.Reader",
+        "guillotina.Reviewer",
+        "guillotina.Owner"
+    ],
     "layouts": {
         "CMSFolder": [
             "listing_view",
@@ -28,28 +35,54 @@ app_settings = {
             "document_view",
         ],
         "Document": ["document_view", "layout_view", "default"],
-        "Container": ["document_view", "layout_view"],
-        "News": ["document_view", "layout_view"],
-        "Event": ["document_view", "layout_view"],
-        "Link": ["document_view", "layout_view"],
-        "File": ["document_view", "layout_view"],
-        "Image": ["document_view", "layout_view"],
+        "Site": ["document_view", "layout_view", "default"],
+        "News": ["document_view", "layout_view", "default"],
+        "Event": ["document_view", "layout_view", "default"],
+        "Link": ["document_view", "layout_view", "default"],
+        "File": ["document_view", "layout_view", "default"],
+        "Image": ["document_view", "layout_view", "default"],
     },
     "workflows_content": {
-        "guillotina.interfaces.IResource": "private",
-        "guillotina.interfaces.IContainer": "basic",
-        "guillotina_volto.content.document.IDocument": "basic",
-        "guillotina_volto.content.image.IImage": "basic",
-        "guillotina_volto.content.folder.IFolder": "basic",
+        "guillotina.interfaces.IResource": "guillotina_basic",
+        "guillotina_volto.content.site.ISite": "guillotina_basic",
+        "guillotina_volto.content.document.IDocument": "guillotina_basic",
+        "guillotina_volto.content.image.IImage": "guillotina_basic",
+        "guillotina_volto.content.folder.IFolder": "guillotina_basic",
     },
     "default_blocks": {
         "Document": {
             "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
             "blocks_layout": {"items": ["tile1", "tile2"]},
         },
-        "Container": {
-            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
-            "blocks_layout": {"items": ["tile1", "tile2"]},
+        "Site": {
+            "blocks_layout": {
+                "items": [
+                    "cdf077c5-8759-4afb-b7a5-07f45c665ad8",
+                    "12821552-d26f-48eb-a1fd-790edb942c30"
+                ]
+            },
+            "blocks": {
+                "cdf077c5-8759-4afb-b7a5-07f45c665ad8": {
+                    "@type": "title"
+                },
+                "12821552-d26f-48eb-a1fd-790edb942c30": {
+                    "@type": "text",
+                    "text": {
+                        "blocks": [
+                            {
+                                "key": "7tq64",
+                                "text": "This is Volto running on Guillotina 6",
+                                "type": "unstyled",
+                                "depth": 0,
+                                "inlineStyleRanges": [],
+                                "entityRanges": [],
+                                "data": {}
+                            }
+                        ],
+                        "entityMap": {}
+                    }
+                }
+            }
         },
     },
     "global_disallowed_types": [
@@ -82,7 +115,6 @@ def includeme(root, settings):
     configure.scan("guillotina_volto.content")
     configure.scan("guillotina_volto.fields")
     configure.scan("guillotina_volto.json")
-    configure.scan("guillotina_volto.utilities")
     configure.scan("guillotina_volto.vocabularies")
     configure.scan("guillotina_volto.permissions")
     configure.scan("guillotina_volto.install")

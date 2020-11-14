@@ -26,7 +26,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    url='https://pypi.python.org/pypi/guillotina_cms',
+    url='https://pypi.python.org/pypi/guillotina_volto',
     license='BSD',
     setup_requires=[
         'pytest-runner',
@@ -44,7 +44,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'initdb=guillotina_cms.scripts:initdb',
-            'deletedb=guillotina_cms.scripts:deletedb'],
+            'initdb=guillotina_volto.scripts:initdb',
+            'deletedb=guillotina_volto.scripts:deletedb'],
     }
 )

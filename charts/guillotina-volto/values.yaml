@@ -1,7 +1,7 @@
 revisionHistoryLimit: 2
 
 api:
-  image: plone/guillotina_cms:latest
+  image: plone/guillotina_volto:latest
   service:
     type: LoadBalancer
     externalPort: 8080

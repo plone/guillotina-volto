@@ -35,5 +35,5 @@ start-dependencies: ## Starts dependencies (PG, ES, Redis)
 	docker-compose -f docker-compose.yaml up postgres
 
 docker:
-	docker build -t plone/guillotina_cms:latest .
-	docker push plone/guillotina_cms:latest
+	docker build -t plone/guillotina_volto:latest .
+	docker push plone/guillotina_volto:latest

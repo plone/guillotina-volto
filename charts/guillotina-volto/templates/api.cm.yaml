@@ -19,7 +19,7 @@ data:
         read_only: false
         pool_size: 100
     applications:
-    - guillotina_cms
+    - guillotina_volto
     - guillotina.contrib.dbusers
     - guillotina.contrib.catalog.pg
     - guillotina.contrib.cache

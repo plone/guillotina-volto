@@ -1,6 +1,6 @@
 dependencies:
 - name: postgresql
-  version: "5.3.9"
-  repository: "@stable"
+  version: "9.8.12"
+  repository: "@bitnami"
   tags:
     - guillotina-db

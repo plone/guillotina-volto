@@ -7,7 +7,7 @@ from guillotina.component import getMultiAdapter
 from guillotina.component import query_utility
 from guillotina.component import queryUtility
 from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.interfaces import IPermission
 from guillotina.interfaces import IResource
@@ -20,7 +20,7 @@ from guillotina_volto.interfaces import ICMSConstrainTypes
 
 
 @configure.service(
-    context=IContainer,
+    context=ISite,
     method="GET",
     permission="guillotina.AccessContent",
     name="@types",
@@ -69,7 +69,6 @@ async def get_all_types(context, request):
     result = []
     base_url = IAbsoluteURL(context, request)()
     constrains = ICMSConstrainTypes(context, None)
-    # constrains = IConstrainTypes(context, None)
 
     policy = get_security_policy()
 
@@ -94,42 +93,7 @@ async def get_all_types(context, request):
 
 
 @configure.service(
-    context=IAsyncContainer,
-    method="GET",
-    name="@addable-types",
-    permission="guillotina.AddContent",
-    summary="Return a list of type names that can be added to container",
-    responses={"200": {"description": "Successfully returned list of type names"}},
-)
-async def addable_types(context, request):
-    result = []
-    constrains = ICMSConstrainTypes(context, None)
-
-    policy = get_security_policy()
-
-    for id, factory in FACTORY_CACHE.items():
-        add = True
-        if constrains is not None:
-            if not constrains.is_type_allowed(id):
-                add = False
-
-        if factory.add_permission:
-            if factory.add_permission in PERMISSIONS_CACHE:
-                permission = PERMISSIONS_CACHE[factory.add_permission]
-            else:
-                permission = query_utility(IPermission, name=factory.add_permission)
-                PERMISSIONS_CACHE[factory.add_permission] = permission
-
-            if permission is not None and not policy.check_permission(permission.id, context):
-                add = False
-
-        if add:
-            result.append(id)
-    return result
-
-
-@configure.service(
-    context=IContainer,
+    context=ISite,
     method="GET",
     permission="guillotina.AccessContent",
     name="@types/{type_id}",

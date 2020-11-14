@@ -1,5 +1,5 @@
 from guillotina import configure
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.directives import merged_tagged_value_dict
 from guillotina.directives import index
@@ -9,7 +9,7 @@ from guillotina._cache import FACTORY_CACHE
 
 
 @configure.service(
-    context=IContainer, method='GET',
+    context=ISite, method='GET',
     permission='guillotina.AccessContent', name='@indices',
     summary='Get available Indexes',
     responses={

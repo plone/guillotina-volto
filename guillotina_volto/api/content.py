@@ -4,7 +4,7 @@ from guillotina.api.service import Service
 from guillotina.content import duplicate, move
 from guillotina.catalog import index
 from guillotina.interfaces import IAsyncContainer
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina.response import HTTPBadRequest
 from guillotina.response import HTTPPreconditionFailed
 from guillotina.transactions import get_transaction
@@ -18,7 +18,7 @@ from guillotina_volto.ordering import supports_ordering
 
 
 @configure.service(
-    method='GET', name="resolveuid/{uid}", context=IContainer,
+    method='GET', name="resolveuid/{uid}", context=ISite,
     permission='guillotina.AccessContent',
     summary='Get content by UID',
     responses={

@@ -1,12 +1,12 @@
 from guillotina import configure
 from guillotina.utils import get_registry
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina_volto.interfaces import ICustomTheme
 from guillotina.response import Response
 
 
 @configure.service(
-    context=IContainer, method='GET', permission='guillotina.ViewContent',
+    context=ISite, method='GET', permission='guillotina.ViewContent',
     name='@css')
 async def themecss(context, request):
 

@@ -18,7 +18,10 @@ class ILink(IItem):
 @configure.contenttype(
     type_name='Link',
     schema=ILink,
-    behaviors=['guillotina.behaviors.dublincore.IDublinCore'],
+    behaviors=[
+        'guillotina.behaviors.dublincore.IDublinCore',
+        "guillotina_volto.interfaces.base.ICMSBehavior",
+    ],
     allowed_types=[]  # dynamically calculated
 )
 class Link(Item):

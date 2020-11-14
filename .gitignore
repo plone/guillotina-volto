@@ -1,0 +1,15 @@
+*.pyc
+.eggs
+__pycache__
+*.egg-info
+.python-version
+.pytest_cache
+bin
+.cache
+lib
+include
+share
+pip-selfcheck.json
+g.db
+g.db.blobs
+settings.json

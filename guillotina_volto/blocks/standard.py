@@ -1,18 +1,18 @@
 from guillotina import schema
-from guillotina_volto import guillotina_volto
+from guillotina_volto import configure_volto
 from zope.interface import Interface
 from guillotina.schema import JSONField
 import json
 
 
-@guillotina_volto.block(
+@configure_volto.block(
     name='title', title='title'
 )
 class IBlockTitle(Interface):
     title = schema.TextLine(required=True)
 
 
-@guillotina_volto.block(
+@configure_volto.block(
     name='description', title='Description'
 )
 class IBlockDescription(Interface):
@@ -29,7 +29,7 @@ TEXT_SCHEMA = json.dumps({
 })
 
 
-@guillotina_volto.block(
+@configure_volto.block(
     name='text', title='Text'
 )
 class IBlockText(Interface):
@@ -40,14 +40,14 @@ class IBlockText(Interface):
     description = schema.TextLine()
 
 
-@guillotina_volto.block(
+@configure_volto.block(
     name='image', title='Image'
 )
 class IBlockImage(Interface):
     url = schema.TextLine()
 
 
-@guillotina_volto.block(
+@configure_volto.block(
     name='video', title='Video'
 )
 class IBlockVideo(Interface):

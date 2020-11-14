@@ -1,6 +1,6 @@
 .. contents::
 
-GUILLOTINA_CMS
+guillotina_volto
 ==============
 
 WIP: This package is a work in progress to provide CMS on guillotina
@@ -140,7 +140,7 @@ Optional addons
 With Extras
 -----------
 
-Install guillotina_cms with `pip install guillotina_cms[extras]`
+Install guillotina_volto with `pip install guillotina_volto[extras]`
 
 Which enabled elasticsearch full text search, pubsub and link integrity support.
 

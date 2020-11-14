@@ -1,7 +1,7 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IContainer
+from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IResource
 from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
@@ -39,7 +39,7 @@ class Breadcrumbs(Service):
     async def __call__(self):
         result = []
         context = self.context
-        while context is not None and not IContainer.providedBy(context):
+        while context is not None and not ISite.providedBy(context):
             result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
             context = getattr(context, "__parent__", None)
         result.reverse()
@@ -92,12 +92,12 @@ class Navigation(Service):
             depth_query = {"depth": depth}
 
         depth_query["hidden_navigation"] = False
-        result = await search.query(
+        result = await search.search(
             container, {**{"_sort_asc": "position_in_parent", "_size": 100}, **depth_query}
         )
 
         pending_dict = {}
-        for brain in result["member"]:
+        for brain in result["items"]:
             brain_serialization = {
                 "title": brain.get("title"),
                 "@id": brain.get("@id"),

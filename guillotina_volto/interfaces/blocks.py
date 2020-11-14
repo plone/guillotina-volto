@@ -6,7 +6,12 @@ import json
 from zope.interface import implementer
 
 
-LAYOUT_SCHEMA = json.dumps({"type": "object", "properties": {}})
+LAYOUT_SCHEMA = json.dumps(
+    {
+        "type": "object",
+        "properties": {"items": {"type": "array", "items": {"type": "string"}}},
+    }
+)
 
 DATA_SCHEMA = json.dumps({"type": "object", "properties": {}})
 
