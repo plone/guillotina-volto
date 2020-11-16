@@ -32,6 +32,7 @@ start-backend: ## Starts Guillotina
 	guillotina -c config.yaml
 
 start-dependencies: ## Starts dependencies (PG, ES, Redis)
+	docker-compose up --no-start postgres
 	docker-compose start postgres
 
 stop-dependencies: ## Starts dependencies (PG, ES, Redis)
