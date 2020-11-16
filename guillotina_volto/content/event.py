@@ -15,4 +15,3 @@ from guillotina_volto.interfaces import IEvent
 )
 class Event(Item):
     pass
-

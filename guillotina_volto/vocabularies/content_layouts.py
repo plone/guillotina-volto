@@ -7,7 +7,9 @@ class ContentLayoutVocabulary:
     def __init__(self, context):
         self.context = context
         if hasattr(self.context, "context"):
-            self.values = app_settings["layouts"].get(self.context.context.type_name, [])
+            self.values = app_settings["layouts"].get(
+                self.context.context.type_name, []
+            )
         else:
             self.values = app_settings["layouts"].get(self.context.type_name, [])
 

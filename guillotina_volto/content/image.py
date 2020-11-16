@@ -5,12 +5,13 @@ from guillotina_volto.interfaces import IImage
 
 
 @configure.contenttype(
-    type_name='Image',
+    type_name="Image",
     schema=IImage,
     behaviors=[
-        'guillotina.behaviors.dublincore.IDublinCore',
-        'guillotina_volto.interfaces.base.ICMSBehavior'],
-    allowed_types=[]  # dynamically calculated
+        "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina_volto.interfaces.base.ICMSBehavior",
+    ],
+    allowed_types=[],  # dynamically calculated
 )
 class Image(Item):
     pass

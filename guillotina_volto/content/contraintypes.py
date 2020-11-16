@@ -21,7 +21,6 @@ class CMSCustomAllowedTypes(FTIConstrainAllowedTypes):
         return [type_ for type_ in tn if type_ not in global_disallowed_types]
 
 
-
 @configure.adapter(for_=Interface, provides=IConstrainTypes)
 class NativeCustomAllowedTypes(FTIConstrainAllowedTypes):
     def get_allowed_types(self) -> list:

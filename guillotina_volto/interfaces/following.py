@@ -11,15 +11,12 @@ class IFollowingMarker(Interface):
 
 class IFollowing(Interface):
 
-    index_field('favorites', type='keyword', store=True)
+    index_field("favorites", type="keyword", store=True)
 
-    read_permission(favorites='guillotina.')
-    write_permission(favorites='guillotina.NoBody')
+    read_permission(favorites="guillotina.")
+    write_permission(favorites="guillotina.NoBody")
     favorites = schema.List(
-        title=u'favorites',
-        default=[],
-        value_type=schema.TextLine(title='follower'))
+        title=u"favorites", default=[], value_type=schema.TextLine(title="follower")
+    )
 
-    favorite = schema.Bool(
-        title=u'Current user has it favorited',
-        default=False)
+    favorite = schema.Bool(title=u"Current user has it favorited", default=False)

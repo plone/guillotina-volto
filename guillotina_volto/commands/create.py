@@ -21,7 +21,13 @@ class CMSCreateCommand(Command):
         parser = super(CMSCreateCommand, self).get_parser()
         parser.add_argument("-d", "--db", help="Database", required=True)
         parser.add_argument("-n", "--name", help="CMS container id", required=True)
-        parser.add_argument("--force", dest="force", action="store_true", help="Delete container if exists", required=False)
+        parser.add_argument(
+            "--force",
+            dest="force",
+            action="store_true",
+            help="Delete container if exists",
+            required=False,
+        )
         return parser
 
     async def create(self, arguments, db):
@@ -53,7 +59,7 @@ class CMSCreateCommand(Command):
                 await workflow.do_action("publish", "Initial setup")
             except ConflictIdOnContainer:
                 pass
-        
+
         if site is None:
             return
 
@@ -61,16 +67,20 @@ class CMSCreateCommand(Command):
             await txn.refresh(site)
             groups = await site.async_get("groups")
             obj = await create_content_in_container(
-                groups, "Group", 'Managers', check_security=False
+                groups, "Group", "Managers", check_security=False
             )
-            obj.user_roles = ["guillotina.Manager", "guillotina.ContainerAdmin", "guillotina.Owner"]
+            obj.user_roles = [
+                "guillotina.Manager",
+                "guillotina.ContainerAdmin",
+                "guillotina.Owner",
+            ]
             obj.register()
 
         async with transaction(db=db) as txn:
             await txn.refresh(site)
             users = await site.async_get("users")
             obj: IUser = await create_content_in_container(
-                users, "User", 'admin', check_security=False
+                users, "User", "admin", check_security=False
             )
             await obj.set_password("admin")
             obj.groups = ["Managers"]

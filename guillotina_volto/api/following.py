@@ -8,8 +8,12 @@ from guillotina_volto.interfaces import ICMSLayer
 
 
 @configure.service(
-    context=IFollowingMarker, layer=ICMSLayer, name='@favorite',
-    method='POST', permission='guillotina.AccessContent')
+    context=IFollowingMarker,
+    layer=ICMSLayer,
+    name="@favorite",
+    method="POST",
+    permission="guillotina.AccessContent",
+)
 async def addfavorite(context, request):
     user = get_authenticated_user_id()
     behavior = IFollowing(context)
@@ -21,14 +25,15 @@ async def addfavorite(context, request):
     if user not in users_list:
         users_list.append(user)
     behavior.data.register()
-    await notify(ObjectModifiedEvent(context, payload={
-        'favorites': ''
-    }))
+    await notify(ObjectModifiedEvent(context, payload={"favorites": ""}))
 
 
 @configure.service(
-    context=IFollowingMarker, name='@favorite', method='DELETE',
-    permission='guillotina.AccessContent')
+    context=IFollowingMarker,
+    name="@favorite",
+    method="DELETE",
+    permission="guillotina.AccessContent",
+)
 async def deletefavorite(context, request):
     user = get_authenticated_user_id()
     behavior = IFollowing(context)
@@ -40,6 +45,4 @@ async def deletefavorite(context, request):
     if user in users_list:
         users_list.remove(user)
     behavior.data.register()
-    await notify(ObjectModifiedEvent(context, payload={
-        'favorites': ''
-    }))
+    await notify(ObjectModifiedEvent(context, payload={"favorites": ""}))

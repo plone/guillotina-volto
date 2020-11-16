@@ -22,22 +22,22 @@ def json_converter(value):
     scales = {}
     url = get_url(request, request.path)
     # TODO: VIRUALHOSTMONSTER
-    for size, dimension in settings['allowed_sizes'].items():
-        width, _, height = dimension.partition(':')
+    for size, dimension in settings["allowed_sizes"].items():
+        width, _, height = dimension.partition(":")
         scales[size] = {
-            "download": url + '/@@images/image/' + size,
+            "download": url + "/@@images/image/" + size,
             "height": height,
-            "width": width
+            "width": width,
         }
 
     return {
-        'filename': value.filename,
-        'content_type': to_str(value.content_type),
-        'size': value.size,
-        'extension': value.extension,
-        'md5': value.md5,
-        'download': f"{url}/@download/image",
-        'scales': scales
+        "filename": value.filename,
+        "content_type": to_str(value.content_type),
+        "size": value.size,
+        "extension": value.extension,
+        "md5": value.md5,
+        "download": f"{url}/@download/image",
+        "scales": scales,
     }
 
 

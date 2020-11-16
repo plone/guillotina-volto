@@ -21,7 +21,9 @@ async def test_default_blocks_layout(cms_requester):
             )
             == 2
         )
-        assert "tile1" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]
+        assert (
+            "tile1" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]
+        )
 
 
 async def test_blocks_endpoint_gives_us_registered_blocks(cms_requester):

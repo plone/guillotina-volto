@@ -18,18 +18,17 @@ from guillotina_volto.ordering import supports_ordering
 
 
 @configure.service(
-    method='GET', name="resolveuid/{uid}", context=ISite,
-    permission='guillotina.AccessContent',
-    summary='Get content by UID',
-    responses={
-        "200": {
-            "description": "Successful"
-        }
-    })
+    method="GET",
+    name="resolveuid/{uid}",
+    context=ISite,
+    permission="guillotina.AccessContent",
+    summary="Get content by UID",
+    responses={"200": {"description": "Successful"}},
+)
 async def plone_resolve_uid(context, request):
-    '''
+    """
     b/w compatible plone endpoint name
-    '''
+    """
     return await resolve_uid(context, request)
 
 
@@ -176,12 +175,10 @@ MAX_FOLDER_SORT_SIZE = 5000
 async def _iter_copyable_content(context, request):
     policy = get_security_policy()
     data = await request.json()
-    if 'source' not in data:
-        raise HTTPPreconditionFailed(content={
-            'reason': 'No source'
-        })
+    if "source" not in data:
+        raise HTTPPreconditionFailed(content={"reason": "No source"})
 
-    source = data['source']
+    source = data["source"]
     if not isinstance(source, list):
         source = [source]
 
@@ -189,103 +186,81 @@ async def _iter_copyable_content(context, request):
     container_url = get_object_url(container)
     for item in source:
         if item.startswith(container_url):
-            path = item[len(container_url):]
-            ob = await navigate_to(container, path.strip('/'))
+            path = item[len(container_url) :]
+            ob = await navigate_to(container, path.strip("/"))
             if ob is None:
-                raise HTTPPreconditionFailed(content={
-                    'reason': 'Could not find content',
-                    'source': item
-                })
-        elif '/' in item:
-            ob = await navigate_to(container, item.strip('/'))
+                raise HTTPPreconditionFailed(
+                    content={"reason": "Could not find content", "source": item}
+                )
+        elif "/" in item:
+            ob = await navigate_to(container, item.strip("/"))
             if ob is None:
-                raise HTTPPreconditionFailed(content={
-                    'reason': 'Could not find content',
-                    'source': item
-                })
+                raise HTTPPreconditionFailed(
+                    content={"reason": "Could not find content", "source": item}
+                )
         else:
             try:
                 ob = await get_object_by_uid(item)
             except KeyError:
-                raise HTTPPreconditionFailed(content={
-                    'reason': 'Could not find content',
-                    'source': item
-                })
-        if not policy.check_permission('guillotina.DuplicateContent', ob):
-            raise HTTPPreconditionFailed(content={
-                'reason': 'Invalid permission',
-                'source': item
-            })
+                raise HTTPPreconditionFailed(
+                    content={"reason": "Could not find content", "source": item}
+                )
+        if not policy.check_permission("guillotina.DuplicateContent", ob):
+            raise HTTPPreconditionFailed(
+                content={"reason": "Invalid permission", "source": item}
+            )
         yield ob
 
 
 @configure.service(
-    method='POST', name="@copy_mult", context=IAsyncContainer,
-    permission='guillotina.AddContent',
-    summary='Copy data into destintation',
-    parameteres=[{
-        "name": "body",
-        "in": "body",
-        "type": "object",
-        "schema": {
-            "properties": {
-                "source": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "required": ["source"]
-    }],
-    responses={
-        "200": {
-            "description": "Successful"
+    method="POST",
+    name="@copy_mult",
+    context=IAsyncContainer,
+    permission="guillotina.AddContent",
+    summary="Copy data into destintation",
+    parameteres=[
+        {
+            "name": "body",
+            "in": "body",
+            "type": "object",
+            "schema": {
+                "properties": {"source": {"type": "array", "items": {"type": "string"}}}
+            },
+            "required": ["source"],
         }
-    })
+    ],
+    responses={"200": {"description": "Successful"}},
+)
 async def copy_content(context, request):
     results = []
     async for ob in _iter_copyable_content(context, request):
         new_ob = await duplicate(ob, context)
-        results.append({
-            "source": get_object_url(ob),
-            "target": get_object_url(new_ob)
-        })
+        results.append({"source": get_object_url(ob), "target": get_object_url(new_ob)})
     return results
 
 
 @configure.service(
-    method='POST', name="@move_mult", context=IAsyncContainer,
-    permission='guillotina.AddContent',
-    summary='Move data into destintation',
-    parameteres=[{
-        "name": "body",
-        "in": "body",
-        "type": "object",
-        "schema": {
-            "properties": {
-                "source": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "required": ["source"]
-    }],
-    responses={
-        "200": {
-            "description": "Successful"
+    method="POST",
+    name="@move_mult",
+    context=IAsyncContainer,
+    permission="guillotina.AddContent",
+    summary="Move data into destintation",
+    parameteres=[
+        {
+            "name": "body",
+            "in": "body",
+            "type": "object",
+            "schema": {
+                "properties": {"source": {"type": "array", "items": {"type": "string"}}}
+            },
+            "required": ["source"],
         }
-    })
+    ],
+    responses={"200": {"description": "Successful"}},
+)
 async def move_content(context, request):
     results = []
     async for ob in _iter_copyable_content(context, request):
         new_ob = await move(ob, context)
-        results.append({
-            "source": get_object_url(ob),
-            "target": get_object_url(new_ob)
-        })
+        results.append({"source": get_object_url(ob), "target": get_object_url(new_ob)})
     return results

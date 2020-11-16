@@ -14,7 +14,9 @@ class DefaultBlocksLayout:
         default_blocks = app_settings.get("default_blocks", None)
         default_result = {"items": []}
         if default_blocks is not None and self.context.type_name in default_blocks:
-            return default_blocks[self.context.type_name].get("blocks_layout", default_result)
+            return default_blocks[self.context.type_name].get(
+                "blocks_layout", default_result
+            )
         else:
             return default_result
 

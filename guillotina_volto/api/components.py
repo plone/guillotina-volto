@@ -27,7 +27,10 @@ from guillotina_volto.utils import get_search_utility
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "properties": {"@id": {"type": "string"}, "title": {"type": "string"}},
+                            "properties": {
+                                "@id": {"type": "string"},
+                                "title": {"type": "string"},
+                            },
                         },
                     },
                 },
@@ -40,7 +43,9 @@ class Breadcrumbs(Service):
         result = []
         context = self.context
         while context is not None and not ISite.providedBy(context):
-            result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
+            result.append(
+                {"title": context.title, "@id": IAbsoluteURL(context, self.request)()}
+            )
             context = getattr(context, "__parent__", None)
         result.reverse()
 
@@ -71,7 +76,10 @@ def recursive_fill(mother_list, pending_dict):
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "properties": {"@id": {"type": "string"}, "title": {"type": "string"}},
+                            "properties": {
+                                "@id": {"type": "string"},
+                                "title": {"type": "string"},
+                            },
                         },
                     },
                 },
@@ -93,7 +101,8 @@ class Navigation(Service):
 
         depth_query["hidden_navigation"] = False
         result = await search.search(
-            container, {**{"_sort_asc": "position_in_parent", "_size": 100}, **depth_query}
+            container,
+            {**{"_sort_asc": "position_in_parent", "_size": 100}, **depth_query},
         )
 
         pending_dict = {}
@@ -102,9 +111,11 @@ class Navigation(Service):
                 "title": brain.get("title"),
                 "@id": brain.get("@id"),
                 "@name": brain.get("uuid"),
-                "description": ""
+                "description": "",
             }
-            pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
+            pending_dict.setdefault(brain.get("parent_uuid"), []).append(
+                brain_serialization
+            )
 
         parent_uuid = container.uuid
         if parent_uuid not in pending_dict:
@@ -123,7 +134,12 @@ class Navigation(Service):
     permission="guillotina.AccessContent",
     name="@actions",
     summary="Actions view",
-    responses={"200": {"description": "Result results on actions", "schema": {"properties": {}}}},
+    responses={
+        "200": {
+            "description": "Result results on actions",
+            "schema": {"properties": {}},
+        }
+    },
 )
 class Actions(Service):
     async def __call__(self):

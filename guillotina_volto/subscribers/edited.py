@@ -22,7 +22,7 @@ async def object_modified(object, event):
     if IVersioningMarker.providedBy(object):
         version_behavior = IVersioning(object)
         await version_behavior.load(create=True)
-        if hasattr(object, '_v_temporal_versioning'):
+        if hasattr(object, "_v_temporal_versioning"):
             version_behavior.diffs.append(object._v_temporal_versioning)
             version_behavior.register()
             del object._v_temporal_versioning

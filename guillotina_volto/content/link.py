@@ -9,20 +9,18 @@ from guillotina.directives import index_field
 
 class ILink(IItem):
 
-    index_field('url', store=True, type='text')
-    url = schema.TextLine(
-        title=_('URL'),
-        required=False)
+    index_field("url", store=True, type="text")
+    url = schema.TextLine(title=_("URL"), required=False)
 
 
 @configure.contenttype(
-    type_name='Link',
+    type_name="Link",
     schema=ILink,
     behaviors=[
-        'guillotina.behaviors.dublincore.IDublinCore',
+        "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina_volto.interfaces.base.ICMSBehavior",
     ],
-    allowed_types=[]  # dynamically calculated
+    allowed_types=[],  # dynamically calculated
 )
 class Link(Item):
     pass

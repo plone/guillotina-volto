@@ -36,10 +36,11 @@ async def test_li(cms_requester):
                     <a href="@resolveuid/{}">foobar</a>
                     </p>
                     """.format(
-                            resp1["@uid"]
-                        ),
+                                resp1["@uid"]
+                            ),
+                        },
                     },
-                }}
+                }
             ),
         )
         assert status == 201
@@ -80,13 +81,17 @@ async def test_links_translated(cms_requester):
                     <a href="@resolveuid/{}">foobar</a>
                     </p>
                     """.format(
-                            resp1["@uid"]
-                        ),
+                                resp1["@uid"]
+                            ),
+                        },
                     },
-                }}
+                }
             ),
         )
         assert status == 201
 
         resp, status = await requester("GET", "/db/guillotina/doc2")
-        assert "/db/guillotina/doc1" in resp["guillotina_volto.interfaces.editors.IRichText"]["text"]["data"]
+        assert (
+            "/db/guillotina/doc1"
+            in resp["guillotina_volto.interfaces.editors.IRichText"]["text"]["data"]
+        )

@@ -9,20 +9,18 @@ from guillotina_volto.interfaces import IVersioningMarker
 import logging
 
 
-logger = logging.getLogger('guillotina_versioning')
+logger = logging.getLogger("guillotina_versioning")
 
 
-@configure.adapter(
-    for_=IResource,
-    provides=IFileCleanup)
+@configure.adapter(for_=IResource, provides=IFileCleanup)
 class VersioningFileCleanup:
     def __init__(self, context):
         self.context = context
 
     def should_clean(self, **kwargs):
-        if 'field' not in kwargs:
+        if "field" not in kwargs:
             return True
-        if kwargs['field'].__name__ not in ('file', 'version_file'):
+        if kwargs["field"].__name__ not in ("file", "version_file"):
             return True
         if IVersioning.providedBy(self.context):
             return False
@@ -30,10 +28,8 @@ class VersioningFileCleanup:
 
 
 @configure.behavior(
-    title="Versioning",
-    provides=IVersioning,
-    marker=IVersioningMarker,
-    for_=IResource)
+    title="Versioning", provides=IVersioning, marker=IVersioningMarker, for_=IResource
+)
 class Versioning(AnnotationBehavior):
     auto_serialize = False
-    __annotations_data_key__ = 'metadata'
+    __annotations_data_key__ = "metadata"

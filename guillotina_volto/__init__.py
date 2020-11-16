@@ -15,25 +15,27 @@ app_settings = {
         "guillotina.contrib.dbusers",
     ],
     "available_blocks": {},
-    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
+    "commands": {
+        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
+    },
     "controlpanels": {
         "image_settings": {
             "title": "Image settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
-            "group": "General"
+            "group": "General",
         },
         "validation_settings": {
             "title": "Image settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
-            "group": "General"
-        }
+            "group": "General",
+        },
     },
     "available_roles": [
         "guillotina.Contributor",
         "guillotina.Editor",
         "guillotina.Reader",
         "guillotina.Reviewer",
-        "guillotina.Owner"
+        "guillotina.Owner",
     ],
     "layouts": {
         "CMSFolder": [
@@ -70,13 +72,11 @@ app_settings = {
             "blocks_layout": {
                 "items": [
                     "cdf077c5-8759-4afb-b7a5-07f45c665ad8",
-                    "12821552-d26f-48eb-a1fd-790edb942c30"
+                    "12821552-d26f-48eb-a1fd-790edb942c30",
                 ]
             },
             "blocks": {
-                "cdf077c5-8759-4afb-b7a5-07f45c665ad8": {
-                    "@type": "title"
-                },
+                "cdf077c5-8759-4afb-b7a5-07f45c665ad8": {"@type": "title"},
                 "12821552-d26f-48eb-a1fd-790edb942c30": {
                     "@type": "text",
                     "text": {
@@ -88,13 +88,13 @@ app_settings = {
                                 "depth": 0,
                                 "inlineStyleRanges": [],
                                 "entityRanges": [],
-                                "data": {}
+                                "data": {},
                             }
                         ],
-                        "entityMap": {}
-                    }
-                }
-            }
+                        "entityMap": {},
+                    },
+                },
+            },
         },
     },
     "global_disallowed_types": [

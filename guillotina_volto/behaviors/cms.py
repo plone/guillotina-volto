@@ -7,7 +7,6 @@ from guillotina.utils import iter_parents
 from guillotina.interfaces import IFolder
 
 
-
 def default_layout(context=None, name=None):
     return "document_view"
 
@@ -19,7 +18,11 @@ def default_language(context=None, name=None):
     return None
 
 
-@configure.behavior(title="CMS data behavior", provides=ICMSBehavior, for_="guillotina.interfaces.IResource")
+@configure.behavior(
+    title="CMS data behavior",
+    provides=ICMSBehavior,
+    for_="guillotina.interfaces.IResource",
+)
 class CMS(AnnotationBehavior):
 
     language = ContextProperty("language", default_language)
@@ -46,4 +49,6 @@ class CMS(AnnotationBehavior):
     def del_allow_discussion(self):
         self._allow_discussion = None
 
-    allow_discussion = property(get_allow_discussion, set_allow_discussion, del_allow_discussion)
+    allow_discussion = property(
+        get_allow_discussion, set_allow_discussion, del_allow_discussion
+    )

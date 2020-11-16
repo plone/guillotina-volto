@@ -5,12 +5,13 @@ from guillotina_volto.interfaces import IFile
 
 
 @configure.contenttype(
-    type_name='File',
+    type_name="File",
     schema=IFile,
     behaviors=[
-        'guillotina.behaviors.dublincore.IDublinCore',
-        'guillotina_volto.interfaces.base.ICMSBehavior'],
-    allowed_types=[]  # dynamically calculated
+        "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina_volto.interfaces.base.ICMSBehavior",
+    ],
+    allowed_types=[],  # dynamically calculated
 )
 class File(Item):
     pass

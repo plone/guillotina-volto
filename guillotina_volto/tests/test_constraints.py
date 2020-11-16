@@ -30,7 +30,9 @@ async def test_constraints(cms_requester):
         assert status == 412
 
         # Set only Files are available
-        resp, status = await requester("POST", "/db/guillotina/doc1/@constraints", data=json.dumps(["File"]))
+        resp, status = await requester(
+            "POST", "/db/guillotina/doc1/@constraints", data=json.dumps(["File"])
+        )
 
         assert status == 200
 
@@ -56,7 +58,9 @@ async def test_constraints(cms_requester):
 
         # Set also Images are available
         resp, status = await requester(
-            "PATCH", "/db/guillotina/doc1/@constraints", data=json.dumps({"op": "add", "types": ["Image"]})
+            "PATCH",
+            "/db/guillotina/doc1/@constraints",
+            data=json.dumps({"op": "add", "types": ["Image"]}),
         )
 
         assert status == 200
@@ -73,14 +77,18 @@ async def test_constraints(cms_requester):
 
         # Try to set any non existing type
         resp, status = await requester(
-            "PATCH", "/db/guillotina/doc1/@constraints", data=json.dumps({"op": "add", "types": ["FakeType"]})
+            "PATCH",
+            "/db/guillotina/doc1/@constraints",
+            data=json.dumps({"op": "add", "types": ["FakeType"]}),
         )
 
         assert status == 412
 
         # Try to set any non FTI enabled type
         resp, status = await requester(
-            "PATCH", "/db/guillotina/doc1/@constraints", data=json.dumps({"op": "add", "types": ["Document"]})
+            "PATCH",
+            "/db/guillotina/doc1/@constraints",
+            data=json.dumps({"op": "add", "types": ["Document"]}),
         )
 
         assert status == 412

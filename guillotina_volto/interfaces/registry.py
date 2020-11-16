@@ -11,12 +11,7 @@ LAYOUT_TYPE_COMPONENTS = json.dumps(
         "properties": {},
         "additionalProperties": {
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "id": {"type" : "string"}
-                }
-            },
+            "items": {"type": "object", "properties": {"id": {"type": "string"}}},
         },
     }
 )

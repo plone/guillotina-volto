@@ -17,4 +17,3 @@ from guillotina_volto.interfaces import IDocument
 )
 class Document(Folder):
     pass
-

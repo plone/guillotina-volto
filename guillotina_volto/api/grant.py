@@ -28,41 +28,45 @@ PERMISSIONS_TO_FORBIT_ONINHERIT = [
 
 
 @configure.service(
-    context=IResource, method='GET', permission='guillotina.SeePermissions',
-    name='@grant')
+    context=IResource,
+    method="GET",
+    permission="guillotina.SeePermissions",
+    name="@grant",
+)
 async def grantinfo(context, request):
     """ principals -> roles """
-    search = request.query.get('search')
+    search = request.query.get("search")
     if search is not None:
         search = search.lower()
 
-    result = {
-        'available_roles': [],
-        'entries': []
-    }
+    result = {"available_roles": [], "entries": []}
 
     # Inherit
     inheritMap = IInheritPermissionMap(context)
     permissions = inheritMap.get_locked_permissions()
     if len(permissions) > 0:
         blocked_permissions = permissions
-        result['inherit'] = False
+        result["inherit"] = False
     else:
-        result['inherit'] = True
+        result["inherit"] = True
 
     # Roles
     roles = local_roles()
-    valid_roles = [role for role in roles if role in app_settings.get('available_roles', [])]
+    valid_roles = [
+        role for role in roles if role in app_settings.get("available_roles", [])
+    ]
     for role in valid_roles:
         role_obj = get_utility(IRole, name=role)
-        result['available_roles'].append({
-            'id': role,
-            'title': role_obj.title,
-            'description': role_obj.description
-        })
+        result["available_roles"].append(
+            {"id": role, "title": role_obj.title, "description": role_obj.description}
+        )
 
     prinrole = IPrincipalRoleMap(context)
-    settings = [setting for setting in prinrole.get_principals_and_roles() if setting[0] in valid_roles]
+    settings = [
+        setting
+        for setting in prinrole.get_principals_and_roles()
+        if setting[0] in valid_roles
+    ]
     valid_settings = {}
     default_roles = {role: None for role in valid_roles}
 
@@ -78,63 +82,69 @@ async def grantinfo(context, request):
             user = await users.async_get(data[1])
             if user:
                 valid_settings[data[1]] = {
-                    'id': data[1],
-                    'disabled': user.disabled,
-                    'login': None,
-                    'roles': deepcopy(default_roles),
-                    'title': user.name,
-                    'type': 'user',
-                    'origin': 'dbusers'
+                    "id": data[1],
+                    "disabled": user.disabled,
+                    "login": None,
+                    "roles": deepcopy(default_roles),
+                    "title": user.name,
+                    "type": "user",
+                    "origin": "dbusers",
                 }
             else:
                 group = await groups.async_get(data[1])
                 if group:
                     valid_settings[data[1]] = {
-                        'id': data[1],
-                        'disabled': group.disabled,
-                        'login': None,
-                        'roles': deepcopy(default_roles),
-                        'title': group.name,
-                        'type': 'group',
-                        'origin': 'dbusers'
+                        "id": data[1],
+                        "disabled": group.disabled,
+                        "login": None,
+                        "roles": deepcopy(default_roles),
+                        "title": group.name,
+                        "type": "group",
+                        "origin": "dbusers",
                     }
                 else:
                     valid_settings[data[1]] = {
-                        'id': data[1],
-                        'disabled': False,
-                        'login': None,
-                        'roles': deepcopy(default_roles),
-                        'title': data[1],
-                        'type': 'user',
-                        'origin': 'system'
+                        "id": data[1],
+                        "disabled": False,
+                        "login": None,
+                        "roles": deepcopy(default_roles),
+                        "title": data[1],
+                        "type": "user",
+                        "origin": "system",
                     }
-        valid_settings[data[1]]['roles'].update({data[0]: data[2]})
+        valid_settings[data[1]]["roles"].update({data[0]: data[2]})
 
-    result['entries'] = list(valid_settings.values())
+    result["entries"] = list(valid_settings.values())
 
     if search is not None:
         catalog = query_utility(ICatalogUtility)
-        query_result = await catalog.search(container, {"type_name": ['User', 'Group']})
+        query_result = await catalog.search(container, {"type_name": ["User", "Group"]})
         for obj in query_result["items"]:
-            ident = obj.get('id', '')
+            ident = obj.get("id", "")
             if search in ident.lower() and ident not in valid_settings:
-                result['entries'].append({
-                    'id': ident,
-                    'disabled': False,
-                    'login': None,
-                    'roles': deepcopy(default_roles),
-                    'title': obj.get('title', ''),
-                    'type': obj.get('type_name').lower()
-                })
+                result["entries"].append(
+                    {
+                        "id": ident,
+                        "disabled": False,
+                        "login": None,
+                        "roles": deepcopy(default_roles),
+                        "title": obj.get("title", ""),
+                        "type": obj.get("type_name").lower(),
+                    }
+                )
 
     return result
 
+
 @configure.service(
-    context=IResource, method='POST', permission='guillotina.ChangePermissions',
-    name='@grant')
+    context=IResource,
+    method="POST",
+    permission="guillotina.ChangePermissions",
+    name="@grant",
+)
 async def grantinfo(context, request):
     payload = await request.json()
-    inherit = payload.get('inherit', None)
+    inherit = payload.get("inherit", None)
 
     inheritManager = IInheritPermissionManager(context)
     if inherit is True:
@@ -144,7 +154,7 @@ async def grantinfo(context, request):
         for permission in PERMISSIONS_TO_FORBIT_ONINHERIT:
             inheritManager.deny_inheritance(permission)
 
-    entries = payload.get('entries', [])
+    entries = payload.get("entries", [])
     try:
         container = get_current_container()
         users = await container.async_get("users")
@@ -155,18 +165,18 @@ async def grantinfo(context, request):
     prinrole = IPrincipalRoleManager(context)
     for entry in entries:
         valid = False
-        if entry['type'] == 'group' and await groups.async_contains(entry['id']):
+        if entry["type"] == "group" and await groups.async_contains(entry["id"]):
             valid = True
-        if entry['type'] == 'user' and await users.async_contains(entry['id']):
+        if entry["type"] == "user" and await users.async_contains(entry["id"]):
             valid = True
 
         if valid:
-            for role, permission in entry['roles'].items():
+            for role, permission in entry["roles"].items():
                 if permission == "Allow":
-                    prinrole.assign_role_to_principal(entry['id'], role)
+                    prinrole.assign_role_to_principal(entry["id"], role)
                 elif permission == "Deny":
-                    prinrole.remove_role_from_principal(entry['id'], role)
+                    prinrole.remove_role_from_principal(entry["id"], role)
                 elif permission is None:
-                    prinrole.unset_role_for_principal(entry['id'], role)
+                    prinrole.unset_role_for_principal(entry["id"], role)
                 elif permission == "AllowSingle":
-                    prinrole.assign_role_to_principal_no_inherit(entry['id'], role)
+                    prinrole.assign_role_to_principal_no_inherit(entry["id"], role)

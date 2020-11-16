@@ -36,7 +36,9 @@ configure.grant(permission="guillotina.RequestReview", role="guillotina.Manager"
 configure.grant(permission="guillotina.RequestReview", role="guillotina.Owner")
 
 configure.grant(permission="guillotina.RequestReview", role="guillotina.ContainerAdmin")
-configure.grant(permission="guillotina.AccessControlPanel", role="guillotina.ContainerAdmin")
+configure.grant(
+    permission="guillotina.AccessControlPanel", role="guillotina.ContainerAdmin"
+)
 
 configure.grant(permission="guillotina.SearchContent", role="guillotina.Manager")
 

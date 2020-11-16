@@ -8,26 +8,27 @@ GUILLOTINA_LOGO = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAAB
 
 def get_search_utility(query=None):
     query = query or {}
-    if 'pg_catalog' not in app_settings['load_utilities']:
+    if "pg_catalog" not in app_settings["load_utilities"]:
         return query_utility(ICatalogUtility)
     else:
-        found = 'SearchableText' in query
+        found = "SearchableText" in query
         for key in query.keys():
-            if key[0] == '_':
+            if key[0] == "_":
                 continue
             index = get_index_definition(key)
             if index is None:
                 continue
-            if index['type'] in ('text', 'searchabletext'):
+            if index["type"] in ("text", "searchabletext"):
                 found = True
                 break
 
         if found:
             return query_utility(ICatalogUtility)
-        return query_utility(ICatalogUtility, name='pg_catalog')
+        return query_utility(ICatalogUtility, name="pg_catalog")
+
 
 def get_default_logo():
-    if 'default_logo' in app_settings:
-        return app_settings['default_logo']
+    if "default_logo" in app_settings:
+        return app_settings["default_logo"]
     else:
         return GUILLOTINA_LOGO

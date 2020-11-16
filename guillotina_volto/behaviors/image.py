@@ -6,8 +6,7 @@ from guillotina_volto.interfaces import IHasImage
 from zope.interface import Interface
 
 
-@configure.behavior(
-    title="Image attachment", for_=IResource, marker=IHasImage)
+@configure.behavior(title="Image attachment", for_=IResource, marker=IHasImage)
 class IImageAttachment(Interface):
 
     image = CloudFileField()
@@ -15,8 +14,7 @@ class IImageAttachment(Interface):
     caption = schema.TextLine()
 
 
-@configure.behavior(
-    title="Lead image attachment", for_=IResource, marker=IHasImage)
+@configure.behavior(title="Lead image attachment", for_=IResource, marker=IHasImage)
 class ILeadImage(Interface):
 
     lead = CloudFileField()

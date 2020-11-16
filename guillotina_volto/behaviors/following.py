@@ -9,12 +9,10 @@ from guillotina_volto.interfaces import IFollowingMarker
 
 
 @configure.behavior(
-    title="Following",
-    provides=IFollowing,
-    marker=IFollowingMarker,
-    for_=IResource)
+    title="Following", provides=IFollowing, marker=IFollowingMarker, for_=IResource
+)
 class Following(AnnotationBehavior):
-    __local__properties__ = ('favorite',)
+    __local__properties__ = ("favorite",)
 
     def get_favorite(self):
         user = get_authenticated_user_id()
@@ -23,5 +21,4 @@ class Following(AnnotationBehavior):
     def set_favorite(self, value):
         pass
 
-    favorite = FunctionProperty(
-        'favorite', get_favorite, set_favorite)
+    favorite = FunctionProperty("favorite", get_favorite, set_favorite)

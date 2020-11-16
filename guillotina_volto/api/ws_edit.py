@@ -24,7 +24,9 @@ dmp = diff_match_patch()
     method="GET",
     permission="guillotina.ModifyContent",
     name="@ws-edit",
-    parameters=[{"name": "ws_token", "in": "query", "type": "string", "required": True}],
+    parameters=[
+        {"name": "ws_token", "in": "query", "type": "string", "required": True}
+    ],
     summary="""This is a web socket using google's diff-match-patch algorithm.
 
 Socket payload examples:
@@ -84,7 +86,6 @@ class WSEdit(Service):
     auto_save_delay = 30
     auto_save_handle = None
 
-
     async def __call__(self):
         self.data = {}
         tm = get_tm()
@@ -102,7 +103,9 @@ class WSEdit(Service):
 
             # subscribe to redis channel for this context
             asyncio.ensure_future(
-                self.pubsub.subscribe(self.channel_name, self.request.uid, self.subscriber_callback)
+                self.pubsub.subscribe(
+                    self.channel_name, self.request.uid, self.subscriber_callback
+                )
             )
 
             self.configure_auto_save()
@@ -145,7 +148,9 @@ class WSEdit(Service):
         if self.auto_save_handle is not None:
             self.auto_save_handle.cancel()
         loop = asyncio.get_event_loop()
-        self.auto_save_handle = loop.call_later(self.auto_save_delay, self.auto_save_callback)
+        self.auto_save_handle = loop.call_later(
+            self.auto_save_delay, self.auto_save_callback
+        )
 
     async def subscriber_callback(self, data):
         if data["t"] == "saved":
@@ -170,12 +175,16 @@ class WSEdit(Service):
                 try:
                     await self.apply_edit(data)
                 except Exception:
-                    await self.ws.send_bytes(orjson.dumps({"t": "e", "v": "Error applying dmp"}))
+                    await self.ws.send_bytes(
+                        orjson.dumps({"t": "e", "v": "Error applying dmp"})
+                    )
                     logger.warn("Error applying dmp", exc_info=True)
             elif operation == "save":
                 await self.save()
                 self.ws.send_bytes(orjson.dumps({"t": "saved"}))
-                await self.pubsub.publish(self.channel_name, {"t": "saved", "ruid": self.request.uid})
+                await self.pubsub.publish(
+                    self.channel_name, {"t": "saved", "ruid": self.request.uid}
+                )
             elif operation == "saved":
                 # reset the counter, only one person needs to save it every 30 seconds
                 self.configure_auto_save()
@@ -189,11 +198,15 @@ class WSEdit(Service):
         if "." in field_name:
             schema_klass, field_name = field_name.rsplit(".", 1)
             if schema_klass not in self.context.__behaviors__:
-                self.ws.send_bytes(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
+                self.ws.send_bytes(
+                    json.dumps({"t": "e", "v": "Not a valid field on a behavior"})
+                )
                 return
             schema = resolve_dotted_name(schema_klass)
             if schema is None:
-                self.ws.send_bytes(json.dumps({"t": "e", "v": "Could not find specified schema"}))
+                self.ws.send_bytes(
+                    json.dumps({"t": "e", "v": "Could not find specified schema"})
+                )
                 return
             behavior = schema(context)
             context = behavior
@@ -204,7 +217,9 @@ class WSEdit(Service):
         try:
             field = schema[field_name]
         except KeyError:
-            self.ws.send_bytes(json.dumps({"t": "e", "v": "Not a valid field on a behavior"}))
+            self.ws.send_bytes(
+                json.dumps({"t": "e", "v": "Not a valid field on a behavior"})
+            )
             return
         return context, field
 

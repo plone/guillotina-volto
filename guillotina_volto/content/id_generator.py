@@ -4,9 +4,7 @@ from guillotina import app_settings
 from guillotina_volto.interfaces import ICMSLayer
 
 
-@configure.adapter(
-    for_=(ICMSLayer),
-    provides=IIDGenerator)
+@configure.adapter(for_=(ICMSLayer), provides=IIDGenerator)
 class IDGenerator(object):
     """Default IDGenerator adapter.
 
@@ -18,26 +16,25 @@ class IDGenerator(object):
 
     def __call__(self, data):
 
-        if 'title' in data:
-            new_id = data['title'].lower().replace(' ', '-')
-        elif '@type' in data and data['@type'] == 'Image':
+        if "title" in data:
+            new_id = data["title"].lower().replace(" ", "-")
+        elif "@type" in data and data["@type"] == "Image":
             try:
-                new_id = data['image']['filename']
+                new_id = data["image"]["filename"]
             except KeyError:
                 return None
-        elif '@type' in data and data['@type'] == 'File':
+        elif "@type" in data and data["@type"] == "File":
             try:
-                new_id = data['file']['filename']
+                new_id = data["file"]["filename"]
             except KeyError:
                 return None
         else:
             return None
         if new_id:
-            if new_id[0] in ('_', '@'):
+            if new_id[0] in ("_", "@"):
                 new_id = new_id[1:]
-            return ''.join(
-                l for l in new_id
-                if l in app_settings["valid_id_characters"]
+            return "".join(
+                l for l in new_id if l in app_settings["valid_id_characters"]
             )
         else:
             return None

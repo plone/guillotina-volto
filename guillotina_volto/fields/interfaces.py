@@ -11,15 +11,10 @@ class IRichTextField(IObject):
 
 class IRichTextFieldSchema(Interface):
     """Rich text field schema"""
-    content_type = schema.ASCII(
-        title='Content type'
-    )
-    data = schema.Text(
-        title='Real data'
-    )
-    encoding = schema.ASCII(
-        title='Get the real encoding'
-    )
+
+    content_type = schema.ASCII(title="Content type")
+    data = schema.Text(title="Real data")
+    encoding = schema.ASCII(title="Get the real encoding")
 
 
 class IImageFile(IFile):

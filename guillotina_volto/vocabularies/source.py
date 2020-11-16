@@ -6,7 +6,6 @@ from zope.interface import implementer
 
 @implementer(ISource)
 class AppSettingSource:
-
     def __init__(self, dotted_setting, missing=None):
         self.dotted_setting = dotted_setting
         self.missing = missing
@@ -17,7 +16,7 @@ class AppSettingSource:
         if self._values is not None:
             return self._values
         context = app_settings
-        for part in self.dotted_setting.split('.'):
+        for part in self.dotted_setting.split("."):
             if part in context:
                 context = context[part]
             else:

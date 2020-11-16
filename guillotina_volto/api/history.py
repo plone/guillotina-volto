@@ -36,17 +36,16 @@ async def history(context, request):
                 "@id": f"{container_url}/@users/{actor}",
                 "fullname": actor,
                 "id": actor,
-                "username": actor
-            }
+                "username": actor,
+            },
         }
 
         data = hist_data.get("data", {})
-        if type_ == 'versioning':
-            value['may_revert'] = False
-            value['version'] = ident
+        if type_ == "versioning":
+            value["may_revert"] = False
+            value["version"] = ident
         elif type_ == "workflow":
-            value['state_title'] = data.get('review_state')
-            value['review_state'] = data.get('review_state')
+            value["state_title"] = data.get("review_state")
+            value["review_state"] = data.get("review_state")
         result.append(value)
     return result
-        

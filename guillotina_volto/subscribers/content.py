@@ -14,8 +14,8 @@ from guillotina_volto.ordering import supports_ordering
 
 
 @configure.subscriber(
-    for_=(IResource, IObjectAddedEvent),
-    priority=1001)  # after indexing
+    for_=(IResource, IObjectAddedEvent), priority=1001
+)  # after indexing
 async def cms_object_added(obj, event):
     cms = query_adapter(obj, ICMSBehavior)
     if cms is not None:
@@ -29,7 +29,7 @@ async def cms_object_added(obj, event):
                 return
             if obj.uuid not in indexer.index:
                 indexer.index[obj.uuid] = {}
-            indexer.index[obj.uuid]['position_in_parent'] = cms.position_in_parent
+            indexer.index[obj.uuid]["position_in_parent"] = cms.position_in_parent
 
-    if hasattr(obj, 'title') and obj.title is None:
+    if hasattr(obj, "title") and obj.title is None:
         obj.title = obj.id

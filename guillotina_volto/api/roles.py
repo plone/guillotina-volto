@@ -29,10 +29,12 @@ class AvailableRoles(Service):
         roles = global_roles()
         for role in roles:
             role_obj = get_utility(IRole, name=role)
-            result.append({
-                "@id": f"{url}/@roles/{role}",
-                "@type": "role",
-                "id": role,
-                "title": role_obj.title
-            })
+            result.append(
+                {
+                    "@id": f"{url}/@roles/{role}",
+                    "@type": "role",
+                    "id": role,
+                    "title": role_obj.title,
+                }
+            )
         return result

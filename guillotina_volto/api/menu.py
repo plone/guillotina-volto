@@ -5,25 +5,20 @@ from guillotina_volto.interfaces import IMenu
 
 
 @configure.service(
-    context=ISite, method='GET', permission='guillotina.ViewContent',
-    name='@menu')
+    context=ISite, method="GET", permission="guillotina.ViewContent", name="@menu"
+)
 async def menu(context, request):
 
     registry = await get_registry()
     settings = registry.for_interface(IMenu)
-    return {
-        'value': settings['definition']
-    }
+    return {"value": settings["definition"]}
 
 
 @configure.service(
-    context=ISite, method='GET', permission='guillotina.ViewContent',
-    name='@logo')
+    context=ISite, method="GET", permission="guillotina.ViewContent", name="@logo"
+)
 async def logo(context, request):
 
     registry = await get_registry()
     settings = registry.for_interface(IMenu)
-    return {
-        'value': settings['logo']
-    }
-
+    return {"value": settings["logo"]}

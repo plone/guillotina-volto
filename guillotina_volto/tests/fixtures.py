@@ -18,7 +18,9 @@ testing.configure_with(base_settings_configurator)
 class CMSRequester(ContainerRequesterAsyncContextManager):
     async def __aenter__(self):
         await super().__aenter__()
-        await self.requester("POST", "/db/guillotina/@addons", data=json.dumps({"id": "cms"}))
+        await self.requester(
+            "POST", "/db/guillotina/@addons", data=json.dumps({"id": "cms"})
+        )
         return self.requester
 
 

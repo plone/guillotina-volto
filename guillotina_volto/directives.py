@@ -4,6 +4,7 @@ from guillotina.directives import Directive
 class MetadataDictMergeDirective(Directive):
     """Store a dict value in the tagged value under the key.
     """
+
     key: str
 
     def store(self, tags, value):
@@ -19,12 +20,12 @@ class fieldset_field(MetadataDictMergeDirective):  # noqa: N801
     """
     Directive used to set fieldset attributes.
     """
-    key = 'guillotina_volto.directives.fieldset'
+
+    key = "guillotina_volto.directives.fieldset"
 
     def factory(self, name, fieldset):
-        return {
-            fieldset: name
-        }
+        return {fieldset: name}
+
 
 def merged_tagged_value_dict_merged(schema, name):
     """Look up the tagged value 'name' in schema and all its bases, assuming

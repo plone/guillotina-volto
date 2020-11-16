@@ -9,33 +9,33 @@ from guillotina.interfaces import IFolder
 class ISyndicationSettings(Interface):
 
     max_items = schema.Int(
-        title='Maximum items',
-        description='Maximum number of items that will be syndicated.',
-        default=15)
+        title="Maximum items",
+        description="Maximum number of items that will be syndicated.",
+        default=15,
+    )
 
     sort_on = schema.Choice(
-        title='Sort on',
-        default='creation_date',
+        title="Sort on",
+        default="creation_date",
         source=AppSettingSource(
-            'syndication.sort_on',
+            "syndication.sort_on",
             missing=[
-                ['creation_date', 'Publication Date'],
-                ['effective_date', 'Publication Date'],
-                ['modification_date', 'Modification Date']
-            ]
-        )
+                ["creation_date", "Publication Date"],
+                ["effective_date", "Publication Date"],
+                ["modification_date", "Modification Date"],
+            ],
+        ),
     )
 
     sort_reverse = schema.Bool(
-        title='Reverse sort',
-        description='Order items in reverse order',
-        default=True)
+        title="Reverse sort", description="Order items in reverse order", default=True
+    )
 
     categories = schema.List(
-        title='Categories',
-        description='(not used with all feed types)',
+        title="Categories",
+        description="(not used with all feed types)",
         value_type=schema.TextLine(),
         default=[],
         required=False,
-        missing_value=[]
+        missing_value=[],
     )

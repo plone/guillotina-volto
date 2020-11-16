@@ -10,8 +10,8 @@ from guillotina_volto.interfaces import IFile
 
 
 @configure.adapter(
-    for_=(IResource, ICMSLayer),
-    provides=IResourceSerializeToJsonSummary)
+    for_=(IResource, ICMSLayer), provides=IResourceSerializeToJsonSummary
+)
 class DefaultJSONSummarySerializer(object):
     """Default ISerializeToJsonSummary adapter.
 
@@ -25,26 +25,25 @@ class DefaultJSONSummarySerializer(object):
 
     async def __call__(self):
 
-        summary = json_compatible({
-            '@id': IAbsoluteURL(self.context)(),
-            '@type': self.context.type_name,
-            '@name': self.context.__name__,
-            '@uid': self.context.uuid,
-            'UID': self.context.uuid,
-            'title': self.context.title
-        })
+        summary = json_compatible(
+            {
+                "@id": IAbsoluteURL(self.context)(),
+                "@type": self.context.type_name,
+                "@name": self.context.__name__,
+                "@uid": self.context.uuid,
+                "UID": self.context.uuid,
+                "title": self.context.title,
+            }
+        )
         return summary
 
 
-@configure.adapter(
-    for_=(IFile, ICMSLayer),
-    provides=IResourceSerializeToJson)
+@configure.adapter(for_=(IFile, ICMSLayer), provides=IResourceSerializeToJson)
 class FileJSONSerializer(SerializeToJson):
-
     async def __call__(self, include=[], omit=[]):
         data = await super().__call__(include=include, omit=omit)
-        if data.get('file'):
-            data['file']['download'] = '{}/@download/file/{}'.format(
-                IAbsoluteURL(self.context)(), data['file']['filename']
+        if data.get("file"):
+            data["file"]["download"] = "{}/@download/file/{}".format(
+                IAbsoluteURL(self.context)(), data["file"]["filename"]
             )
         return data

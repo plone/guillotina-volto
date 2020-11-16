@@ -15,6 +15,7 @@ from guillotina.interfaces import IResourceFactory
 from guillotina.interfaces import IAsyncContainer
 from guillotina.response import HTTPNotFound
 from guillotina.utils import get_security_policy
+
 # from guillotina.interfaces import IConstrainTypes
 from guillotina_volto.interfaces import ICMSConstrainTypes
 
@@ -85,10 +86,14 @@ async def get_all_types(context, request):
                 permission = query_utility(IPermission, name=factory.add_permission)
                 PERMISSIONS_CACHE[factory.add_permission] = permission
 
-            if permission is not None and not policy.check_permission(permission.id, context):
+            if permission is not None and not policy.check_permission(
+                permission.id, context
+            ):
                 add = False
         if add:
-            result.append({"@id": base_url + "/@types/" + id, "addable": True, "title": id})
+            result.append(
+                {"@id": base_url + "/@types/" + id, "addable": True, "title": id}
+            )
     return result
 
 
@@ -98,7 +103,9 @@ async def get_all_types(context, request):
     permission="guillotina.AccessContent",
     name="@types/{type_id}",
     summary="Components for a resource",
-    responses={"200": {"description": "Result results on types", "schema": {"properties": {}}}},
+    responses={
+        "200": {"description": "Result results on types", "schema": {"properties": {}}}
+    },
 )
 @configure.service(
     context=IResource,
@@ -106,17 +113,23 @@ async def get_all_types(context, request):
     permission="guillotina.AccessContent",
     name="@types/{type_id}",
     summary="Components for a resource",
-    responses={"200": {"description": "Result results on types", "schema": {"properties": {}}}},
+    responses={
+        "200": {"description": "Result results on types", "schema": {"properties": {}}}
+    },
 )
 class Read(Service):
     async def prepare(self):
         type_id = self.request.matchdict["type_id"]
         self.value = queryUtility(IResourceFactory, name=type_id)
         if self.value is None:
-            raise HTTPNotFound(content={"reason": f"Could not find type {type_id}", "type": type_id})
+            raise HTTPNotFound(
+                content={"reason": f"Could not find type {type_id}", "type": type_id}
+            )
 
     async def __call__(self):
-        serializer = getMultiAdapter((self.value, self.request), IFactorySerializeToJson)
+        serializer = getMultiAdapter(
+            (self.value, self.request), IFactorySerializeToJson
+        )
 
         result = await serializer()
         return result
