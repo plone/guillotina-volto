@@ -2,14 +2,22 @@ version: '3'
 services:
   guillotina:
     build: .
-    command:
-      - guillotina
-      - -c
-      - config.yaml
+    image: guillotina_volto:local
     ports:
       - '8081:8081'
     volumes:
       - .:/usr/src/app
+      - logvolume01:/var/log
+    links:
+      - postgres
+  guillotina-local:
+    build: .
+    image: guillotina_volto:local
+    ports:
+      - '8081:8081'
+    volumes:
+      - .:/usr/src/app
+      - ../guillotina:/usr/src/guillotina
       - logvolume01:/var/log
     links:
       - postgres

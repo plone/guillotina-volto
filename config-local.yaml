@@ -1,13 +1,11 @@
 ---
-aiohttp_settings:
-  client_max_size: 20971520
 databases:
-  - db:
-      storage: postgresql
-      transaction_strategy: dbresolve_readcommitted
-      dsn: postgresql://postgres:secret@localhost:5432/guillotina
-      read_only: false
-      pool_size: 100
+  db:
+    storage: postgresql
+    transaction_strategy: dbresolve_readcommitted
+    dsn: postgresql://postgres:secret@localhost:5432/guillotina
+    read_only: false
+    pool_size: 100
 store_json: true
 applications:
   - guillotina_volto
