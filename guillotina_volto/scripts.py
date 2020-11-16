@@ -56,8 +56,12 @@ def initdb():
 
     assert resp.status_code in (201, 409)
 
-    resp = requests.post("{}/web/@workflow/publish".format(groot), json={}, auth=auth)
-    assert resp.status_code in (200, 500, 404)
+    resp = requests.get("{}/web".format(groot), auth=auth)
+    assert resp.status_code == 200
+
+    if resp.json()['review_state'] == 'private':
+        resp = requests.post("{}/web/@workflow/publish".format(groot), json={}, auth=auth)
+        assert resp.status_code in (200, 500, 404)
 
     resp = requests.get("{}/web/@user".format(groot), auth=HTTPBasicAuth('admin', 'admin'))
     assert 'managers' in resp.json()['admin']['groups']
