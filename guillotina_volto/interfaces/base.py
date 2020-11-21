@@ -86,21 +86,6 @@ class ICMSBehavior(Interface):
         title="Position in parent", default=-1, required=False
     )
 
-    index_field("review_state", store=True, type="keyword")
-    review_state = schema.Choice(
-        readonly=True,
-        title="Workflow review state",
-        required=False,
-        source="worklow_states",
-    )
-
-    history = schema.List(
-        title="History list",
-        readonly=True,
-        required=False,
-        value_type=schema.JSONField(title="History element", schema=HISTORY_SCHEMA),
-    )
-
     comments = schema.Dict(
         title="Comments list field",
         required=False,

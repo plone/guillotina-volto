@@ -25,8 +25,8 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
                     {
                         "@type": "Document",
                         "title": "Document " + str(idx),
-                        "@behaviors": ["guillotina_volto.interfaces.editors.IRichText"],
-                        "guillotina_volto.interfaces.editors.IRichText": {
+                        "@behaviors": ["guillotina_volto.interfaces.richtext.IRichText"],
+                        "guillotina_volto.interfaces.richtext.IRichText": {
                             "text": {
                                 "encoding": "utf-8",
                                 "content-type": "",

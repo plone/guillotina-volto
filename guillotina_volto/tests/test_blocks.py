@@ -22,7 +22,7 @@ async def test_default_blocks_layout(cms_requester):
             == 2
         )
         assert (
-            "tile1" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]
+            "12821552-d26f-48eb-a1fd-790edb942c30" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]
         )
 
 

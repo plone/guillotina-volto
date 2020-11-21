@@ -16,10 +16,10 @@ async def test_history_creation(cms_requester):
         resp, status = await requester("GET", "/db/guillotina/doc1")
 
         assert (
-            resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"] is not None
+            resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"] is not None
         )
         assert (
-            resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"][0]["title"]
+            resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"][0]["title"]
             == "Created"
         )
 

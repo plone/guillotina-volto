@@ -10,6 +10,7 @@ from guillotina_volto.interfaces import IDocument
     schema=IDocument,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
         "guillotina_volto.interfaces.blocks.IBlocks",
     ],

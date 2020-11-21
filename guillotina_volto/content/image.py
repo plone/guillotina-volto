@@ -9,6 +9,7 @@ from guillotina_volto.interfaces import IImage
     schema=IImage,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
     ],
     allowed_types=[],  # dynamically calculated

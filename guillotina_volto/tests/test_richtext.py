@@ -24,10 +24,10 @@ async def test_li(cms_requester):
             data=json.dumps(
                 {
                     "@type": "Document",
-                    "@behaviors": ["guillotina_volto.interfaces.editors.IRichText"],
+                    "@behaviors": ["guillotina_volto.interfaces.richtext.IRichText"],
                     "title": "Document 2",
                     "id": "doc2",
-                    "guillotina_volto.interfaces.editors.IRichText": {
+                    "guillotina_volto.interfaces.richtext.IRichText": {
                         "text": {
                             "encoding": "utf-8",
                             "content-type": "text/html",
@@ -69,10 +69,10 @@ async def test_links_translated(cms_requester):
             data=json.dumps(
                 {
                     "@type": "Document",
-                    "@behaviors": ["guillotina_volto.interfaces.editors.IRichText"],
+                    "@behaviors": ["guillotina_volto.interfaces.richtext.IRichText"],
                     "title": "Document 2",
                     "id": "doc2",
-                    "guillotina_volto.interfaces.editors.IRichText": {
+                    "guillotina_volto.interfaces.richtext.IRichText": {
                         "text": {
                             "encoding": "utf-8",
                             "content-type": "text/html",
@@ -93,5 +93,5 @@ async def test_links_translated(cms_requester):
         resp, status = await requester("GET", "/db/guillotina/doc2")
         assert (
             "/db/guillotina/doc1"
-            in resp["guillotina_volto.interfaces.editors.IRichText"]["text"]["data"]
+            in resp["guillotina_volto.interfaces.richtext.IRichText"]["text"]["data"]
         )

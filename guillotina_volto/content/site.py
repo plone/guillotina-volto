@@ -9,6 +9,7 @@ from guillotina.content import Container
     schema=ISite,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
+        "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
         "guillotina_volto.interfaces.blocks.IBlocks",
     ],

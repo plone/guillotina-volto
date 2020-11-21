@@ -2,7 +2,6 @@ import json
 
 import pytest
 from guillotina import testing
-from guillotina.tests.fixtures import ContainerRequesterAsyncContextManager
 
 
 def base_settings_configurator(settings):
@@ -10,18 +9,44 @@ def base_settings_configurator(settings):
         settings["applications"].append("guillotina_volto")
     else:
         settings["applications"] = ["guillotina_volto"]
+    settings["container_types"] = ["Site"]
 
 
 testing.configure_with(base_settings_configurator)
 
 
-class CMSRequester(ContainerRequesterAsyncContextManager):
+class CMSRequester:
+    def __init__(self, guillotina, install=None):
+        self.guillotina = guillotina
+        self.install = install or ["cms", "dbusers", "email_validation"]
+        self.requester = None
+
+    async def get_requester(self):
+        return self.guillotina
+
     async def __aenter__(self):
-        await super().__aenter__()
-        await self.requester(
-            "POST", "/db/guillotina/@addons", data=json.dumps({"id": "cms"})
+        self.requester = await self.get_requester()
+        resp, status = await self.requester(
+            "POST",
+            "/db",
+            data=json.dumps(
+                {
+                    "@type": "Site",
+                    "title": "Guillotina Volto Site",
+                    "id": "guillotina",
+                    "description": "Description Guillotina Container",
+                }
+            ),
         )
+        assert status == 200
+        for addon in self.install:
+            await self.requester("POST", "/db/guillotina/@addons", data=json.dumps({"id": addon}))
         return self.requester
+
+    async def __aexit__(self, exc_type, exc, tb):
+        _, status = await self.requester("DELETE", "/db/guillotina")
+        assert status in (200, 404)
+        await self.guillotina.close()
 
 
 @pytest.fixture(scope="function")

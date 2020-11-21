@@ -22,6 +22,7 @@ from .blocks import IBlockType  # noqa
 from .blocks import IDefaultBlocksLayout  # noqa
 from .blocks import IDefaultBlocks  # noqa
 from .blocks import IBlocksMarker  # noqa
+from .richtext import IRichText  # noqa
 from .versioning import IDiffCalculator  # noqa
 from .versioning import IVersioning  # noqa
 from .versioning import IVersioningMarker  # noqa

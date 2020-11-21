@@ -11,6 +11,11 @@ _ = MessageFactory("guillotina_volto")
 app_settings = {
     "applications": [
         "guillotina.contrib.catalog.pg",
+        "guillotina.contrib.vocabularies",
+        "guillotina.contrib.workflows",
+        "guillotina.contrib.email_validation",
+        "guillotina.contrib.templates",
+        "guillotina.contrib.mailer",
         "guillotina.contrib.swagger",
         "guillotina.contrib.dbusers",
     ],
