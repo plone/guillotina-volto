@@ -44,6 +44,7 @@ app_settings = {
     ],
     "layouts": {
         "CMSFolder": [
+            "default",
             "listing_view",
             "tabular_view",
             "summary_view",
