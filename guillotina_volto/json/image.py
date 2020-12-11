@@ -1,4 +1,3 @@
-import pdb
 from guillotina import configure
 from guillotina import task_vars
 from guillotina.files.field import deserialize_cloud_field

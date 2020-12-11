@@ -20,9 +20,7 @@ class DefaultChoiceSchemaFieldSerializer(DefaultSchemaFieldSerializer):
         if self.field.vocabularyName is not None:
             container = get_current_container()
             result["vocabulary"] = {
-                "@id": get_object_url(container, self.request)
-                + "/@vocabularies/"
-                + self.field.vocabularyName
+                "@id": f"{get_object_url(container, self.request)}/@vocabularies/{self.field.vocabularyName}"
             }
             vocabulary_registry = getVocabularyRegistry()
             try:

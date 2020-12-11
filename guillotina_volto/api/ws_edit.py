@@ -113,7 +113,7 @@ class WSEdit(Service):
             async for msg in self.ws:
                 try:
                     message = msg.json
-                except WebSocketJsonDecodeError:
+                except Exception:
                     # We only care about json messages
                     logger.warning("Invalid websocket payload, ignored: {}".format(msg))
                     continue
@@ -132,7 +132,7 @@ class WSEdit(Service):
         finally:
             try:
                 await self.pubsub.unsubscribe(self.channel_name, self.request.uid)
-                await ws.close()  # make sure to close socket
+                await self.ws.close()  # make sure to close socket
             except Exception:
                 pass
 

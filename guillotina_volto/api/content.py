@@ -1,20 +1,13 @@
 from guillotina import configure
 from guillotina.api.content import resolve_uid
-from guillotina.api.service import Service
 from guillotina.content import duplicate, move
-from guillotina.catalog import index
 from guillotina.interfaces import IAsyncContainer
 from guillotina_volto.interfaces import ISite
-from guillotina.response import HTTPBadRequest
 from guillotina.response import HTTPPreconditionFailed
-from guillotina.transactions import get_transaction
 from guillotina.utils import find_container
-from guillotina.utils import get_behavior
 from guillotina.utils import get_object_by_uid
 from guillotina.utils import get_security_policy, get_object_url
 from guillotina.utils import navigate_to
-from guillotina_volto.interfaces import ICMSBehavior
-from guillotina_volto.ordering import supports_ordering
 
 
 @configure.service(

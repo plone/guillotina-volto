@@ -67,7 +67,7 @@ REACT_PAGE_PAYLOAD = {
                                                         },
                                                         {
                                                             "object": "text",
-                                                            "text": " is a company building and maintaining developer tools for a safer, more accessible web. You might also like our other ",
+                                                            "text": " is a company building and maintaining developer tools for a safer, more accessible web. You might also like our other ",  # noqa
                                                             "marks": [],
                                                         },
                                                         {
@@ -86,7 +86,7 @@ REACT_PAGE_PAYLOAD = {
                                                         },
                                                         {
                                                             "object": "text",
-                                                            "text": ' tools! The ORY Editor is a smart, extensible and modern editor ("WYSIWYG") for the web written in React.',
+                                                            "text": ' tools! The ORY Editor is a smart, extensible and modern editor ("WYSIWYG") for the web written in React.',  # noqa
                                                             "marks": [],
                                                         },
                                                     ],
@@ -98,7 +98,7 @@ REACT_PAGE_PAYLOAD = {
                                                     "nodes": [
                                                         {
                                                             "object": "text",
-                                                            "text": "The ORY Editor was written because we urgently needed a robust and modern content editing solution for our open education platform ",
+                                                            "text": "The ORY Editor was written because we urgently needed a robust and modern content editing solution for our open education platform ",  # noqa
                                                             "marks": [],
                                                         },
                                                         {
@@ -117,7 +117,7 @@ REACT_PAGE_PAYLOAD = {
                                                         },
                                                         {
                                                             "object": "text",
-                                                            "text": ". Serlo is the largest open education platform in Germany, works like the Wikipedia and is used by millions every year.",
+                                                            "text": ". Serlo is the largest open education platform in Germany, works like the Wikipedia and is used by millions every year.",  # noqa
                                                             "marks": [],
                                                         },
                                                     ],
@@ -200,7 +200,7 @@ REACT_PAGE_PAYLOAD = {
                                                         },
                                                         {
                                                             "object": "text",
-                                                            "text": " based on the ORY Editor. Create stunning websites, write your own designs and plugins, and be done with databases, application servers, and security updates.",
+                                                            "text": " based on the ORY Editor. Create stunning websites, write your own designs and plugins, and be done with databases, application servers, and security updates.",  # noqa
                                                             "marks": [],
                                                         },
                                                     ],

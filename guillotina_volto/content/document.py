@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 from guillotina import configure
 from guillotina.content import Folder
-from guillotina.directives import index
 from guillotina_volto.interfaces import IDocument
 
 
