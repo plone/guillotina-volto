@@ -7,9 +7,7 @@ from . import following  # noqa
 from . import history  # noqa
 from . import grant  # noqa
 from . import images  # noqa
-from . import indices  # noqa
 from . import menu  # noqa
-from . import search  # noqa
 from . import blocks  # noqa
 from . import roles  # noqa
 from . import system  # noqa

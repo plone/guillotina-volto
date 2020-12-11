@@ -7,6 +7,8 @@ from guillotina.utils import get_current_container
 from zope.interface import Interface
 from guillotina.schema.interfaces import ISource
 from guillotina.schema.vocabulary import SimpleVocabulary
+from guillotina.interfaces import ICloudFileField
+from guillotina.schema.vocabulary import getVocabularyRegistry
 
 
 @configure.adapter(
@@ -22,6 +24,13 @@ class DefaultChoiceSchemaFieldSerializer(DefaultSchemaFieldSerializer):
                 + "/@vocabularies/"
                 + self.field.vocabularyName
             }
+            vocabulary_registry = getVocabularyRegistry()
+            try:
+                vocab = vocabulary_registry.get(None, self.field.vocabularyName)
+                result["enum"] = vocab.keys()
+            except AttributeError:
+                pass
+            result["type"] = "string"
         else:
             if isinstance(self.field.vocabulary, SimpleVocabulary):
                 result["choices"] = [
@@ -38,3 +47,13 @@ class DefaultChoiceSchemaFieldSerializer(DefaultSchemaFieldSerializer):
     @property
     def field_type(self):
         return "string"
+
+
+@configure.adapter(
+    for_=(ICloudFileField, Interface, Interface), provides=ISchemaFieldSerializeToJson
+)
+class DefaultFileSchemaFieldSerializer(DefaultSchemaFieldSerializer):
+    def serialize(self):
+        result = super().serialize()
+        result["widget"] = "file"
+        return result
