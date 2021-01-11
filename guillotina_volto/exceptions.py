@@ -1,2 +1,0 @@
-class VocabularySettingNotFound(Exception):
-    pass

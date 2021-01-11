@@ -14,7 +14,6 @@ from guillotina.auth.role import local_roles
 from guillotina import app_settings
 from guillotina.component import get_utility
 from guillotina.component import query_utility
-from typing import List
 from copy import deepcopy
 
 
