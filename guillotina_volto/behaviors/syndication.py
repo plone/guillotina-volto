@@ -1,6 +1,6 @@
 from guillotina import configure
 from guillotina import schema
-from guillotina_volto.vocabularies.source import AppSettingSource
+from guillotina.contrib.dyncontent.vocabularies import AppSettingSource
 from zope.interface import Interface
 from guillotina.interfaces import IFolder
 

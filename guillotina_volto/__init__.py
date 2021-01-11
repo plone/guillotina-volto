@@ -11,6 +11,7 @@ _ = MessageFactory("guillotina_volto")
 app_settings = {
     "applications": [
         "guillotina.contrib.catalog.pg",
+        "guillotina.contrib.dyncontent",
         "guillotina.contrib.vocabularies",
         "guillotina.contrib.workflows",
         "guillotina.contrib.email_validation",

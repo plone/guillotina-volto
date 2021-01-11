@@ -5,7 +5,7 @@ pytestmark = pytest.mark.asyncio
 
 async def test_indices(cms_requester):
     async with cms_requester as requester:
-        resp, status = await requester("GET", "/db/guillotina/@indices")
+        resp, status = await requester("GET", "/db/guillotina/@metadata")
         assert "Item" in resp["types"]
         assert "title" in resp["types"]["Item"]
         assert "text" in resp["types"]["Item"]["title"]
