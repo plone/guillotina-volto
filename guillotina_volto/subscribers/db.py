@@ -27,6 +27,7 @@ async def db_initialized(event):
     # create json data indexes
     async with storage.lock:
         for statement in statements:
-            await storage.read_conn.execute(
-                statement.format(storage._objects_table_name)
-            )
+            async with storage.pool.acquire() as conn:
+                await conn.execute(
+                    statement.format(storage._objects_table_name)
+                )
