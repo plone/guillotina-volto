@@ -113,6 +113,12 @@ app_settings = {
         "Container",
         "Folder",
     ],
+    "sharing_tab_roles": [
+        "guillotina.Reader",
+        "guillotina.Editor",
+        "guillotina.Reviewer",
+        "guillotina.Owner",
+    ],
     "default_allow_discussion": False,
     "allow_discussion_types": [],
     "store_json": True,

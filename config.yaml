@@ -27,6 +27,8 @@ container_types:
   - Site
 root_user:
   password: root
+auth_user_identifiers:
+  - guillotina.contrib.dbusers.users.DBUserIdentifier
 auth_extractors:
   - guillotina.auth.extractors.BearerAuthPolicy
   - guillotina.auth.extractors.BasicAuthPolicy
@@ -100,3 +102,8 @@ default_blocks:
         - tile3
 allow_discussion_types:
   - Document
+sharing_tab_roles:
+  - guillotina.Reader
+  - guillotina.Editor
+  - guillotina.Reviewer
+  - guillotina.Owner
