@@ -1,6 +1,9 @@
 1.0.0a2 (Unreleased)
 ====================
 
+- Include 'Sharing Tab' functionality
+  [frapell]
+
 - Compatibility with guillotina>=6.3.0
   [frapell]
 
