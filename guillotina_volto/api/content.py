@@ -6,8 +6,10 @@ from guillotina.component import query_utility
 from guillotina.content import duplicate, move
 from guillotina.event import notify
 from guillotina.events import ObjectPermissionsViewEvent
+from guillotina.interfaces import Deny
 from guillotina.interfaces import IAsyncContainer
 from guillotina.interfaces import ICatalogUtility
+from guillotina.interfaces import IInheritPermissionMap
 from guillotina.interfaces import IRolePermissionMap
 from guillotina.interfaces import IPrincipalPermissionMap
 from guillotina.interfaces import IPrincipalRoleMap
@@ -273,6 +275,32 @@ async def move_content(context, request):
     return results
 
 
+async def get_all_sharing_roles():
+    all_roles = list()
+    restrict_roles = app_settings.get('sharing_tab_roles', list())
+    roles = configure.get_configurations('guillotina', 'role')
+    for app_name in app_settings.get('applications', list()):
+        roles += configure.get_configurations(app_name, 'role')
+
+    for _type, role_config in roles:
+        role_id = role_config['config'].get('id')
+        role_description = role_config['config'].get('description')
+        if not role_description:
+            continue
+        if restrict_roles:
+            if role_id in restrict_roles:
+                all_roles.append({
+                    'id': role_id,
+                    'title': role_description
+                })
+        else:
+            all_roles.append({
+                'id': role_id,
+                'title': role_description
+            })
+    return all_roles
+
+
 @configure.service(
     context=IResource,
     layer=ICMSLayer,
@@ -390,46 +418,34 @@ class SharingGET(Service):
         self.users_with_local_roles = dict()
         self.groups_with_local_roles = dict()
 
-        result = {
-            "available_roles": list(),
-            "entries": list(),
-            "inherit": True
-        }
-
         # Find all available roles
-        self.all_roles = list()
-        restrict_roles = app_settings.get('sharing_tab_roles', list())
-        roles = configure.get_configurations('guillotina', 'role')
-        for app_name in app_settings.get('applications', list()):
-            roles += configure.get_configurations(app_name, 'role')
-
-        for _type, role_config in roles:
-            role_id = role_config['config'].get('id')
-            role_description = role_config['config'].get('description')
-            if not role_description:
-                continue
-            if restrict_roles:
-                if role_id in restrict_roles:
-                    self.all_roles.append({
-                        'id': role_id,
-                        'title': role_description
-                    })
-            else:
-                self.all_roles.append({
-                    'id': role_id,
-                    'title': role_description
-                })
-
-        result['available_roles'] = self.all_roles
+        self.all_roles = await get_all_sharing_roles()
         self.all_role_ids = [i['id'] for i in self.all_roles]
+
+        inherit_permissions = IInheritPermissionMap(context)
+
+        inherit = True
+        if inherit_permissions is not None:
+            settings = inherit_permissions.get_locked_permissions()
+            # Either all permissions are allowed to be inherited or none are
+            for (p, s) in settings:
+                if p in self.all_role_ids and s is Deny:
+                    inherit = False
+
+        result = {
+            "available_roles": self.all_roles,
+            "entries": list(),
+            "inherit": inherit
+        }
 
         await self.set_roles_for_context(context)
 
-        for obj in iter_parents(context):
-            roleperm = IRolePermissionMap(obj, None)
-            url = get_object_url(obj, request)
-            if roleperm is not None and url is not None:
-                await self.set_roles_for_context(obj, acquired=True)
+        if inherit:
+            for obj in iter_parents(context):
+                roleperm = IRolePermissionMap(obj, None)
+                url = get_object_url(obj, request)
+                if roleperm is not None and url is not None:
+                    await self.set_roles_for_context(obj, acquired=True)
 
         group_keys = list(self.groups_with_local_roles.keys())
         group_keys.sort()
@@ -553,6 +569,22 @@ class SharingPOST(Service):
                         "setting": setting
                     })
 
+        self.all_roles = await get_all_sharing_roles()
+        self.all_role_ids = [i['id'] for i in self.all_roles]
+
+        # When 'inherit' is not in data, means the value should be enabled
+        inherit = data.get('inherit', True)
+
+        perminhe = list()
+        for role_id in self.all_role_ids:
+            perminhe.append({
+                'permission': role_id,
+                'setting': 'Allow' if inherit else 'Deny'
+            })
+
+        data_to_apply = {'perminhe': perminhe}
+
         if prinrole:
             data_to_apply = {"prinrole": prinrole}
-            return await apply_sharing(context, data_to_apply)
+
+        return await apply_sharing(context, data_to_apply)
