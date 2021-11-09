@@ -10,9 +10,11 @@ pytestmark = pytest.mark.asyncio
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_search(cms_requester):
     async with cms_requester as requester:
-        await add_content(requester)
+        created = await add_content(requester)
         resp, status = await requester("GET", "/db/guillotina/@search")
-        assert resp["items_total"] == 22
+
+        # Items also include /users and /groups
+        assert resp["items_total"] == 24
 
         resp, status = await requester(
             "GET", "/db/guillotina/@search?path__starts=cms-folder0&depth__gte=1"

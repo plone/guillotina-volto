@@ -42,9 +42,9 @@ async def test_li(cms_requester):
                     },
                 }
             ),
+            headers={"X-Wait": "10"},
         )
         assert status == 201
-
         resp, status = await requester("GET", "/db/guillotina/doc2/@links")
         assert resp1["@uid"] in resp
         resp, status = await requester("GET", "/db/guillotina/doc1/@links-to")

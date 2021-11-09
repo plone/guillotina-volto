@@ -4,22 +4,19 @@ import os
 
 pytestmark = pytest.mark.asyncio
 
+NOT_POSTGRES = os.environ.get("DATABASE", "DUMMY") in ("cockroachdb", "DUMMY")
+PG_CATALOG_SETTINGS = {
+    "applications": ["guillotina.contrib.catalog.pg"],
+    "load_utilities": {
+        "catalog": {
+            "provides": "guillotina.interfaces.ICatalogUtility",
+            "factory": "guillotina.contrib.catalog.pg.utility.PGSearchUtility",
+        }
+    },
+}
 
-@pytest.mark.skipif(
-    os.environ.get("DATABASE", "DUMMY") in ("cockroachdb", "DUMMY"),
-    reason="Not for dummy db",
-)
-@pytest.mark.app_settings(
-    {
-        "applications": ["guillotina.contrib.catalog.pg"],
-        "load_utilities": {
-            "catalog": {
-                "provides": "guillotina.interfaces.ICatalogUtility",
-                "factory": "guillotina.contrib.catalog.pg.PGSearchUtility",
-            }
-        },
-    }
-)
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_navigation(cms_requester):
     async with cms_requester as requester:
         resp, status = await requester(
