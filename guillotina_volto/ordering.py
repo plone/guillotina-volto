@@ -26,7 +26,7 @@ async def get_last_child_position(folder):
     conn = await txn.get_connection()
     results = await conn.fetch(
         """select json from {}
-WHERE parent_id = $1 AND of IS NULL
+WHERE parent_id = $1 AND of IS NULL AND (json->>'position_in_parent')::int IS NOT NULL
 ORDER BY (json->>'position_in_parent')::int DESC
 limit 1""".format(
             txn.storage._objects_table_name
