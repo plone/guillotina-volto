@@ -44,14 +44,12 @@ async def test_sharing_tab_assign_permissions(cms_requester):
             data=json.dumps({"@type": "CMSFolder", "id": "folder1"}),
         )
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/@sharing")
 
         # There are no local roles assigned for any user in this context
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 0
 
         # Assign local roles to the user
@@ -62,10 +60,10 @@ async def test_sharing_tab_assign_permissions(cms_requester):
                 {
                     "entries": [
                         {
-                            'id': 'john_doe_1',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Editor': True,
+                            "id": "john_doe_1",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Editor": True,
                             },
                         }
                     ],
@@ -74,23 +72,21 @@ async def test_sharing_tab_assign_permissions(cms_requester):
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 1
 
         # Even that the "Editor" role was assigned locally, the global setting has more precedence
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] is True
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is True
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] is True
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is True
+                assert entry["roles"]["guillotina.Reviewer"] is False
 
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
@@ -125,14 +121,12 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
             data=json.dumps({"@type": "CMSFolder", "id": "folder2"}),
         )
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
         # There are no local roles assigned nor inherited for any user in this context
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is True
         assert len(resp["entries"]) == 0
 
@@ -144,10 +138,10 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
                 {
                     "entries": [
                         {
-                            'id': 'john_doe_1',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Editor': True,
+                            "id": "john_doe_1",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Editor": True,
                             },
                         }
                     ],
@@ -156,45 +150,36 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is True
         assert len(resp["entries"]) == 1
 
         # In a children folder, roles are acquired
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'acquired'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "acquired"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is False
 
         # Disable inheritance in subfolder
         resp, status = await requester(
             "POST",
             "/db/guillotina/folder1/folder2/@sharing",
-            data=json.dumps(
-                {
-                    "entries": [],
-                    "inherit": False
-                }
-            ),
+            data=json.dumps({"entries": [], "inherit": False}),
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is False
         assert len(resp["entries"]) == 0
 
@@ -206,10 +191,10 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
                 {
                     "entries": [
                         {
-                            'id': 'john_doe_1',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Reviewer': True,
+                            "id": "john_doe_1",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Reviewer": True,
                             },
                         }
                     ],
@@ -218,87 +203,71 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is False
         assert len(resp["entries"]) == 1
 
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] is False
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is True
-                assert entry['roles']['guillotina.Reviewer'] is True
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] is False
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is True
+                assert entry["roles"]["guillotina.Reviewer"] is True
 
         # Enable back inheritance in subfolder
         resp, status = await requester(
             "POST",
             "/db/guillotina/folder1/folder2/@sharing",
-            data=json.dumps(
-                {
-                    "entries": [],
-                    "inherit": True
-                }
-            ),
+            data=json.dumps({"entries": [], "inherit": True}),
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is True
         assert len(resp["entries"]) == 1
 
         # Acquired roles have more precedence over locally assigned
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'acquired'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is True
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "acquired"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is True
 
         # Disable inheritance in subfolder
         resp, status = await requester(
             "POST",
             "/db/guillotina/folder1/folder2/@sharing",
-            data=json.dumps(
-                {
-                    "entries": [],
-                    "inherit": False
-                }
-            ),
+            data=json.dumps({"entries": [], "inherit": False}),
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert resp["inherit"] is False
         assert len(resp["entries"]) == 1
 
         # No acquired roles, only assigned ones
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] is False
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is True
-                assert entry['roles']['guillotina.Reviewer'] is True
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] is False
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is True
+                assert entry["roles"]["guillotina.Reviewer"] is True
 
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
@@ -357,41 +326,39 @@ async def test_sharing_tab_search(cms_requester):
             data=json.dumps({"@type": "CMSFolder", "id": "folder1"}),
         )
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/@sharing")
 
         # There are no local roles assigned for any user in this context
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 0
 
         resp, status = await requester(
             "GET", "/db/guillotina/folder1/@sharing?search=john"
         )
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 3
 
         resp, status = await requester(
             "GET", "/db/guillotina/folder1/@sharing?search=doe"
         )
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 4
 
         resp, status = await requester(
             "GET", "/db/guillotina/folder1/@sharing?search=another"
         )
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 1
 
 
@@ -408,10 +375,7 @@ async def test_sharing_tab_global_permissions(cms_requester):
         for name, userid in users:
             user_roles = ["guillotina.Member"]
             if userid == "john_doe_1":
-                user_roles = [
-                    "guillotina.Editor",
-                    "guillotina.Member"
-                ]
+                user_roles = ["guillotina.Editor", "guillotina.Member"]
             resp, status = await requester(
                 "POST",
                 "/db/guillotina/users",
@@ -440,43 +404,41 @@ async def test_sharing_tab_global_permissions(cms_requester):
             data=json.dumps({"@type": "CMSFolder", "id": "folder2"}),
         )
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/@sharing")
 
         # There are no local roles assigned for any user in this context
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 0
 
         resp, status = await requester(
             "GET", "/db/guillotina/folder1/@sharing?search=john"
         )
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 3
 
         # Search results, john_doe_1 has 1 global role
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'global'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is False
-                assert entry['roles']['guillotina.Reviewer'] is False
-            if userid == 'john_doe_2':
-                assert entry['roles']['guillotina.Editor'] is False
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is False
-                assert entry['roles']['guillotina.Reviewer'] is False
-            if userid == 'john_doe_3':
-                assert entry['roles']['guillotina.Editor'] is False
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is False
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "global"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is False
+                assert entry["roles"]["guillotina.Reviewer"] is False
+            if userid == "john_doe_2":
+                assert entry["roles"]["guillotina.Editor"] is False
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is False
+                assert entry["roles"]["guillotina.Reviewer"] is False
+            if userid == "john_doe_3":
+                assert entry["roles"]["guillotina.Editor"] is False
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is False
+                assert entry["roles"]["guillotina.Reviewer"] is False
 
         # Assign local roles to 2 users
         resp, status = await requester(
@@ -486,70 +448,66 @@ async def test_sharing_tab_global_permissions(cms_requester):
                 {
                     "entries": [
                         {
-                            'id': 'john_doe_1',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Editor': True,
+                            "id": "john_doe_1",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Editor": True,
                             },
                         },
                         {
-                            'id': 'john_doe_2',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Editor': True,
+                            "id": "john_doe_2",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Editor": True,
                             },
-                        }
+                        },
                     ],
                 }
             ),
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 2
 
         # Even that the "Editor" role was assigned locally, the global setting has more precedence
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'global'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is True
-                assert entry['roles']['guillotina.Reviewer'] is False
-            if userid == 'john_doe_2':
-                assert entry['roles']['guillotina.Editor'] is True
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] is True
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "global"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is True
+                assert entry["roles"]["guillotina.Reviewer"] is False
+            if userid == "john_doe_2":
+                assert entry["roles"]["guillotina.Editor"] is True
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] is True
+                assert entry["roles"]["guillotina.Reviewer"] is False
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 2
 
         # In a children folder, roles are acquired
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'global'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is False
-            if userid == 'john_doe_2':
-                assert entry['roles']['guillotina.Editor'] == 'acquired'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "global"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is False
+            if userid == "john_doe_2":
+                assert entry["roles"]["guillotina.Editor"] == "acquired"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is False
 
         # Assign local roles to subfolder
         resp, status = await requester(
@@ -559,11 +517,11 @@ async def test_sharing_tab_global_permissions(cms_requester):
                 {
                     "entries": [
                         {
-                            'id': 'john_doe_1',
-                            'roles': {
-                                'guillotina.Reader': True,
-                                'guillotina.Editor': True,
-                                'guillotina.Reviewer': True,
+                            "id": "john_doe_1",
+                            "roles": {
+                                "guillotina.Reader": True,
+                                "guillotina.Editor": True,
+                                "guillotina.Reviewer": True,
                             },
                         }
                     ],
@@ -572,25 +530,23 @@ async def test_sharing_tab_global_permissions(cms_requester):
         )
         assert status == 200
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/folder1/folder2/@sharing"
-        )
+        resp, status = await requester("GET", "/db/guillotina/folder1/folder2/@sharing")
 
-        assert 'available_roles' in resp
-        assert 'entries' in resp
-        assert 'inherit' in resp
+        assert "available_roles" in resp
+        assert "entries" in resp
+        assert "inherit" in resp
         assert len(resp["entries"]) == 2
 
         # Acquired and Global roles have more precedence over locally assigned
-        for entry in resp['entries']:
-            userid = entry.get('id')
-            if userid == 'john_doe_1':
-                assert entry['roles']['guillotina.Editor'] == 'global'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is True
-            if userid == 'john_doe_2':
-                assert entry['roles']['guillotina.Editor'] == 'acquired'
-                assert entry['roles']['guillotina.Owner'] is False
-                assert entry['roles']['guillotina.Reader'] == 'acquired'
-                assert entry['roles']['guillotina.Reviewer'] is False
+        for entry in resp["entries"]:
+            userid = entry.get("id")
+            if userid == "john_doe_1":
+                assert entry["roles"]["guillotina.Editor"] == "global"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is True
+            if userid == "john_doe_2":
+                assert entry["roles"]["guillotina.Editor"] == "acquired"
+                assert entry["roles"]["guillotina.Owner"] is False
+                assert entry["roles"]["guillotina.Reader"] == "acquired"
+                assert entry["roles"]["guillotina.Reviewer"] is False

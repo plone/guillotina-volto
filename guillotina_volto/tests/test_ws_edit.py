@@ -30,7 +30,12 @@ async def _test_ws_edit(pubsub):
         resp, status = await requester(
             "POST",
             "/db/guillotina",
-            data=json.dumps({"@type": "Item", "title": "item", }),
+            data=json.dumps(
+                {
+                    "@type": "Item",
+                    "title": "item",
+                }
+            ),
         )
         url = pubsub.guillotina.server.make_url("db/guillotina/item/@ws-edit")
         asyncio.ensure_future(await_for_value(url))

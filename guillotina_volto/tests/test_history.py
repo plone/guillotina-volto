@@ -16,12 +16,8 @@ async def test_history_creation(cms_requester):
         resp, status = await requester("GET", "/db/guillotina/doc1")
 
         behavior = resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]
-        assert (
-            behavior["history"] is not None
-        )
-        assert (
-            behavior["history"][0]["title"] == "Created"
-        )
+        assert behavior["history"] is not None
+        assert behavior["history"][0]["title"] == "Created"
 
         resp, status = await requester("GET", "/db/guillotina/doc1/@workflow")
 

@@ -28,6 +28,4 @@ async def db_initialized(event):
     async with storage.lock:
         for statement in statements:
             async with storage.pool.acquire() as conn:
-                await conn.execute(
-                    statement.format(storage._objects_table_name)
-                )
+                await conn.execute(statement.format(storage._objects_table_name))

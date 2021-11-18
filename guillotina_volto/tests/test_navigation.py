@@ -15,6 +15,7 @@ PG_CATALOG_SETTINGS = {
     },
 }
 
+
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_navigation(cms_requester):

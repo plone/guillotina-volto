@@ -191,7 +191,7 @@ async def _iter_copyable_content(context, request):
     container_url = get_object_url(container)
     for item in source:
         if item.startswith(container_url):
-            path = item[len(container_url):]
+            path = item[len(container_url) :]
             ob = await navigate_to(container, path.strip("/"))
             if ob is None:
                 raise HTTPPreconditionFailed(
@@ -273,27 +273,21 @@ async def move_content(context, request):
 
 async def get_all_sharing_roles():
     all_roles = list()
-    restrict_roles = app_settings.get('sharing_tab_roles', list())
-    roles = configure.get_configurations('guillotina', 'role')
-    for app_name in app_settings.get('applications', list()):
-        roles += configure.get_configurations(app_name, 'role')
+    restrict_roles = app_settings.get("sharing_tab_roles", list())
+    roles = configure.get_configurations("guillotina", "role")
+    for app_name in app_settings.get("applications", list()):
+        roles += configure.get_configurations(app_name, "role")
 
     for _type, role_config in roles:
-        role_id = role_config['config'].get('id')
-        role_description = role_config['config'].get('description')
+        role_id = role_config["config"].get("id")
+        role_description = role_config["config"].get("description")
         if not role_description:
             continue
         if restrict_roles:
             if role_id in restrict_roles:
-                all_roles.append({
-                    'id': role_id,
-                    'title': role_description
-                })
+                all_roles.append({"id": role_id, "title": role_description})
         else:
-            all_roles.append({
-                'id': role_id,
-                'title': role_description
-            })
+            all_roles.append({"id": role_id, "title": role_description})
     return all_roles
 
 
@@ -302,16 +296,16 @@ async def get_all_sharing_roles():
     layer=ICMSLayer,
     method="GET",
     permission="guillotina.SeePermissions",
-    name="@sharing"
+    name="@sharing",
 )
 class SharingGET(Service):
-
     async def set_roles_for_context(self, context, acquired=False):
         prinrole = IPrincipalRoleMap(context)
         for pr_id, permissions in prinrole._bycol.items():
             local_roles = [
-                p for p, s in permissions.items()
-                if s.get_name() == 'Allow' and p in self.all_role_ids
+                p
+                for p, s in permissions.items()
+                if s.get_name() == "Allow" and p in self.all_role_ids
             ]
             # If none of the local roles are configurable from the sharing tab,
             # just go to the next principal
@@ -330,71 +324,71 @@ class SharingGET(Service):
 
             if pr_id in self.users_with_local_roles:
                 user_value = self.users_with_local_roles[pr_id]
-                existing_roles = user_value.get('roles', dict())
+                existing_roles = user_value.get("roles", dict())
                 for k, v in local_roles_dict.items():
                     if v and existing_roles.get(k) != "global":
                         if acquired:
                             existing_roles[k] = "acquired"
                         else:
                             existing_roles[k] = True
-                user_value['roles'] = existing_roles
+                user_value["roles"] = existing_roles
                 self.users_with_local_roles[pr_id] = user_value
 
             elif pr_id in self.groups_with_local_roles:
                 group_value = self.groups_with_local_roles[pr_id]
-                existing_roles = group_value.get('roles', dict())
+                existing_roles = group_value.get("roles", dict())
                 for k, v in local_roles_dict.items():
                     if v and existing_roles.get(k) != "global":
                         if acquired:
                             existing_roles[k] = "acquired"
                         else:
                             existing_roles[k] = True
-                group_value['roles'] = existing_roles
+                group_value["roles"] = existing_roles
                 self.groups_with_local_roles[pr_id] = group_value
 
             else:
                 query = {
-                    'portal_type__or': 'Group,User',
-                    'id': pr_id,
+                    "portal_type__or": "Group,User",
+                    "id": pr_id,
                 }
                 groups_or_users = await self.search.search(self.site, query)
-                for item in groups_or_users.get('items', list()):
-                    if item['type_name'] == 'User':
+                for item in groups_or_users.get("items", list()):
+                    if item["type_name"] == "User":
                         for role in local_roles_dict.keys():
-                            if role in item['user_roles']:
+                            if role in item["user_roles"]:
                                 local_roles_dict[role] = "global"
-                        user_id = item.get('id')
-                        user_name = item.get('user_name')
+                        user_id = item.get("id")
+                        user_name = item.get("user_name")
                         if not user_name:
                             user_name = user_id
                         else:
-                            user_name += f' ({user_id})'
+                            user_name += f" ({user_id})"
                         entry = {
                             "disabled": False,
                             "id": user_id,
                             "login": user_id,
                             "roles": local_roles_dict,
                             "title": user_name,
-                            "type": "user"
+                            "type": "user",
                         }
                         self.users_with_local_roles[pr_id] = entry
-                    elif item['type_name'] == 'Group':
+                    elif item["type_name"] == "Group":
                         for role in local_roles_dict.keys():
-                            if role in item['group_user_roles']:
+                            if role in item["group_user_roles"]:
                                 local_roles_dict[role] = "global"
-                        group_id = item.get('id')
-                        group_name = item.get('group_name')
+                        group_id = item.get("id")
+                        group_name = item.get("group_name")
                         if not group_name:
                             group_name = group_id
                         else:
-                            group_name += f' ({group_id})'
+                            group_name += f" ({group_id})"
                         entry = {
                             "disabled": False,
                             "id": group_id,
                             "login": None,
                             "roles": local_roles_dict,
                             "title": group_name,
-                            "type": "group"
+                            "type": "group",
                         }
                         self.groups_with_local_roles[pr_id] = entry
 
@@ -414,7 +408,7 @@ class SharingGET(Service):
 
         # Find all available roles
         self.all_roles = await get_all_sharing_roles()
-        self.all_role_ids = [i['id'] for i in self.all_roles]
+        self.all_role_ids = [i["id"] for i in self.all_roles]
 
         inherit_permissions = IInheritPermissionMap(context)
 
@@ -429,7 +423,7 @@ class SharingGET(Service):
         result = {
             "available_roles": self.all_roles,
             "entries": list(),
-            "inherit": inherit
+            "inherit": inherit,
         }
 
         await self.set_roles_for_context(context)
@@ -448,13 +442,13 @@ class SharingGET(Service):
         user_keys.sort()
 
         for k in group_keys:
-            result['entries'].append(self.groups_with_local_roles[k])
+            result["entries"].append(self.groups_with_local_roles[k])
 
         for k in user_keys:
-            result['entries'].append(self.users_with_local_roles[k])
+            result["entries"].append(self.users_with_local_roles[k])
 
         # Finally, add results for searched users/groups
-        search_query = request.query.get('search', None)
+        search_query = request.query.get("search", None)
         if search_query:
             site = context
             while not ISite.providedBy(site):
@@ -464,64 +458,64 @@ class SharingGET(Service):
             if search:
                 # find groups
                 query = {
-                    'portal_type': 'Group',
-                    'title__in': search_query,
+                    "portal_type": "Group",
+                    "title__in": search_query,
                 }
 
                 groups = await search.search(site, query)
-                for group in groups.get('items', list()):
-                    group_id = group.get('id')
+                for group in groups.get("items", list()):
+                    group_id = group.get("id")
                     if group_id not in self.groups_with_local_roles:
-                        group_name = group.get('group_name')
+                        group_name = group.get("group_name")
                         if not group_name:
                             group_name = group_id
                         else:
-                            group_name += f' ({group_id})'
+                            group_name += f" ({group_id})"
                         entry = {
                             "disabled": False,
                             "id": group_id,
                             "login": None,
                             "roles": dict(),
                             "title": group_name,
-                            "type": "group"
+                            "type": "group",
                         }
                         for roleid in self.all_role_ids:
-                            if roleid in group.get('group_user_roles', list()):
-                                entry['roles'][roleid] = "global"
+                            if roleid in group.get("group_user_roles", list()):
+                                entry["roles"][roleid] = "global"
                             else:
-                                entry['roles'][roleid] = False
+                                entry["roles"][roleid] = False
 
-                        result['entries'].append(entry)
+                        result["entries"].append(entry)
 
                 # find users
                 query = {
-                    'portal_type': 'User',
-                    'title__in': search_query,
+                    "portal_type": "User",
+                    "title__in": search_query,
                 }
                 users = await search.search(site, query)
-                for user in users.get('items', list()):
-                    user_id = user.get('id')
+                for user in users.get("items", list()):
+                    user_id = user.get("id")
                     if user_id not in self.users_with_local_roles:
-                        user_name = user.get('user_name')
+                        user_name = user.get("user_name")
                         if not user_name:
                             user_name = user_id
                         else:
-                            user_name += f' ({user_id})'
+                            user_name += f" ({user_id})"
                         entry = {
                             "disabled": False,
                             "id": user_id,
                             "login": user_id,
                             "roles": dict(),
                             "title": user_name,
-                            "type": "user"
+                            "type": "user",
                         }
                         for roleid in self.all_role_ids:
-                            if roleid in user.get('user_roles', list()):
-                                entry['roles'][roleid] = "global"
+                            if roleid in user.get("user_roles", list()):
+                                entry["roles"][roleid] = "global"
                             else:
-                                entry['roles'][roleid] = False
+                                entry["roles"][roleid] = False
 
-                        result['entries'].append(entry)
+                        result["entries"].append(entry)
 
         return result
 
@@ -533,7 +527,7 @@ class SharingGET(Service):
     permission="guillotina.ChangePermissions",
     name="@sharing",
     summary="Change permissions for a resource",
-    validate=True
+    validate=True,
 )
 class SharingPOST(Service):
     async def __call__(self, changed=False):
@@ -542,41 +536,38 @@ class SharingPOST(Service):
         request = self.request
         data = await request.json()
 
-        if 'entries' not in data:
+        if "entries" not in data:
             raise HTTPPreconditionFailed(self.context, "entries missing")
 
-        entries = data['entries']
+        entries = data["entries"]
 
         prinrole = list()
         for entry in entries:
-            principal = entry.get('id')
-            for k, v in entry['roles'].items():
+            principal = entry.get("id")
+            for k, v in entry["roles"].items():
                 setting = None
                 if v is True:
                     setting = "Allow"
                 if v is False:
                     setting = "Unset"
                 if setting:
-                    prinrole.append({
-                        "principal": principal,
-                        "role": k,
-                        "setting": setting
-                    })
+                    prinrole.append(
+                        {"principal": principal, "role": k, "setting": setting}
+                    )
 
         self.all_roles = await get_all_sharing_roles()
-        self.all_role_ids = [i['id'] for i in self.all_roles]
+        self.all_role_ids = [i["id"] for i in self.all_roles]
 
         # When 'inherit' is not in data, means the value should be enabled
-        inherit = data.get('inherit', True)
+        inherit = data.get("inherit", True)
 
         perminhe = list()
         for role_id in self.all_role_ids:
-            perminhe.append({
-                'permission': role_id,
-                'setting': 'Allow' if inherit else 'Deny'
-            })
+            perminhe.append(
+                {"permission": role_id, "setting": "Allow" if inherit else "Deny"}
+            )
 
-        data_to_apply = {'perminhe': perminhe}
+        data_to_apply = {"perminhe": perminhe}
 
         if prinrole:
             data_to_apply = {"prinrole": prinrole}

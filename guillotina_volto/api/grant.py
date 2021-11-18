@@ -33,7 +33,7 @@ PERMISSIONS_TO_FORBIT_ONINHERIT = [
     name="@grant",
 )
 async def grantinfo_get(context, request):
-    """ principals -> roles """
+    """principals -> roles"""
     search = request.query.get("search")
     if search is not None:
         search = search.lower()

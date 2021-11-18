@@ -40,7 +40,9 @@ class CMSRequester:
         )
         assert status == 200
         for addon in self.install:
-            await self.requester("POST", "/db/guillotina/@addons", data=json.dumps({"id": addon}))
+            await self.requester(
+                "POST", "/db/guillotina/@addons", data=json.dumps({"id": addon})
+            )
         return self.requester
 
     async def __aexit__(self, exc_type, exc, tb):

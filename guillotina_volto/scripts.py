@@ -7,7 +7,10 @@ auth = HTTPBasicAuth("root", "root")
 def initdb():
     groot = "http://localhost:8081/db"
 
-    resp = requests.get(groot, auth=auth,)
+    resp = requests.get(
+        groot,
+        auth=auth,
+    )
     assert resp.status_code == 200
 
     # Create container

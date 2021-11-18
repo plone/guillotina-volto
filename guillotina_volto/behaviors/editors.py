@@ -6,10 +6,13 @@ from guillotina.directives import index
 
 
 @configure.behavior(
-    title="Blocks behavior", provides=IBlocks, for_="guillotina.interfaces.IResource",
+    title="Blocks behavior",
+    provides=IBlocks,
+    for_="guillotina.interfaces.IResource",
 )
 class Blocks(ContextBehavior):
     pass
+
 
 @configure.behavior(
     title="RichText behavior",

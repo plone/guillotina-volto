@@ -65,8 +65,7 @@ class IBlocks(Interface):
 
 
 class IBlockType(Interface):
-    """A utility that describes a type of block
-    """
+    """A utility that describes a type of block"""
 
     __name__ = schema.DottedName(title="Block name (same as utility name)")
     title = schema.TextLine(title=u"Title")

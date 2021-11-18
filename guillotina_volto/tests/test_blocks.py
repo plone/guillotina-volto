@@ -17,10 +17,12 @@ async def test_default_blocks_layout(cms_requester):
                 response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks_layout"][
                     "items"
                 ]
-            ) == 2
+            )
+            == 2
         )
         assert (
-            "12821552-d26f-48eb-a1fd-790edb942c30" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]  # noqa
+            "12821552-d26f-48eb-a1fd-790edb942c30"
+            in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]  # noqa
         )
 
 
