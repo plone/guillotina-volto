@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
+from guillotina import app_settings
 from guillotina import configure
-from guillotina.json.serialize_schema import SerializeFactoryToJson
-from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.component.interfaces import IFactory
-from guillotina_volto.interfaces import ICMSLayer
+from guillotina.interfaces import IFactorySerializeToJson
+from guillotina.json.serialize_schema import SerializeFactoryToJson
+from guillotina.schema.interfaces import ISource
+
 from guillotina_volto.directives import fieldset
 from guillotina_volto.directives import merged_tagged_value_dict_merged
-from guillotina.schema.interfaces import ISource
-from guillotina import app_settings
+from guillotina_volto.interfaces import ICMSLayer
 
 
 @configure.adapter(for_=(IFactory, ICMSLayer), provides=IFactorySerializeToJson)

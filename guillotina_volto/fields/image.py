@@ -1,7 +1,8 @@
-from guillotina_volto.fields.interfaces import ICloudImageFileField
-from guillotina_volto.fields.interfaces import IImageFile
 from guillotina.schema import Object
 from zope.interface import implementer
+
+from guillotina_volto.fields.interfaces import ICloudImageFileField
+from guillotina_volto.fields.interfaces import IImageFile
 
 
 @implementer(ICloudImageFileField)

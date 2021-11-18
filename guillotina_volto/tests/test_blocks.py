@@ -1,9 +1,12 @@
-from guillotina.tests.utils import create_content
-from guillotina.content import Resource
-from guillotina_volto.interfaces import IBlocks
-from guillotina_volto.behaviors.editors import Blocks
-import pytest
 import json
+
+import pytest
+from guillotina.content import Resource
+from guillotina.tests.utils import create_content
+
+from guillotina_volto.behaviors.editors import Blocks
+from guillotina_volto.interfaces import IBlocks
+
 
 pytestmark = pytest.mark.asyncio
 

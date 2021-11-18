@@ -1,6 +1,8 @@
 from guillotina.behaviors.dublincore import IDublinCore
 from guillotina.interfaces import IResource
+
 from guillotina_volto import directives
+
 
 directives.fieldset_field.apply(
     IDublinCore, "description", "default"

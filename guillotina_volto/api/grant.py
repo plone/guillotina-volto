@@ -1,20 +1,19 @@
-from guillotina import configure
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IInheritPermissionManager
-from guillotina.interfaces import IPrincipalRoleManager
+from copy import deepcopy
 
-from guillotina.interfaces import IInheritPermissionMap
-from guillotina.interfaces import IPrincipalRoleMap
-from guillotina.exceptions import ContainerNotFound
-from guillotina.interfaces.catalog import ICatalogUtility
-
-from guillotina.utils import get_current_container
-from guillotina.interfaces import IRole
-from guillotina.auth.role import local_roles
 from guillotina import app_settings
+from guillotina import configure
+from guillotina.auth.role import local_roles
 from guillotina.component import get_utility
 from guillotina.component import query_utility
-from copy import deepcopy
+from guillotina.exceptions import ContainerNotFound
+from guillotina.interfaces import IInheritPermissionManager
+from guillotina.interfaces import IInheritPermissionMap
+from guillotina.interfaces import IPrincipalRoleManager
+from guillotina.interfaces import IPrincipalRoleMap
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IRole
+from guillotina.interfaces.catalog import ICatalogUtility
+from guillotina.utils import get_current_container
 
 
 PERMISSIONS_TO_FORBIT_ONINHERIT = [

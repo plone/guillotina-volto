@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
-from guillotina_volto.interfaces.content import ISite
 from guillotina import configure
 from guillotina.content import Container
+
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.contenttype(

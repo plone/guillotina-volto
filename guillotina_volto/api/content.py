@@ -1,25 +1,28 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 from guillotina.api.content import resolve_uid
 from guillotina.api.service import Service
 from guillotina.component import query_utility
-from guillotina.content import duplicate, move
+from guillotina.content import duplicate
+from guillotina.content import move
 from guillotina.interfaces import Deny
 from guillotina.interfaces import IAsyncContainer
 from guillotina.interfaces import ICatalogUtility
 from guillotina.interfaces import IInheritPermissionMap
-from guillotina.interfaces import IRolePermissionMap
 from guillotina.interfaces import IPrincipalRoleMap
 from guillotina.interfaces import IResource
-from guillotina_volto.interfaces import ICMSLayer
-from guillotina_volto.interfaces import ISite
+from guillotina.interfaces import IRolePermissionMap
 from guillotina.response import HTTPPreconditionFailed
 from guillotina.security.utils import apply_sharing
 from guillotina.utils import find_container
 from guillotina.utils import get_object_by_uid
-from guillotina.utils import get_security_policy, get_object_url
+from guillotina.utils import get_object_url
+from guillotina.utils import get_security_policy
 from guillotina.utils import iter_parents
 from guillotina.utils import navigate_to
+
+from guillotina_volto.interfaces import ICMSLayer
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(

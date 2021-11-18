@@ -1,13 +1,14 @@
+from guillotina import app_settings
 from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
+from guillotina.component import get_multi_adapter
+from guillotina.component import getMultiAdapter
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ISchemaFieldSerializeToJson
-from guillotina.component import getMultiAdapter
-from guillotina.component import get_multi_adapter
 from guillotina.schema import get_fields_in_order
-from guillotina.utils import resolve_dotted_name
 from guillotina.utils import get_registry
-from guillotina import app_settings
+from guillotina.utils import resolve_dotted_name
+
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.service(

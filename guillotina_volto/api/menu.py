@@ -1,7 +1,8 @@
 from guillotina import configure
 from guillotina.utils import get_registry
-from guillotina_volto.interfaces import ISite
+
 from guillotina_volto.interfaces import IMenu
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(

@@ -3,6 +3,7 @@ import json
 import pytest
 from guillotina.tests.test_catalog import NOT_POSTGRES
 
+
 pytestmark = pytest.mark.asyncio
 
 

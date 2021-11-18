@@ -1,10 +1,11 @@
 from guillotina import configure
 from guillotina.event import notify
 from guillotina.events import ObjectModifiedEvent
-from guillotina_volto.interfaces import IFollowingMarker
-from guillotina_volto.interfaces import IFollowing
 from guillotina.utils import get_authenticated_user_id
+
 from guillotina_volto.interfaces import ICMSLayer
+from guillotina_volto.interfaces import IFollowing
+from guillotina_volto.interfaces import IFollowingMarker
 
 
 @configure.service(

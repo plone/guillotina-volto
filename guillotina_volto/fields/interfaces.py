@@ -1,8 +1,8 @@
-from zope.interface import Interface
-from guillotina.schema.interfaces import IObject
 from guillotina import schema
-from guillotina.interfaces import IFile
 from guillotina.interfaces import ICloudFileField
+from guillotina.interfaces import IFile
+from guillotina.schema.interfaces import IObject
+from zope.interface import Interface
 
 
 class IRichTextField(IObject):

@@ -1,10 +1,11 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 from guillotina.behaviors.instance import AnnotationBehavior
 from guillotina.behaviors.properties import ContextProperty
-from guillotina_volto.interfaces import ICMSBehavior
-from guillotina.utils import iter_parents
 from guillotina.interfaces import IFolder
+from guillotina.utils import iter_parents
+
+from guillotina_volto.interfaces import ICMSBehavior
 
 
 def default_layout(context=None, name=None):

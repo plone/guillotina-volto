@@ -1,8 +1,9 @@
+import json
+
 from guillotina import schema
 from guillotina.schema import JSONField
-from zope.interface import Interface
 from guillotina.schema.interfaces import IContextAwareDefaultFactory
-import json
+from zope.interface import Interface
 from zope.interface import implementer
 
 

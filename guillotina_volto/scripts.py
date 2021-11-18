@@ -1,6 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
 
+
 auth = HTTPBasicAuth("root", "root")
 
 

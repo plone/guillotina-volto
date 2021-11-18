@@ -4,12 +4,13 @@ from guillotina import app_settings
 from guillotina import configure
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IAbsoluteURL
-from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import ISchemaSerializeToJson
 from guillotina.response import HTTPNotFound
-from guillotina.utils import resolve_dotted_name
 from guillotina.utils import get_registry
+from guillotina.utils import resolve_dotted_name
+
 from guillotina_volto.interfaces import ILayoutComponents
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(

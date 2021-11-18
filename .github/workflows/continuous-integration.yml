@@ -30,7 +30,7 @@ jobs:
       - name: Run pre-checks
         run: |
           flake8 guillotina_volto --config=setup.cfg
-          mypy guillotina_volto/ --ignore-missing-imports
+          isort -c -rc guillotina_volto/
           black --check --verbose guillotina_volto
   # Job to run tests
   tests:

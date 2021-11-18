@@ -1,8 +1,9 @@
 from guillotina import configure
 from guillotina.behaviors.instance import ContextBehavior
+from guillotina.directives import index
+
 from guillotina_volto.interfaces import IBlocks
 from guillotina_volto.interfaces import IRichText
-from guillotina.directives import index
 
 
 @configure.behavior(

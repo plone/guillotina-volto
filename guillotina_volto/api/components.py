@@ -1,11 +1,12 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.interfaces import IAbsoluteURL
-from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IResource
 from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
+
 from guillotina_volto.interfaces import ICMSLayer
+from guillotina_volto.interfaces import ISite
 from guillotina_volto.utils import get_search_utility
 
 

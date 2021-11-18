@@ -1,5 +1,5 @@
-from zope.interface import Interface
 from guillotina.fields.annotation import BucketListField
+from zope.interface import Interface
 
 
 class IVersioning(Interface):

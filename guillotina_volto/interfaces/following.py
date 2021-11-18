@@ -1,8 +1,8 @@
-from zope.interface import Interface
 from guillotina import schema
 from guillotina.directives import index_field
 from guillotina.directives import read_permission
 from guillotina.directives import write_permission
+from zope.interface import Interface
 
 
 class IFollowingMarker(Interface):

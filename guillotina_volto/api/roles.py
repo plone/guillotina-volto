@@ -1,11 +1,12 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.auth.role import global_roles
-from guillotina_volto.interfaces import ISite
-from guillotina.interfaces import IAbsoluteURL
-from guillotina.interfaces import IRole
 from guillotina.component import get_utility
 from guillotina.component import getMultiAdapter
+from guillotina.interfaces import IAbsoluteURL
+from guillotina.interfaces import IRole
+
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(

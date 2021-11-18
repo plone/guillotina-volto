@@ -1,14 +1,17 @@
+import json
+
 from guillotina.fields import CloudFileField
+from guillotina.interfaces import IAsyncUtility
 from guillotina.interfaces import IFolder
 from guillotina.interfaces import IItem
 from guillotina.interfaces.content import IContainer
-from guillotina_volto.directives import fieldset_field
 from guillotina.schema import Datetime
 from guillotina.schema import JSONField
+
+from guillotina_volto.directives import fieldset_field
 from guillotina_volto.fields.image import CloudImageFileField
 from guillotina_volto.interfaces.image import IHasImage
-from guillotina.interfaces import IAsyncUtility
-import json
+
 
 RECURRENT_EVENT = json.dumps({"type": "object", "properties": {}})
 

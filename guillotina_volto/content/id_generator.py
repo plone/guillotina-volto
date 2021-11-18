@@ -1,6 +1,7 @@
+from guillotina import app_settings
 from guillotina import configure
 from guillotina.interfaces import IIDGenerator
-from guillotina import app_settings
+
 from guillotina_volto.interfaces import ICMSLayer
 
 

@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
-from guillotina.configure import service
+import logging
+
 from guillotina.behaviors.dublincore import IDublinCore
-from guillotina_volto.interfaces import IVersioning
+from guillotina.configure import service
 from guillotina.interfaces import IResource
 
-import logging
+from guillotina_volto.interfaces import IVersioning
 
 
 logger = logging.getLogger("guillotina_versioning")

@@ -1,5 +1,5 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 
 
 @configure.vocabulary(name="content_layouts")
