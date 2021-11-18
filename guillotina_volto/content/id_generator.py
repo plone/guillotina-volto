@@ -34,7 +34,7 @@ class IDGenerator(object):
             if new_id[0] in ("_", "@"):
                 new_id = new_id[1:]
             return "".join(
-                l for l in new_id if l in app_settings["valid_id_characters"]
+                i for i in new_id if i in app_settings["valid_id_characters"]
             )
         else:
             return None

@@ -10,7 +10,7 @@ pytestmark = pytest.mark.asyncio
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_search(cms_requester):
     async with cms_requester as requester:
-        created = await add_content(requester)
+        await add_content(requester)
         resp, status = await requester("GET", "/db/guillotina/@search")
 
         # Items also include /users and /groups

@@ -4,7 +4,6 @@ from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ISchemaFieldSerializeToJson
 from guillotina.component import getMultiAdapter
 from guillotina.component import get_multi_adapter
-from guillotina.contrib.email_validation.interfaces import IValidationSettings
 from guillotina.schema import get_fields_in_order
 from guillotina.utils import resolve_dotted_name
 from guillotina.utils import get_registry
@@ -39,7 +38,7 @@ async def controlpanel(context, request):
     permission="guillotina.AccessControlPanel",
     name="@controlpanels/{type_id}",
 )
-async def controlpanel_element(context, request):
+async def controlpanel_element_get(context, request):
 
     url = getMultiAdapter((context, request), IAbsoluteURL)()
     type_id = request.matchdict["type_id"]
@@ -84,7 +83,7 @@ async def controlpanel_element(context, request):
     permission="guillotina.AccessControlPanel",
     name="@controlpanels/{type_id}",
 )
-async def controlpanel_element(context, request):
+async def controlpanel_element_post(context, request):
     payload = await request.json()
     type_id = request.matchdict["type_id"]
 

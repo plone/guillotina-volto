@@ -12,7 +12,6 @@ from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.interfaces import IPermission
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceFactory
-from guillotina.interfaces import IAsyncContainer
 from guillotina.response import HTTPNotFound
 from guillotina.utils import get_security_policy
 

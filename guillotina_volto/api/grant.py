@@ -32,7 +32,7 @@ PERMISSIONS_TO_FORBIT_ONINHERIT = [
     permission="guillotina.SeePermissions",
     name="@grant",
 )
-async def grantinfo(context, request):
+async def grantinfo_get(context, request):
     """ principals -> roles """
     search = request.query.get("search")
     if search is not None:
@@ -44,7 +44,6 @@ async def grantinfo(context, request):
     inheritMap = IInheritPermissionMap(context)
     permissions = inheritMap.get_locked_permissions()
     if len(permissions) > 0:
-        blocked_permissions = permissions
         result["inherit"] = False
     else:
         result["inherit"] = True
@@ -141,7 +140,7 @@ async def grantinfo(context, request):
     permission="guillotina.ChangePermissions",
     name="@grant",
 )
-async def grantinfo(context, request):
+async def grantinfo_post(context, request):
     payload = await request.json()
     inherit = payload.get("inherit", None)
 

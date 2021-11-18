@@ -4,20 +4,16 @@ from guillotina.api.content import resolve_uid
 from guillotina.api.service import Service
 from guillotina.component import query_utility
 from guillotina.content import duplicate, move
-from guillotina.event import notify
-from guillotina.events import ObjectPermissionsViewEvent
 from guillotina.interfaces import Deny
 from guillotina.interfaces import IAsyncContainer
 from guillotina.interfaces import ICatalogUtility
 from guillotina.interfaces import IInheritPermissionMap
 from guillotina.interfaces import IRolePermissionMap
-from guillotina.interfaces import IPrincipalPermissionMap
 from guillotina.interfaces import IPrincipalRoleMap
 from guillotina.interfaces import IResource
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import ISite
 from guillotina.response import HTTPPreconditionFailed
-from guillotina.response import HTTPServiceUnavailable
 from guillotina.security.utils import apply_sharing
 from guillotina.utils import find_container
 from guillotina.utils import get_object_by_uid
@@ -195,7 +191,7 @@ async def _iter_copyable_content(context, request):
     container_url = get_object_url(container)
     for item in source:
         if item.startswith(container_url):
-            path = item[len(container_url) :]
+            path = item[len(container_url):]
             ob = await navigate_to(container, path.strip("/"))
             if ob is None:
                 raise HTTPPreconditionFailed(
@@ -308,14 +304,13 @@ async def get_all_sharing_roles():
     permission="guillotina.SeePermissions",
     name="@sharing"
 )
-
 class SharingGET(Service):
 
     async def set_roles_for_context(self, context, acquired=False):
         prinrole = IPrincipalRoleMap(context)
         for pr_id, permissions in prinrole._bycol.items():
             local_roles = [
-                p for p,s in permissions.items()
+                p for p, s in permissions.items()
                 if s.get_name() == 'Allow' and p in self.all_role_ids
             ]
             # If none of the local roles are configurable from the sharing tab,
@@ -336,7 +331,7 @@ class SharingGET(Service):
             if pr_id in self.users_with_local_roles:
                 user_value = self.users_with_local_roles[pr_id]
                 existing_roles = user_value.get('roles', dict())
-                for k,v in local_roles_dict.items():
+                for k, v in local_roles_dict.items():
                     if v and existing_roles.get(k) != "global":
                         if acquired:
                             existing_roles[k] = "acquired"
@@ -348,7 +343,7 @@ class SharingGET(Service):
             elif pr_id in self.groups_with_local_roles:
                 group_value = self.groups_with_local_roles[pr_id]
                 existing_roles = group_value.get('roles', dict())
-                for k,v in local_roles_dict.items():
+                for k, v in local_roles_dict.items():
                     if v and existing_roles.get(k) != "global":
                         if acquired:
                             existing_roles[k] = "acquired"
@@ -402,7 +397,6 @@ class SharingGET(Service):
                             "type": "group"
                         }
                         self.groups_with_local_roles[pr_id] = entry
-
 
     async def __call__(self, changed=False):
         """Change permissions"""
@@ -549,14 +543,14 @@ class SharingPOST(Service):
         data = await request.json()
 
         if 'entries' not in data:
-            raise PreconditionFailed(self.context, "entries missing")
+            raise HTTPPreconditionFailed(self.context, "entries missing")
 
         entries = data['entries']
 
         prinrole = list()
         for entry in entries:
             principal = entry.get('id')
-            for k,v in entry['roles'].items():
+            for k, v in entry['roles'].items():
                 setting = None
                 if v is True:
                     setting = "Allow"

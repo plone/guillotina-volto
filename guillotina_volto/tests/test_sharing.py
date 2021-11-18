@@ -133,7 +133,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == True
+        assert resp["inherit"] is True
         assert len(resp["entries"]) == 0
 
         # Assign local roles to user in parent content
@@ -163,7 +163,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == True
+        assert resp["inherit"] is True
         assert len(resp["entries"]) == 1
 
         # In a children folder, roles are acquired
@@ -195,7 +195,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == False
+        assert resp["inherit"] is False
         assert len(resp["entries"]) == 0
 
         # Assign local roles to subfolder
@@ -225,7 +225,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == False
+        assert resp["inherit"] is False
         assert len(resp["entries"]) == 1
 
         for entry in resp['entries']:
@@ -256,7 +256,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == True
+        assert resp["inherit"] is True
         assert len(resp["entries"]) == 1
 
         # Acquired roles have more precedence over locally assigned
@@ -288,7 +288,7 @@ async def test_sharing_tab_inherit_permissions(cms_requester):
         assert 'available_roles' in resp
         assert 'entries' in resp
         assert 'inherit' in resp
-        assert resp["inherit"] == False
+        assert resp["inherit"] is False
         assert len(resp["entries"]) == 1
 
         # No acquired roles, only assigned ones
@@ -384,7 +384,6 @@ async def test_sharing_tab_search(cms_requester):
         assert 'entries' in resp
         assert 'inherit' in resp
         assert len(resp["entries"]) == 4
-
 
         resp, status = await requester(
             "GET", "/db/guillotina/folder1/@sharing?search=another"

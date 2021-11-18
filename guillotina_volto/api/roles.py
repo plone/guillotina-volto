@@ -1,7 +1,6 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.auth.role import global_roles
-from guillotina.auth.role import local_roles
 from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IRole
