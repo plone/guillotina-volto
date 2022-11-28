@@ -28,13 +28,17 @@ class ICMSFolder(IFolder):
     pass
 
 
-class IImage(IItem, IHasImage):
+class IBaseFile(IItem):
+    pass
+
+
+class IImage(IBaseFile, IHasImage):
 
     fieldset_field("image", "default")
     image = CloudImageFileField(title="Image", required=False, widget="file")
 
 
-class IFile(IItem):
+class IFile(IBaseFile):
 
     fieldset_field("file", "default")
     file = CloudFileField(title="File", required=False, widget="file")
