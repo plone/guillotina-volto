@@ -1,3 +1,4 @@
+from guillotina.behaviors.attachment import IAttachment
 from guillotina.behaviors.dublincore import IDublinCore
 from guillotina.interfaces import IResource
 
@@ -26,3 +27,5 @@ directives.fieldset_field.apply(
     IDublinCore, "contributors", "ownership"
 )  # pylint: disable=E1101
 directives.fieldset_field.apply(IResource, "title", "default")  # pylint: disable=E1101
+
+directives.fieldset_field.apply(IAttachment, "file", "default") # pylint: disable=E1101
