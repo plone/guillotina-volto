@@ -40,9 +40,6 @@ class IImage(IBaseFile, IHasImage):
 
 class IFile(IBaseFile):
 
-    fieldset_field("file", "default")
-    file = CloudFileField(title="File", required=False, widget="file")
-
 
 class IEvent(IItem):
 

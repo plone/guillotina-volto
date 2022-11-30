@@ -1,7 +1,10 @@
 1.0.0a2 (Unreleased)
 ====================
 
-- Add file field from IAttachment to default fieldset.
+- Change File to use IAttachment behavior.
+  [enfold-josh]
+
+- Add file field from IAttachment behavior to default fieldset.
   [enfold-josh]
 
 - Include 'Sharing Tab' functionality
