@@ -1,6 +1,5 @@
 import json
 
-from guillotina.fields import CloudFileField
 from guillotina.interfaces import IAsyncUtility
 from guillotina.interfaces import IFolder
 from guillotina.interfaces import IItem
