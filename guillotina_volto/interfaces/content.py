@@ -38,6 +38,7 @@ class IImage(IBaseFile, IHasImage):
 
 
 class IFile(IBaseFile):
+    pass
 
 
 class IEvent(IItem):
