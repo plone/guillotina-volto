@@ -1,6 +1,11 @@
 1.0.0a2 (Unreleased)
 ====================
 
+- Change id generator and File json serializer to work with IAttachment behavior
+  based files.
+  [enfold-josh]
+
+
 - Change File to use IAttachment behavior.
   [enfold-josh]
 

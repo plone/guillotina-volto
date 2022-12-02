@@ -1,4 +1,5 @@
 from guillotina import configure
+from guillotina.behaviors.attachment import IAttachmentMarker
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceSerializeToJson
@@ -7,7 +8,6 @@ from guillotina.json.serialize_content import SerializeToJson
 from guillotina.json.serialize_value import json_compatible
 
 from guillotina_volto.interfaces import ICMSLayer
-from guillotina_volto.interfaces import IFile
 
 
 @configure.adapter(
@@ -39,12 +39,16 @@ class DefaultJSONSummarySerializer(object):
         return summary
 
 
-@configure.adapter(for_=(IFile, ICMSLayer), provides=IResourceSerializeToJson)
+@configure.adapter(for_=(IAttachmentMarker, ICMSLayer), provides=IResourceSerializeToJson)
 class FileJSONSerializer(SerializeToJson):
     async def __call__(self, include=[], omit=[]):
         data = await super().__call__(include=include, omit=omit)
-        if data.get("file"):
-            data["file"]["download"] = "{}/@download/file/{}".format(
-                IAbsoluteURL(self.context)(), data["file"]["filename"]
-            )
+        bdata = data.get("guillotina.behaviors.attachment.IAttachment")
+        if bdata:
+            fdata = bdata.get("file")
+            if fdata:
+                data["file"] = fdata
+                data["file"]["download"] = "{}/@download/file/{}".format(
+                    IAbsoluteURL(self.context)(), data["file"]["filename"]
+                )
         return data

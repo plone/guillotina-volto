@@ -5,7 +5,7 @@ from guillotina.interfaces import IIDGenerator
 from guillotina_volto.interfaces import ICMSLayer
 
 
-@configure.adapter(for_=(ICMSLayer), provides=IIDGenerator)
+@configure.adapter(for_=ICMSLayer, provides=IIDGenerator)
 class IDGenerator(object):
     """Default IDGenerator adapter.
 
@@ -26,7 +26,7 @@ class IDGenerator(object):
                 return None
         elif "@type" in data and data["@type"] == "File":
             try:
-                new_id = data["file"]["filename"]
+                new_id = data['guillotina.behaviors.attachment.IAttachment']["file"]["filename"]
             except KeyError:
                 return None
         else:
