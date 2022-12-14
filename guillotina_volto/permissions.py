@@ -1,5 +1,6 @@
 from guillotina import configure
 
+
 configure.role("guillotina.Contributor", "Contributor", "Can add content", True)
 
 configure.permission(

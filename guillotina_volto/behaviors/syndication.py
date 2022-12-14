@@ -1,8 +1,8 @@
 from guillotina import configure
 from guillotina import schema
 from guillotina.contrib.dyncontent.vocabularies import AppSettingSource
-from zope.interface import Interface
 from guillotina.interfaces import IFolder
+from zope.interface import Interface
 
 
 @configure.behavior(title="Syndication settings", for_=IFolder)

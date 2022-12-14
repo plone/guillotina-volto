@@ -4,8 +4,8 @@ from guillotina import configure
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.response import HTTPNotFound
-from guillotina.schema.vocabulary import getVocabularyRegistry
 from guillotina.schema.vocabulary import VocabularyRegistryError
+from guillotina.schema.vocabulary import getVocabularyRegistry
 
 
 @configure.service(

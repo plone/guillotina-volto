@@ -1,17 +1,17 @@
+from guillotina import addons
+from guillotina import task_vars
 from guillotina.commands import Command
 from guillotina.component import get_utility
-from guillotina.interfaces import IApplication
-from guillotina.interfaces import IDatabase
-from guillotina import task_vars
-from guillotina import addons
-from guillotina.transactions import transaction
 from guillotina.content import create_content_in_container
-from guillotina.exceptions import ConflictIdOnContainer
 from guillotina.contrib.dbusers.content.users import IUser
 from guillotina.contrib.workflows.interfaces import IWorkflow
+from guillotina.event import notify
 from guillotina.events import BeforeObjectRemovedEvent
 from guillotina.events import ObjectRemovedEvent
-from guillotina.event import notify
+from guillotina.exceptions import ConflictIdOnContainer
+from guillotina.interfaces import IApplication
+from guillotina.interfaces import IDatabase
+from guillotina.transactions import transaction
 
 
 class CMSCreateCommand(Command):

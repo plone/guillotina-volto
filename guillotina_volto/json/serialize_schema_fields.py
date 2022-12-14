@@ -1,14 +1,14 @@
 from guillotina import configure
-from guillotina.schema.interfaces import IChoice
+from guillotina.interfaces import ICloudFileField
 from guillotina.interfaces import ISchemaFieldSerializeToJson
 from guillotina.json.serialize_schema_field import DefaultSchemaFieldSerializer
-from guillotina.utils import get_object_url
-from guillotina.utils import get_current_container
-from zope.interface import Interface
+from guillotina.schema.interfaces import IChoice
 from guillotina.schema.interfaces import ISource
 from guillotina.schema.vocabulary import SimpleVocabulary
-from guillotina.interfaces import ICloudFileField
 from guillotina.schema.vocabulary import getVocabularyRegistry
+from guillotina.utils import get_current_container
+from guillotina.utils import get_object_url
+from zope.interface import Interface
 
 
 @configure.adapter(

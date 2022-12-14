@@ -1,9 +1,11 @@
 import base64
 import json
 
-from guillotina.utils import resolve_path
-from guillotina_volto.behaviors.image import IImageAttachment
 import pytest
+from guillotina.utils import resolve_path
+
+from guillotina_volto.behaviors.image import IImageAttachment
+
 
 pytestmark = pytest.mark.asyncio
 

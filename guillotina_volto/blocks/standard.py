@@ -1,8 +1,10 @@
-from guillotina import schema
-from guillotina_volto import configure_volto
-from zope.interface import Interface
-from guillotina.schema import JSONField
 import json
+
+from guillotina import schema
+from guillotina.schema import JSONField
+from zope.interface import Interface
+
+from guillotina_volto import configure_volto
 
 
 @configure_volto.block(name="title", title="title")

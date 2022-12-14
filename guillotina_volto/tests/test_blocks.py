@@ -1,9 +1,12 @@
-from guillotina.tests.utils import create_content
-from guillotina.content import Resource
-from guillotina_volto.interfaces import IBlocks
-from guillotina_volto.behaviors.editors import Blocks
-import pytest
 import json
+
+import pytest
+from guillotina.content import Resource
+from guillotina.tests.utils import create_content
+
+from guillotina_volto.behaviors.editors import Blocks
+from guillotina_volto.interfaces import IBlocks
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -17,10 +20,12 @@ async def test_default_blocks_layout(cms_requester):
                 response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks_layout"][
                     "items"
                 ]
-            ) == 2
+            )
+            == 2
         )
         assert (
-            "12821552-d26f-48eb-a1fd-790edb942c30" in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]  # noqa
+            "12821552-d26f-48eb-a1fd-790edb942c30"
+            in response["guillotina_volto.interfaces.blocks.IBlocks"]["blocks"]  # noqa
         )
 
 

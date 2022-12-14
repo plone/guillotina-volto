@@ -7,9 +7,10 @@ from guillotina.schema import Object
 from guillotina.schema._field import _validate_fields
 from guillotina.schema.exceptions import WrongContainedType
 from guillotina.utils import execute
+from zope.interface import implementer
+
 from guillotina_volto.fields.interfaces import IRichTextField
 from guillotina_volto.fields.interfaces import IRichTextFieldSchema
-from zope.interface import implementer
 
 
 try:

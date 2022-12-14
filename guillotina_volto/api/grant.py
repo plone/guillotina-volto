@@ -1,20 +1,19 @@
-from guillotina import configure
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IInheritPermissionManager
-from guillotina.interfaces import IPrincipalRoleManager
+from copy import deepcopy
 
-from guillotina.interfaces import IInheritPermissionMap
-from guillotina.interfaces import IPrincipalRoleMap
-from guillotina.exceptions import ContainerNotFound
-from guillotina.interfaces.catalog import ICatalogUtility
-
-from guillotina.utils import get_current_container
-from guillotina.interfaces import IRole
-from guillotina.auth.role import local_roles
 from guillotina import app_settings
+from guillotina import configure
+from guillotina.auth.role import local_roles
 from guillotina.component import get_utility
 from guillotina.component import query_utility
-from copy import deepcopy
+from guillotina.exceptions import ContainerNotFound
+from guillotina.interfaces import IInheritPermissionManager
+from guillotina.interfaces import IInheritPermissionMap
+from guillotina.interfaces import IPrincipalRoleManager
+from guillotina.interfaces import IPrincipalRoleMap
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IRole
+from guillotina.interfaces.catalog import ICatalogUtility
+from guillotina.utils import get_current_container
 
 
 PERMISSIONS_TO_FORBIT_ONINHERIT = [
@@ -32,8 +31,8 @@ PERMISSIONS_TO_FORBIT_ONINHERIT = [
     permission="guillotina.SeePermissions",
     name="@grant",
 )
-async def grantinfo(context, request):
-    """ principals -> roles """
+async def grantinfo_get(context, request):
+    """principals -> roles"""
     search = request.query.get("search")
     if search is not None:
         search = search.lower()
@@ -44,7 +43,6 @@ async def grantinfo(context, request):
     inheritMap = IInheritPermissionMap(context)
     permissions = inheritMap.get_locked_permissions()
     if len(permissions) > 0:
-        blocked_permissions = permissions
         result["inherit"] = False
     else:
         result["inherit"] = True
@@ -141,7 +139,7 @@ async def grantinfo(context, request):
     permission="guillotina.ChangePermissions",
     name="@grant",
 )
-async def grantinfo(context, request):
+async def grantinfo_post(context, request):
     payload = await request.json()
     inherit = payload.get("inherit", None)
 

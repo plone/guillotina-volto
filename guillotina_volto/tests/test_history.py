@@ -1,5 +1,7 @@
 import json
+
 import pytest
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -15,13 +17,9 @@ async def test_history_creation(cms_requester):
 
         resp, status = await requester("GET", "/db/guillotina/doc1")
 
-        assert (
-            resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"] is not None
-        )
-        assert (
-            resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"][0]["title"]
-            == "Created"
-        )
+        behavior = resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]
+        assert behavior["history"] is not None
+        assert behavior["history"][0]["title"] == "Created"
 
         resp, status = await requester("GET", "/db/guillotina/doc1/@workflow")
 

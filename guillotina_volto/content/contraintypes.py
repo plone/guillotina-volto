@@ -1,11 +1,11 @@
+from guillotina import FACTORY_CACHE
 from guillotina import app_settings
 from guillotina import configure
-from guillotina import FACTORY_CACHE
-from zope.interface import Interface
 from guillotina.constraintypes import FTIConstrainAllowedTypes
+from guillotina.interfaces import IConstrainTypes
+from zope.interface import Interface
 
 from guillotina_volto.interfaces import ICMSConstrainTypes
-from guillotina.interfaces import IConstrainTypes
 
 
 @configure.adapter(for_=Interface, provides=ICMSConstrainTypes)

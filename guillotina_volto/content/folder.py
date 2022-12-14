@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 from guillotina import configure
 from guillotina.content import Folder
+
 from guillotina_volto.interfaces import ICMSFolder
 
 

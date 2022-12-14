@@ -1,8 +1,9 @@
+import json
+
 from guillotina import schema
 from guillotina.schema import JSONField
-from zope.interface import Interface
 from guillotina.schema.interfaces import IContextAwareDefaultFactory
-import json
+from zope.interface import Interface
 from zope.interface import implementer
 
 
@@ -65,8 +66,7 @@ class IBlocks(Interface):
 
 
 class IBlockType(Interface):
-    """A utility that describes a type of block
-    """
+    """A utility that describes a type of block"""
 
     __name__ = schema.DottedName(title="Block name (same as utility name)")
     title = schema.TextLine(title=u"Title")

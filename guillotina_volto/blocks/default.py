@@ -1,8 +1,9 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 from guillotina.interfaces import IResource
-from guillotina_volto.interfaces import IDefaultBlocksLayout
+
 from guillotina_volto.interfaces import IDefaultBlocks
+from guillotina_volto.interfaces import IDefaultBlocksLayout
 
 
 @configure.adapter(for_=IResource, provides=IDefaultBlocksLayout)

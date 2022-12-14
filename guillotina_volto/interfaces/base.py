@@ -2,8 +2,10 @@ import json
 
 from guillotina import schema
 from guillotina.directives import index_field
-from guillotina_volto.directives import fieldset
 from zope.interface import Interface
+
+from guillotina_volto.directives import fieldset
+
 
 DISCUSSION_SCHEMA = json.dumps(
     {

@@ -1,7 +1,11 @@
-import pytest
 import json
+
+import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
+
 from guillotina_volto.tests.utils import add_content
-from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS, NOT_POSTGRES
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -12,7 +16,9 @@ async def test_search(cms_requester):
     async with cms_requester as requester:
         await add_content(requester)
         resp, status = await requester("GET", "/db/guillotina/@search")
-        assert resp["items_total"] == 22
+
+        # Items also include /users and /groups
+        assert resp["items_total"] == 24
 
         resp, status = await requester(
             "GET", "/db/guillotina/@search?path__starts=cms-folder0&depth__gte=1"

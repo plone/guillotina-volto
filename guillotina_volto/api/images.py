@@ -6,11 +6,12 @@ from guillotina.api.service import TraversableFieldService
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IFileManager
 from guillotina.response import HTTPNotFound
+from guillotina.response import Response
 from guillotina.utils import get_registry
+from plone.scale.scale import scaleImage
+
 from guillotina_volto.interfaces import IHasImage
 from guillotina_volto.interfaces import IImagingSettings
-from plone.scale.scale import scaleImage
-from guillotina.response import Response
 
 
 @configure.service(

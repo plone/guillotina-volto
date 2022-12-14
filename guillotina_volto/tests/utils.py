@@ -1,5 +1,5 @@
-import json
 import asyncio
+import json
 
 
 async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
@@ -25,7 +25,9 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
                     {
                         "@type": "Document",
                         "title": "Document " + str(idx),
-                        "@behaviors": ["guillotina_volto.interfaces.richtext.IRichText"],
+                        "@behaviors": [
+                            "guillotina_volto.interfaces.richtext.IRichText"
+                        ],
                         "guillotina_volto.interfaces.richtext.IRichText": {
                             "text": {
                                 "encoding": "utf-8",

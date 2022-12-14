@@ -4,6 +4,7 @@ from guillotina.behaviors.instance import AnnotationBehavior
 from guillotina.behaviors.properties import FunctionProperty
 from guillotina.interfaces import IResource
 from guillotina.utils import get_authenticated_user_id
+
 from guillotina_volto.interfaces import IFollowing
 from guillotina_volto.interfaces import IFollowingMarker
 

@@ -1,7 +1,10 @@
-from guillotina import schema
-from guillotina_volto.utils import get_default_logo
-from zope.interface import Interface
 import json
+
+from guillotina import schema
+from zope.interface import Interface
+
+from guillotina_volto.utils import get_default_logo
+
 
 MENU_LAYOUT = json.dumps({"type": "object", "properties": {}})
 

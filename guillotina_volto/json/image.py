@@ -2,12 +2,13 @@ from guillotina import configure
 from guillotina import task_vars
 from guillotina.files.field import deserialize_cloud_field
 from guillotina.utils import get_current_request
+from guillotina.utils import get_url
 from guillotina.utils import to_str
+from zope.interface import alsoProvides
+
 from guillotina_volto.fields.interfaces import ICloudImageFileField
 from guillotina_volto.fields.interfaces import IImageFile
 from guillotina_volto.interfaces import IImagingSettings
-from zope.interface import alsoProvides
-from guillotina.utils import get_url
 
 
 @configure.value_serializer(for_=IImageFile)

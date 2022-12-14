@@ -5,6 +5,7 @@ from guillotina.interfaces import IResourceSerializeToJson
 from guillotina.interfaces import IResourceSerializeToJsonSummary
 from guillotina.json.serialize_content import SerializeToJson
 from guillotina.json.serialize_value import json_compatible
+
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import IFile
 
