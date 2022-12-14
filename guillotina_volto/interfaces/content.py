@@ -1,5 +1,6 @@
 import json
 
+from guillotina.fields import CloudFileField
 from guillotina.interfaces import IAsyncUtility
 from guillotina.interfaces import IFolder
 from guillotina.interfaces import IItem
@@ -38,7 +39,9 @@ class IImage(IBaseFile, IHasImage):
 
 
 class IFile(IBaseFile):
-    pass
+
+    fieldset_field("file", "default")
+    file = CloudFileField(title="File", required=False, widget="file")
 
 
 class IEvent(IItem):

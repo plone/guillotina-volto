@@ -26,7 +26,7 @@ class IDGenerator(object):
                 return None
         elif "@type" in data and data["@type"] == "File":
             try:
-                new_id = data['guillotina.behaviors.attachment.IAttachment']["file"]["filename"]
+                new_id = data["file"]["filename"]
             except KeyError:
                 return None
         else:

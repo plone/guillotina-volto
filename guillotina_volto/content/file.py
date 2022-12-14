@@ -12,7 +12,6 @@ from guillotina_volto.interfaces import IFile
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
-        "guillotina.behaviors.attachment.IAttachment",
     ],
     allowed_types=[],  # dynamically calculated
 )
