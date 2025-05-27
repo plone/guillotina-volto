@@ -20,7 +20,7 @@ init: start-dependencies
 	docker-compose run -e INIT=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml
 
 start: start-dependencies
-	docker-compose run --service-ports guillotina guillotina -c config-dockercompose.yaml
+	docker-compose up --force-recreate --abort-on-container-exit nginx guillotina
 
 purge: start-dependencies ## Deletes and resets the DB
 	docker-compose run -e INIT=True -e PURGE=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml
@@ -41,3 +41,5 @@ stop-dependencies: ## Starts dependencies (PG, ES, Redis)
 docker:
 	docker build -t plone/guillotina_volto:latest .
 	docker push plone/guillotina_volto:latest
+down:
+	docker-compose down

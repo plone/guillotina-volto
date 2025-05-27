@@ -19,7 +19,7 @@ applications:
 mailer:
   utility: guillotina.contrib.mailer.utility.PrintingMailerUtility
 host: 0.0.0.0
-address: 8081
+address: 8080
 static:
   - favicon.png: static/favicon.png
   - assets: guillotina:static/assets
