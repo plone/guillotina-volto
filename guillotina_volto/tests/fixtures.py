@@ -18,6 +18,7 @@ def base_settings_configurator(settings):
         settings["applications"].append("guillotina.contrib.workflows")
     else:
         settings["applications"] = ["guillotina.contrib.workflows"]
+    settings["allow_register"] = True
     settings["container_types"] = ["Site"]
     settings["applications"].append("guillotina.contrib.workflows")
     settings["applications"].append("guillotina.contrib.vocabularies")
@@ -26,6 +27,15 @@ def base_settings_configurator(settings):
     settings["applications"].append("guillotina.contrib.email_validation")
     settings["applications"].append("guillotina.contrib.catalog.pg")
     settings["applications"].append("guillotina_volto")
+    settings["auth_extractors"] = [
+        "guillotina.auth.extractors.BearerAuthPolicy",
+        "guillotina.auth.extractors.BasicAuthPolicy",
+        "guillotina.auth.extractors.WSTokenAuthPolicy"
+    ]
+    settings["auth_token_validators"] = [
+        "guillotina.auth.validators.SaltedHashPasswordValidator",
+        "guillotina.auth.validators.JWTValidator"
+    ]
 
 
 testing.configure_with(base_settings_configurator)

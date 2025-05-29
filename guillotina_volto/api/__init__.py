@@ -19,3 +19,5 @@ from . import resource  # noqa
 from . import addons  # noqa
 from . import database  # noqa
 from . import workflow  # noqa
+from . import site  # noqa
+from . import user  # noqa

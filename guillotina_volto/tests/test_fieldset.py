@@ -19,3 +19,6 @@ async def test_fieldset(cms_requester):
     for fieldset in resp["fieldsets"]:
         if fieldset["title"] == "default":
             assert len(fieldset["fields"]) == 2
+
+    resp, status = await requester("GET", "/db/guillotina/@userschema")
+    assert status == 200

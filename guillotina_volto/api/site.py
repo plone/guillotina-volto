@@ -2,39 +2,53 @@ from guillotina import configure, app_settings
 from guillotina.utils import get_registry
 from guillotina.interfaces import IAddons
 from guillotina_volto.interfaces.content import ISite
+from guillotina_volto.directives import merged_tagged_value_dict_merged
+from guillotina_volto.directives import fieldset
+from guillotina.utils import resolve_dotted_name
+from guillotina.schema import get_fields_in_order
+from guillotina.interfaces import ISchemaFieldSerializeToJson
+from guillotina.component import get_multi_adapter
 
 
 @configure.service(
     context=ISite,
     method="GET",
-    permission="guillotina.ManageAddons",
-    name="@addons",
-    summary="List available addons",
+    permission="guillotina.ManageUsers",
+    name="@userschema",
+    summary="List users schema",
     responses={
         "200": {
-            "description": "Get list of available and installed addons",
+            "description": "Get information of the users schema",
             "content": {"application/json": {"schema": {"$ref": "#/components/schemas/AddonResponse"}}},
         }
     },
 )
-async def get_addons(context, request):
-    result = {"items": []}
-    for key, addon in app_settings["available_addons"].items():
-        result["items"].append(
-            {
-                "id": key,
-                "title": addon["title"],
-                "dependencies": addon["dependencies"],
-                "is_installed": False,
-                "upgrade_info": {"available": False}
-            }
+async def get_users_schema(context, request):
+    schema_name = "guillotina.contrib.dbusers.content.users.IUser"
+    schema = {"properties": {}, "fieldsets": [], "required": []}
+    iface = resolve_dotted_name(schema_name)
+    fields = []
+    all_names = []
+    fields_allowed = [
+        "username",
+        "email",
+        "password",
+        "user_groups",
+        "user_roles",
+        "user_permissions",
+        "name",
+        "disabled"
+    ]
+    for name, field in get_fields_in_order(iface):
+        all_names.append(name)
+        if name not in fields_allowed:
+            continue
+        if field.required:
+            schema["required"].append(name)
+        serializer = get_multi_adapter(
+            (field, iface, request), ISchemaFieldSerializeToJson
         )
-
-    registry = await get_registry()
-    config = registry.for_interface(IAddons)
-
-    for installed in config["enabled"]:
-        for addon in result["items"]:
-            if addon["id"] == installed:
-                addon["is_installed"] = True
-    return result
+        schema["properties"][name] = await serializer()
+        fields.append(name)
+    schema["fieldsets"] = [{"fields": fields, "id": "default", "title": "default"}]
+    return schema
