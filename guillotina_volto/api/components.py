@@ -144,21 +144,52 @@ class Navigation(Service):
 class Actions(Service):
     async def __call__(self):
         return {
-            "document_actions": [],
             "object": [
-                {"icon": "", "id": "view", "title": "View"},
-                {"icon": "", "id": "edit", "title": "Edit"},
-                {"icon": "", "id": "add", "title": "Add"},
-                {"icon": "", "id": "folderContents", "title": "Contents"},
-                {"icon": "", "id": "history", "title": "History"},
-                {"icon": "", "id": "local_roles", "title": "Sharing"},
+                {"id": "view", "title": "View", "url": None},
+                {"id": "add", "title": "Add", "url": None},
+                {"icon": "toolbar-action/edit", "id": "edit", "title": "Edit", "url": None},
+                {"id": "folderContents", "title": "Contents", "url": None},
+                {"id": "history", "title": "History", "url": None},
+                {"id": "contentrules", "title": "Rules", "url": None},
+                {"id": "local_roles", "title": "Sharing", "url": None},
             ],
-            "object_buttons": [{"icon": "", "id": "rename", "title": "Rename"}],
-            "portal_tabs": [{"icon": "", "id": "index_html", "title": "Home"}],
-            "site_actions": [],
+            "object_buttons": [{
+                "id": "cut",
+                "title": "Cut",
+                "url": None
+            }, {
+                "id": "copy",
+                "title": "Copy",
+                "url": None
+            }, {
+                "id": "paste",
+                "title": "Paste",
+                "url": None
+            }, {
+                "id": "delete",
+                "title": "Delete",
+                "url": None
+            }, {
+                "id": "rename",
+                "title": "Rename",
+                "url": None
+            }],
+            "site_actions": [{
+                "id": "sitemap",
+                "title": "Sitemap",
+                "url": None
+            }, {
+                "id": "accessibility",
+                "title": "Accessibility",
+                "url": None
+            }, {
+                "id": "contact",
+                "title": "Contact",
+                "url": None
+            }],
             "user": [
-                {"icon": "", "id": "preferences", "title": "Preferences"},
-                {"icon": "", "id": "plone_setup", "title": "Site Setup"},
-                {"icon": "", "id": "logout", "title": "Log out"},
+                {"id": "preferences", "title": "Preferences", "url": None},
+                {"id": "plone_setup", "title": "Site Setup", "url": None},
+                {"id": "logout", "title": "Log out", "url": None},
             ],
         }

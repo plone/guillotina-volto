@@ -9,6 +9,7 @@ from guillotina.schema import get_fields_in_order
 from guillotina.utils import resolve_dotted_name
 from guillotina.utils import get_registry
 from guillotina import app_settings
+from guillotina.response import Response
 
 
 @configure.service(
@@ -22,7 +23,7 @@ async def controlpanel(context, request):
     url = getMultiAdapter((context, request), IAbsoluteURL)()
 
     result = []
-    for item, value in app_settings.get("controlpanels", {}):
+    for item, value in app_settings.get("controlpanels", {}).items():
         result.append(
             {
                 "@id": f"{url}/@controlpanels/{item}",
@@ -84,7 +85,7 @@ async def controlpanel_element(context, request):
     permission="guillotina.AccessControlPanel",
     name="@controlpanels/{type_id}",
 )
-async def controlpanel_element(context, request):
+async def patch_controlpanel_element(context, request):
     payload = await request.json()
     type_id = request.matchdict["type_id"]
 
@@ -94,8 +95,9 @@ async def controlpanel_element(context, request):
         schema = controlpanels[type_id].get("schema", None)
         if schema is None:
             return
-        config = registry.for_interface(schema)
+        iface = resolve_dotted_name(schema)
+        config = registry.for_interface(iface)
         for key, value in payload.items():
-            if key in schema:
+            if key in iface:
                 config.__setitem__(key, value)
-    return
+    return Response(status=204)

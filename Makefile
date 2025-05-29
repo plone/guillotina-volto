@@ -20,7 +20,7 @@ init: start-dependencies
 	docker-compose run -e INIT=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml
 
 start: start-dependencies
-	docker-compose up --force-recreate --abort-on-container-exit nginx guillotina
+	docker-compose up --no-deps --force-recreate --abort-on-container-exit guillotina
 
 purge: start-dependencies ## Deletes and resets the DB
 	docker-compose run -e INIT=True -e PURGE=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml

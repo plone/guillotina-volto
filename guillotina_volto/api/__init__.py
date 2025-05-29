@@ -15,3 +15,7 @@ from . import theme  # noqa
 from . import types  # noqa
 from . import versioning  # noqa
 from . import ws_edit  # noqa
+from . import resource  # noqa
+from . import addons  # noqa
+from . import database  # noqa
+from . import workflow  # noqa

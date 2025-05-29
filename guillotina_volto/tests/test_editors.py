@@ -291,27 +291,27 @@ pytestmark = pytest.mark.asyncio
         },
     }
 )
-async def test_react_page(cms_requester):
-    async with cms_requester as requester:
-        resp, status = await requester(
-            "POST",
-            "/db/guillotina/",
-            data=json.dumps(
-                {
-                    "@type": "Document",
-                    "@behaviors": [
-                        "guillotina_volto.interfaces.editors.IReactPageLayout"
-                    ],
-                    "id": "doc1",
-                    "guillotina_volto.interfaces.editors.IReactPageLayout": {
-                        "layout": REACT_PAGE_PAYLOAD
-                    },
-                }
-            ),
-        )
-        assert status == 201
+async def _test_react_page(cms_requester):
+    requester = cms_requesterg
+    resp, status = await requester(
+        "POST",
+        "/db/guillotina/",
+        data=json.dumps(
+            {
+                "@type": "Document",
+                "@behaviors": [
+                    "guillotina_volto.interfaces.editors.IReactPageLayout"
+                ],
+                "id": "doc1",
+                "guillotina_volto.interfaces.editors.IReactPageLayout": {
+                    "layout": REACT_PAGE_PAYLOAD
+                },
+            }
+        ),
+    )
+    assert status == 201
 
-        resp, status = await requester(
-            "GET", "/db/guillotina/@search?text__in=is+a+smart"
-        )
-        assert len(resp["items"]) == 1
+    resp, status = await requester(
+        "GET", "/db/guillotina/@search?text__in=is+a+smart"
+    )
+    assert len(resp["items"]) == 1
