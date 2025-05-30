@@ -1,9 +1,5 @@
-from guillotina import configure, app_settings
-from guillotina.utils import get_registry
-from guillotina.interfaces import IAddons
+from guillotina import configure
 from guillotina_volto.interfaces.content import ISite
-from guillotina_volto.directives import merged_tagged_value_dict_merged
-from guillotina_volto.directives import fieldset
 from guillotina.utils import resolve_dotted_name
 from guillotina.schema import get_fields_in_order
 from guillotina.interfaces import ISchemaFieldSerializeToJson
