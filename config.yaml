@@ -75,28 +75,20 @@ default_blocks:
       tile1:
         '@type': title
       tile2:
-        '@type': description
-      tile3:
-        text: null
-        '@type': text
+        '@type': slate
     blocks_layout:
       items:
       - tile1
       - tile2
-      - tile3
   Container:
     blocks:
       tile1:
         '@type': title
       tile2:
-        '@type': description
-      tile3:
-        text: null
-        '@type': text
+        '@type': slate
     blocks_layout:
       items:
         - tile1
         - tile2
-        - tile3
 allow_discussion_types:
   - Document

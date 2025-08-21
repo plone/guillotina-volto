@@ -268,8 +268,7 @@ cms:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1
@@ -279,8 +278,7 @@ cms:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1
@@ -290,8 +288,7 @@ cms:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1

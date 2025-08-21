@@ -74,7 +74,7 @@ app_settings = {
     },
     "default_blocks": {
         "Document": {
-            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "slate"}},
             "blocks_layout": {"items": ["tile1", "tile2"]},
         },
         "Site": {
@@ -141,6 +141,7 @@ def includeme(root, settings):
     configure.scan("guillotina_volto.install")
     configure.scan("guillotina_volto.subscribers")
     configure.scan("guillotina_volto.blocks")
+    configure.scan("guillotina_volto.contrib.dbusers.adapters")
 
     if "guillotina_elasticsearch" in settings.get("applications", []):
         if "load_utilities" not in settings:
