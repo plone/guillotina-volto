@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import glob
-
+from guillotina import directives
 import yaml
 from guillotina import configure
 from guillotina.i18n import MessageFactory
+from guillotina.contrib.dbusers.content.users import IUser
 
+directives.index_field.apply(IUser, "user_name", type="text")  # pylint: disable=E1101
 
 _ = MessageFactory("guillotina_volto")
 

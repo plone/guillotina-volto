@@ -33,9 +33,6 @@ async def test_users(cms_requester):
         data=json.dumps({"login": "foo_user", "password": "Foo12345"}),
     )
     assert status == 200
-    resp, status = await requester("GET", "/db/guillotina/@search?user_email=null")
-    assert status == 200
-    __import__("pdb").set_trace()
     resp, status = await requester("GET", "/db/guillotina/@users?search=foo")
     assert status == 200
     assert resp[0]["id"] == "foo_user"
@@ -43,3 +40,4 @@ async def test_users(cms_requester):
     assert status == 200
     resp, status = await requester("GET", "/db/guillotina/@users?search=wrong")
     assert status == 200
+    assert len(resp) == 0
