@@ -37,6 +37,11 @@ app_settings = {
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
             "group": "General",
         },
+        "usergroup": {
+            "title": "User group settings",
+            "schema": "guillotina_volto.controlpanels.IUserGroupSettings",
+            "group": "Users",
+        }
     },
     "available_roles": [
         "guillotina.Contributor",

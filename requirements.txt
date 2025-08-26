@@ -3,3 +3,7 @@ diff-match-patch==20121119
 Pillow
 plone.scale>=3.0.1
 guillotina_linkintegrity>=5.0.2
+jinja2==2.11.3
+MarkupSafe==2.0.1
+pytz==2021.1
+redis[hiredis]>4.2.0rc1

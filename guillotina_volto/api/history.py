@@ -21,6 +21,8 @@ async def history(context, request):
     result = []
     context_url = getMultiAdapter((context, request), IAbsoluteURL)()
     container_url = getMultiAdapter((container, request), IAbsoluteURL)()
+    if bhr.history is None:
+        return []
     for ident, hist_data in enumerate(bhr.history):
         actor = hist_data.get("actor", "")
         type_ = hist_data.get("type", "")

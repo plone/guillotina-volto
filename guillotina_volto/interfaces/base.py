@@ -92,3 +92,10 @@ class ICMSBehavior(Interface):
         key_type=schema.TextLine(title="CommentID"),
         value_type=schema.JSONField(title="Comment", schema=DISCUSSION_SCHEMA),
     )
+
+    history = schema.Dict(
+        title="History list field",
+        required=False,
+        key_type=schema.TextLine(title="HistoryID"),
+        value_type=schema.JSONField(title="History", schema=HISTORY_SCHEMA),
+    )

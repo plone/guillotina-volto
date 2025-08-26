@@ -49,3 +49,10 @@ If you want to start with guillotina source core development also enabled you sh
 done a checkout of guillotina repository on a sibling folder to guillotina_volto one and start with::
 
     make init-local
+
+Environment variables to set in Volto
+--------------------------------------
+
+export RAZZLE_API_PATH=http://127.0.0.1:8081/db/container
+export RAZZLE_INTERNAL_API_PATH=http://127.0.0.1:8081/db/container
+export RAZZLE_LEGACY_TRAVERSE=true
