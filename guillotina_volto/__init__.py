@@ -28,7 +28,7 @@ app_settings = {
     },
     "controlpanels": {
         "image_settings": {
-            "title": "Image settings",
+            "title": "Validation settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
             "group": "General",
         },
@@ -44,11 +44,18 @@ app_settings = {
         }
     },
     "available_roles": [
-        "guillotina.Contributor",
-        "guillotina.Editor",
-        "guillotina.Reader",
-        "guillotina.Reviewer",
-        "guillotina.Owner",
+        "Contributor",
+        "Editor",
+        "Reader",
+        "Reviewer"
+        "SiteAdministrator",
+        "Manager",
+    ],
+    "sharing_tab_roles": [
+        "Contributor",
+        "Editor",
+        "Reader",
+        "Reviewer"
     ],
     "layouts": {
         "CMSFolder": [

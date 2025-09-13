@@ -292,7 +292,7 @@ pytestmark = pytest.mark.asyncio
     }
 )
 async def _test_react_page(cms_requester):
-    requester = cms_requesterg
+    requester = cms_requester
     resp, status = await requester(
         "POST",
         "/db/guillotina/",

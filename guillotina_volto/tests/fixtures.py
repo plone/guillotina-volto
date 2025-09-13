@@ -27,6 +27,12 @@ def base_settings_configurator(settings):
     settings["applications"].append("guillotina.contrib.email_validation")
     settings["applications"].append("guillotina.contrib.catalog.pg")
     settings["applications"].append("guillotina_volto")
+    settings["load_utilities"] = {
+        "catalog": {
+            "provides": "guillotina.interfaces.ICatalogUtility",
+            "factory": "guillotina.contrib.catalog.pg.utility.PGSearchUtility",
+        },
+    }
     settings["auth_extractors"] = [
         "guillotina.auth.extractors.BearerAuthPolicy",
         "guillotina.auth.extractors.BasicAuthPolicy",
@@ -80,23 +86,16 @@ async def guillotina_volto_app(app_client):
 @pytest_asyncio.fixture(scope="function")
 async def cms_requester(request, guillotina_volto_app):
     guillotina = guillotina_volto_app
-    install = getattr(request, "param", ["cms", "dbusers", "email_validation"])
     resp, status = await guillotina(
         "POST",
         "/db",
         data=json.dumps(
             {
                 "@type": "Site",
-                "title": "Title effitronix",
+                "title": "Title guillotina volto",
                 "id": "guillotina",
             }
         ),
     )
     assert status == 200
-    for install_id in install:
-        _, status = await guillotina(
-            "POST", "/db/guillotina/@addons", data=json.dumps({"id": install_id})
-        )
-        assert status == 200
-    await asyncio.sleep(5)
     yield guillotina

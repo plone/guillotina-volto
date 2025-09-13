@@ -51,6 +51,7 @@ async def controlpanel_element(context, request):
         "group": "General",
         "title": "Validations Settings",
         "data": {},
+        "items": [],
     }
 
     controlpanels = app_settings.get("controlpanels", {})
@@ -70,7 +71,7 @@ async def controlpanel_element(context, request):
                 (field, schemaObj, request), ISchemaFieldSerializeToJson
             )
             schema["properties"][name] = await serializer()
-            data[name] = config.__getitem__(name)
+            data[name] = config.__getitem__(name) or field.default
             fields.append(name)
         schema["fieldsets"] = [{"fields": fields, "id": "default", "title": "default"}]
         result["schema"] = schema

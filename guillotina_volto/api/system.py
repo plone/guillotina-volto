@@ -18,5 +18,5 @@ async def system(context, request):
         "guillotina": version("guillotina"),
         "guillotina_volto": version("guillotina_volto"),
         "python_version": platform.python_version(),
-        "plone_restapi_version": "x.x.x", # This is for volto control panel compatibility
+        "plone_restapi_version": "8.25.0", # This is for volto control panel compatibility
     }

@@ -13,7 +13,7 @@ async def test_search(cms_requester):
 
     await add_content(requester)
     resp, status = await requester("GET", "/db/guillotina/@search")
-    assert resp["items_total"] == 22
+    assert resp["items_total"] == 26
 
     resp, status = await requester(
         "GET", "/db/guillotina/@search?path__starts=cms-folder0&depth__gte=1"

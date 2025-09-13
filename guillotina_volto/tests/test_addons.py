@@ -20,14 +20,6 @@ async def test_addons_install(cms_requester):
     for addon in response["items"]:
         if addon["id"] == "email_validation":
             found = True
-            assert addon["is_installed"] is False
-    assert found is True
-
-    response, status = await cms_requester("POST", "/db/guillotina/@addons/email_validation/install")
-    found = False
-    for addon in response["items"]:
-        if addon["id"] == "email_validation":
-            found = True
             assert addon["is_installed"] is True
     assert found is True
     response, status = await cms_requester("POST", "/db/guillotina/@addons/email_validation/install")

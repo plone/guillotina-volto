@@ -274,23 +274,17 @@ async def move_content(context, request):
     return results
 
 
-async def get_all_sharing_roles():
+async def get_app_sharing_roles():
+    valid_roles = app_settings.get("sharing_tab_roles", [])
     all_roles = list()
-    restrict_roles = app_settings.get("sharing_tab_roles", list())
-    roles = configure.get_configurations("guillotina", "role")
-    for app_name in app_settings.get("applications", list()):
-        roles += configure.get_configurations(app_name, "role")
-
+    roles = configure.get_configurations("guillotina_volto", "role")
+    
     for _type, role_config in roles:
         role_id = role_config["config"].get("id")
         role_description = role_config["config"].get("description")
-        if not role_description:
+        if not role_description or role_id not in valid_roles:
             continue
-        if restrict_roles:
-            if role_id in restrict_roles:
-                all_roles.append({"id": role_id, "title": role_description})
-        else:
-            all_roles.append({"id": role_id, "title": role_description})
+        all_roles.append({"id": role_id, "title": role_description})
     return all_roles
 
 
@@ -300,7 +294,7 @@ async def get_all_sharing_roles():
     method="GET",
     permission="guillotina.SeePermissions",
     name="@sharing",
-)g
+)
 class SharingGET(Service):
     async def set_roles_for_context(self, context, acquired=False):
         prinrole = IPrincipalRoleMap(context)
@@ -351,7 +345,7 @@ class SharingGET(Service):
 
             else:
                 query = {
-                    "portal_type__or": "Group,User",
+                    "type__or": "Group,User",
                     "id": pr_id,
                 }
                 groups_or_users = await self.search.search(self.site, query)
@@ -410,7 +404,7 @@ class SharingGET(Service):
         self.groups_with_local_roles = dict()
 
         # Find all available roles
-        self.all_roles = await get_all_sharing_roles()
+        self.all_roles = await get_app_sharing_roles()
         self.all_role_ids = [i["id"] for i in self.all_roles]
 
         inherit_permissions = IInheritPermissionMap(context)
@@ -558,7 +552,7 @@ class SharingPOST(Service):
                         {"principal": principal, "role": k, "setting": setting}
                     )
 
-        self.all_roles = await get_all_sharing_roles()
+        self.all_roles = await get_app_sharing_roles()
         self.all_role_ids = [i["id"] for i in self.all_roles]
 
         # When 'inherit' is not in data, means the value should be enabled

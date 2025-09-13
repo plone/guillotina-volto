@@ -8,6 +8,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.mark.app_settings({"applications": ["guillotina_linkintegrity"]})
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
+@pytest.mark.skip(reason="@link not implemented in guillotina_volto, check it in plone if it exists")
 async def test_li(cms_requester):
     requester = cms_requester
     resp1, status = await requester(

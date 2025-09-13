@@ -41,8 +41,10 @@ async def test_get_max_position_in_folder(cms_requester):
         ),
     )
 
+    
     root = await utils.get_root(db=requester.db)
     container = await root.async_get("guillotina")
+    # TODO: In database the info exists, but when we get them, we don't get the position_in_parent
     pos = await get_last_child_position(container)
     assert pos > 1
 

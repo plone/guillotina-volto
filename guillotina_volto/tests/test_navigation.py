@@ -9,17 +9,6 @@ pytestmark = pytest.mark.asyncio
     os.environ.get("DATABASE", "DUMMY") in ("cockroachdb", "DUMMY"),
     reason="Not for dummy db",
 )
-@pytest.mark.app_settings(
-    {
-        "applications": ["guillotina.contrib.catalog.pg"],
-        "load_utilities": {
-            "catalog": {
-                "provides": "guillotina.interfaces.ICatalogUtility",
-                "factory": "guillotina.contrib.catalog.pg.PGSearchUtility",
-            }
-        },
-    }
-)
 async def test_navigation(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -27,16 +16,19 @@ async def test_navigation(cms_requester):
         "/db/guillotina/",
         data=json.dumps({"@type": "CMSFolder", "id": "folder1"}),
     )
+    assert status == 201
     resp, status = await requester(
         "POST",
         "/db/guillotina/folder1",
         data=json.dumps({"@type": "Document", "id": "doc1"}),
     )
+    assert status == 201
     resp, status = await requester(
         "POST",
         "/db/guillotina/folder1",
         data=json.dumps({"@type": "Document", "id": "doc2"}),
     )
+    assert status == 201
     resp, status = await requester(
         "GET", "/db/guillotina/@navigation?expand.navigation.depth=2"
     )
