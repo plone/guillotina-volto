@@ -52,7 +52,6 @@ jobs:
 
       - name: Install the package
         run: |
-          pip install $(grep "Cython" requirements.txt)
           pip install -r requirements.txt
           pip install -r contrib-requirements.txt
           pip install -r requirements-test.txt
