@@ -1,8 +1,8 @@
 from guillotina import configure
 from guillotina import schema
 from guillotina.contrib.dyncontent.vocabularies import AppSettingSource
-from zope.interface import Interface
 from guillotina.interfaces import IFolder
+from zope.interface import Interface
 
 
 @configure.behavior(title="Syndication settings", for_=IFolder)
@@ -27,9 +27,7 @@ class ISyndicationSettings(Interface):
         ),
     )
 
-    sort_reverse = schema.Bool(
-        title="Reverse sort", description="Order items in reverse order", default=True
-    )
+    sort_reverse = schema.Bool(title="Reverse sort", description="Order items in reverse order", default=True)
 
     categories = schema.List(
         title="Categories",

@@ -1,16 +1,16 @@
 import json
-import asyncio
 
 import pytest_asyncio
-from guillotina import testing
-from guillotina.component import globalregistry
-from guillotina.tests.fixtures import get_db_settings
-from guillotina.factory import make_app
 from async_asgi_testclient import TestClient
-from guillotina.tests.fixtures import _clear_dbs, clear_task_vars
-from guillotina.tests.fixtures import GuillotinaDBAsgiRequester
+from guillotina import testing
 from guillotina.component import get_utility
+from guillotina.component import globalregistry
+from guillotina.factory import make_app
 from guillotina.interfaces import IApplication
+from guillotina.tests.fixtures import GuillotinaDBAsgiRequester
+from guillotina.tests.fixtures import _clear_dbs
+from guillotina.tests.fixtures import clear_task_vars
+from guillotina.tests.fixtures import get_db_settings
 
 
 def base_settings_configurator(settings):
@@ -36,15 +36,16 @@ def base_settings_configurator(settings):
     settings["auth_extractors"] = [
         "guillotina.auth.extractors.BearerAuthPolicy",
         "guillotina.auth.extractors.BasicAuthPolicy",
-        "guillotina.auth.extractors.WSTokenAuthPolicy"
+        "guillotina.auth.extractors.WSTokenAuthPolicy",
     ]
     settings["auth_token_validators"] = [
         "guillotina.auth.validators.SaltedHashPasswordValidator",
-        "guillotina.auth.validators.JWTValidator"
+        "guillotina.auth.validators.JWTValidator",
     ]
 
 
 testing.configure_with(base_settings_configurator)
+
 
 @pytest_asyncio.fixture(scope="function")
 async def app_client(event_loop, db, request):

@@ -1,20 +1,19 @@
-from guillotina import configure
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IInheritPermissionManager
-from guillotina.interfaces import IPrincipalRoleManager
+from copy import deepcopy
 
-from guillotina.interfaces import IInheritPermissionMap
-from guillotina.interfaces import IPrincipalRoleMap
-from guillotina.exceptions import ContainerNotFound
-from guillotina.interfaces.catalog import ICatalogUtility
-
-from guillotina.utils import get_current_container
-from guillotina.interfaces import IRole
-from guillotina.auth.role import local_roles
 from guillotina import app_settings
+from guillotina import configure
+from guillotina.auth.role import local_roles
 from guillotina.component import get_utility
 from guillotina.component import query_utility
-from copy import deepcopy
+from guillotina.exceptions import ContainerNotFound
+from guillotina.interfaces import IInheritPermissionManager
+from guillotina.interfaces import IInheritPermissionMap
+from guillotina.interfaces import IPrincipalRoleManager
+from guillotina.interfaces import IPrincipalRoleMap
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IRole
+from guillotina.interfaces.catalog import ICatalogUtility
+from guillotina.utils import get_current_container
 
 
 PERMISSIONS_TO_FORBIT_ONINHERIT = [
@@ -33,7 +32,7 @@ PERMISSIONS_TO_FORBIT_ONINHERIT = [
     name="@grant",
 )
 async def grantinfo(context, request):
-    """ principals -> roles """
+    """principals -> roles"""
     search = request.query.get("search")
     if search is not None:
         search = search.lower()
@@ -44,28 +43,19 @@ async def grantinfo(context, request):
     inheritMap = IInheritPermissionMap(context)
     permissions = inheritMap.get_locked_permissions()
     if len(permissions) > 0:
-        blocked_permissions = permissions
         result["inherit"] = False
     else:
         result["inherit"] = True
 
     # Roles
     roles = local_roles()
-    valid_roles = [
-        role for role in roles if role in app_settings.get("available_roles", [])
-    ]
+    valid_roles = [role for role in roles if role in app_settings.get("available_roles", [])]
     for role in valid_roles:
         role_obj = get_utility(IRole, name=role)
-        result["available_roles"].append(
-            {"id": role, "title": role_obj.title, "description": role_obj.description}
-        )
+        result["available_roles"].append({"id": role, "title": role_obj.title, "description": role_obj.description})
 
     prinrole = IPrincipalRoleMap(context)
-    settings = [
-        setting
-        for setting in prinrole.get_principals_and_roles()
-        if setting[0] in valid_roles
-    ]
+    settings = [setting for setting in prinrole.get_principals_and_roles() if setting[0] in valid_roles]
     valid_settings = {}
     default_roles = {role: None for role in valid_roles}
 
@@ -141,7 +131,7 @@ async def grantinfo(context, request):
     permission="guillotina.ChangePermissions",
     name="@grant",
 )
-async def grantinfo(context, request):
+async def grantinfo_post(context, request):
     payload = await request.json()
     inherit = payload.get("inherit", None)
 

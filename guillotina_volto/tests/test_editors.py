@@ -1,6 +1,8 @@
 import json
-import pytest
 import os
+
+import pytest
+
 
 REACT_PAGE_PAYLOAD = {
     "id": "1",
@@ -54,9 +56,7 @@ REACT_PAGE_PAYLOAD = {
                                                         {
                                                             "object": "inline",
                                                             "type": "LINK/LINK",
-                                                            "data": {
-                                                                "href": "https://www.ory.sh/"
-                                                            },
+                                                            "data": {"href": "https://www.ory.sh/"},
                                                             "nodes": [
                                                                 {
                                                                     "object": "text",
@@ -73,9 +73,7 @@ REACT_PAGE_PAYLOAD = {
                                                         {
                                                             "object": "inline",
                                                             "type": "LINK/LINK",
-                                                            "data": {
-                                                                "href": "https://github.com/ory"
-                                                            },
+                                                            "data": {"href": "https://github.com/ory"},
                                                             "nodes": [
                                                                 {
                                                                     "object": "text",
@@ -104,9 +102,7 @@ REACT_PAGE_PAYLOAD = {
                                                         {
                                                             "object": "inline",
                                                             "type": "LINK/LINK",
-                                                            "data": {
-                                                                "href": "https://en.serlo.org/serlo"
-                                                            },
+                                                            "data": {"href": "https://en.serlo.org/serlo"},
                                                             "nodes": [
                                                                 {
                                                                     "object": "text",
@@ -219,7 +215,7 @@ REACT_PAGE_PAYLOAD = {
                                                             "object": "inline",
                                                             "type": "LINK/LINK",
                                                             "data": {
-                                                                "href": "https://www.ory.sh/sites?utm_source=github&utm_medium=link&utm_campaign=editor_demo"
+                                                                "href": "https://www.ory.sh/sites?utm_source=github&utm_medium=link&utm_campaign=editor_demo"  # noqa
                                                             },
                                                             "nodes": [
                                                                 {
@@ -299,19 +295,13 @@ async def _test_react_page(cms_requester):
         data=json.dumps(
             {
                 "@type": "Document",
-                "@behaviors": [
-                    "guillotina_volto.interfaces.editors.IReactPageLayout"
-                ],
+                "@behaviors": ["guillotina_volto.interfaces.editors.IReactPageLayout"],
                 "id": "doc1",
-                "guillotina_volto.interfaces.editors.IReactPageLayout": {
-                    "layout": REACT_PAGE_PAYLOAD
-                },
+                "guillotina_volto.interfaces.editors.IReactPageLayout": {"layout": REACT_PAGE_PAYLOAD},
             }
         ),
     )
     assert status == 201
 
-    resp, status = await requester(
-        "GET", "/db/guillotina/@search?text__in=is+a+smart"
-    )
+    resp, status = await requester("GET", "/db/guillotina/@search?text__in=is+a+smart")
     assert len(resp["items"]) == 1

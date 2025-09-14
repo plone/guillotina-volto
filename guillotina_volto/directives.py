@@ -2,8 +2,7 @@ from guillotina.directives import Directive
 
 
 class MetadataDictMergeDirective(Directive):
-    """Store a dict value in the tagged value under the key.
-    """
+    """Store a dict value in the tagged value under the key."""
 
     key: str
 

@@ -1,17 +1,18 @@
+import uuid
+from copy import deepcopy
+from datetime import datetime
+
 from guillotina import configure
+from guillotina.component import getMultiAdapter
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
-from guillotina.component import getMultiAdapter
 from guillotina.response import ErrorResponse
 from guillotina.response import HTTPUnauthorized
 from guillotina.response import Response
 from guillotina.utils import get_authenticated_user_id
 from guillotina.utils import get_security_policy
-from guillotina_volto.interfaces import ICMSBehavior
 
-from copy import deepcopy
-import uuid
-from datetime import datetime
+from guillotina_volto.interfaces import ICMSBehavior
 
 
 @configure.service(
@@ -200,9 +201,7 @@ async def delete_comment(context, request):
 
     # TODO: We need ?
     policy = get_security_policy()
-    if user_id != comment["author_username"] or not policy.check_permission(
-        "guillotina.DeleteAllComments", context
-    ):
+    if user_id != comment["author_username"] or not policy.check_permission("guillotina.DeleteAllComments", context):
         raise HTTPUnauthorized(content={"text": "Not the author or permission"})
 
     list_to_delete = [comment_id]

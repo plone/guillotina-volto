@@ -1,5 +1,6 @@
 from guillotina import configure
 
+
 @configure.vocabulary(name="plone.contentrules.events")
 class ContentRulesVocabulary:
     def __init__(self, context):
@@ -19,7 +20,7 @@ class ContentRulesVocabulary:
             "User Logged in": "User Logged in",
             "User Logged out": "User Logged out",
             "User Removed": "User Removed",
-            "Workflow state changed": "Workflow state changed",     
+            "Workflow state changed": "Workflow state changed",
         }
 
     def keys(self):

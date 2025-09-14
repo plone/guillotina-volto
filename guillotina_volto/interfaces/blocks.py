@@ -1,8 +1,9 @@
+import json
+
 from guillotina import schema
 from guillotina.schema import JSONField
-from zope.interface import Interface
 from guillotina.schema.interfaces import IContextAwareDefaultFactory
-import json
+from zope.interface import Interface
 from zope.interface import implementer
 
 
@@ -65,16 +66,15 @@ class IBlocks(Interface):
 
 
 class IBlockType(Interface):
-    """A utility that describes a type of block
-    """
+    """A utility that describes a type of block"""
 
     __name__ = schema.DottedName(title="Block name (same as utility name)")
-    title = schema.TextLine(title=u"Title")
-    description = schema.Text(title=u"Description", required=False)
-    icon = schema.Text(title=u"Icon", required=False)
-    add_permission = schema.Id(title=u"Zope 3 IPermission utility name")
+    title = schema.TextLine(title="Title")
+    description = schema.Text(title="Description", required=False)
+    icon = schema.Text(title="Icon", required=False)
+    add_permission = schema.Id(title="Zope 3 IPermission utility name")
     schema = schema.Object(
-        title=u"Block schema",
+        title="Block schema",
         description="Describes configurable data for this block and allows a "
         "form to be rendered to edit it. Set to None if the block "
         "has no configurable schema",

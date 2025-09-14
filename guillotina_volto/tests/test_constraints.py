@@ -1,5 +1,7 @@
 import json
+
 import pytest
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -29,9 +31,7 @@ async def test_constraints(cms_requester):
     assert status == 412
 
     # Set only Files are available
-    resp, status = await requester(
-        "POST", "/db/guillotina/doc1/@constraints", data=json.dumps(["File"])
-    )
+    resp, status = await requester("POST", "/db/guillotina/doc1/@constraints", data=json.dumps(["File"]))
 
     assert status == 200
 

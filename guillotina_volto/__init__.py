@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import glob
-from guillotina import directives
+
 import yaml
 from guillotina import configure
-from guillotina.i18n import MessageFactory
+from guillotina import directives
 from guillotina.contrib.dbusers.content.users import IUser
+from guillotina.i18n import MessageFactory
+
 
 directives.index_field.apply(IUser, "user_name", type="text")  # pylint: disable=E1101
 
@@ -23,9 +25,7 @@ app_settings = {
         "guillotina.contrib.dbusers",
     ],
     "available_blocks": {},
-    "commands": {
-        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
-    },
+    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
         "image_settings": {
             "title": "Validation settings",
@@ -41,22 +41,16 @@ app_settings = {
             "title": "User group settings",
             "schema": "guillotina_volto.controlpanels.IUserGroupSettings",
             "group": "Users",
-        }
+        },
     },
     "available_roles": [
         "Contributor",
         "Editor",
         "Reader",
-        "Reviewer"
-        "SiteAdministrator",
+        "Reviewer" "SiteAdministrator",
         "Manager",
     ],
-    "sharing_tab_roles": [
-        "Contributor",
-        "Editor",
-        "Reader",
-        "Reviewer"
-    ],
+    "sharing_tab_roles": ["Contributor", "Editor", "Reader", "Reviewer"],
     "layouts": {
         "CMSFolder": [
             "default",

@@ -1,6 +1,6 @@
 from guillotina import configure
-from guillotina.schema.vocabulary import SimpleVocabulary
 from guillotina.schema import Choice
+from guillotina.schema.vocabulary import SimpleVocabulary
 
 
 @configure.value_serializer(SimpleVocabulary)

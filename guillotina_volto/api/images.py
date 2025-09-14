@@ -6,11 +6,12 @@ from guillotina.api.service import TraversableFieldService
 from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IFileManager
 from guillotina.response import HTTPNotFound
+from guillotina.response import Response
 from guillotina.utils import get_registry
+from plone.scale.scale import scaleImage
+
 from guillotina_volto.interfaces import IHasImage
 from guillotina_volto.interfaces import IImagingSettings
-from plone.scale.scale import scaleImage
-from guillotina.response import Response
 
 
 @configure.service(
@@ -41,13 +42,9 @@ class DownloadImageScale(TraversableFieldService):
             raise HTTPNotFound(content={"reason": f"{scale_name} is not supported"})
         file = self.field.get(self.field.context or self.context)
         if file is None:
-            raise HTTPNotFound(
-                content={"message": "File or custom filename required to download"}
-            )
+            raise HTTPNotFound(content={"message": "File or custom filename required to download"})
 
-        adapter = get_multi_adapter(
-            (self.context, self.request, self.field), IFileManager
-        )
+        adapter = get_multi_adapter((self.context, self.request, self.field), IFileManager)
         data = b""
         async for chunk in adapter.iter_data():
             data += chunk
@@ -64,9 +61,7 @@ class DownloadImageScale(TraversableFieldService):
 
         cors_renderer = app_settings["cors_renderer"](self.request)
         headers = await cors_renderer.get_headers()
-        headers.update(
-            {"CONTENT-DISPOSITION": 'attachment; filename="{}"'.format(file.filename)}
-        )
+        headers.update({"CONTENT-DISPOSITION": 'attachment; filename="{}"'.format(file.filename)})
 
         download_resp = Response(
             status=200,

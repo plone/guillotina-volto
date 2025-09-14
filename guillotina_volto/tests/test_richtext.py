@@ -3,6 +3,7 @@ import json
 import pytest
 from guillotina.tests.test_catalog import NOT_POSTGRES
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -90,7 +91,4 @@ async def test_links_translated(cms_requester):
     assert status == 201
 
     resp, status = await requester("GET", "/db/guillotina/doc2")
-    assert (
-        "/db/guillotina/doc1"
-        in resp["guillotina_volto.interfaces.richtext.IRichText"]["text"]["data"]
-    )
+    assert "/db/guillotina/doc1" in resp["guillotina_volto.interfaces.richtext.IRichText"]["text"]["data"]

@@ -1,11 +1,12 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.interfaces import IAbsoluteURL
-from guillotina_volto.interfaces import ISite
 from guillotina.interfaces import IResource
 from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
+
 from guillotina_volto.interfaces import ICMSLayer
+from guillotina_volto.interfaces import ISite
 from guillotina_volto.utils import get_search_utility
 
 
@@ -43,9 +44,7 @@ class Breadcrumbs(Service):
         result = []
         context = self.context
         while context is not None and not ISite.providedBy(context):
-            result.append(
-                {"title": context.title, "@id": IAbsoluteURL(context, self.request)()}
-            )
+            result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
             context = getattr(context, "__parent__", None)
         result.reverse()
 
@@ -113,9 +112,7 @@ class Navigation(Service):
                 "@name": brain.get("uuid"),
                 "description": "",
             }
-            pending_dict.setdefault(brain.get("parent_uuid"), []).append(
-                brain_serialization
-            )
+            pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
 
         parent_uuid = container.uuid
         if parent_uuid not in pending_dict:
@@ -153,40 +150,18 @@ class Actions(Service):
                 {"id": "contentrules", "title": "Rules", "url": None},
                 {"id": "local_roles", "title": "Sharing", "url": None},
             ],
-            "object_buttons": [{
-                "id": "cut",
-                "title": "Cut",
-                "url": None
-            }, {
-                "id": "copy",
-                "title": "Copy",
-                "url": None
-            }, {
-                "id": "paste",
-                "title": "Paste",
-                "url": None
-            }, {
-                "id": "delete",
-                "title": "Delete",
-                "url": None
-            }, {
-                "id": "rename",
-                "title": "Rename",
-                "url": None
-            }],
-            "site_actions": [{
-                "id": "sitemap",
-                "title": "Sitemap",
-                "url": None
-            }, {
-                "id": "accessibility",
-                "title": "Accessibility",
-                "url": None
-            }, {
-                "id": "contact",
-                "title": "Contact",
-                "url": None
-            }],
+            "object_buttons": [
+                {"id": "cut", "title": "Cut", "url": None},
+                {"id": "copy", "title": "Copy", "url": None},
+                {"id": "paste", "title": "Paste", "url": None},
+                {"id": "delete", "title": "Delete", "url": None},
+                {"id": "rename", "title": "Rename", "url": None},
+            ],
+            "site_actions": [
+                {"id": "sitemap", "title": "Sitemap", "url": None},
+                {"id": "accessibility", "title": "Accessibility", "url": None},
+                {"id": "contact", "title": "Contact", "url": None},
+            ],
             "user": [
                 {"id": "preferences", "title": "Preferences", "url": None},
                 {"id": "plone_setup", "title": "Site Setup", "url": None},

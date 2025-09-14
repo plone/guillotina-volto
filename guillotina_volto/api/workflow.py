@@ -1,7 +1,7 @@
 from guillotina import configure
-from guillotina.interfaces import IResource
 from guillotina.contrib.workflows.api import WorkflowGET
 from guillotina.contrib.workflows.interfaces import IWorkflowBehavior
+from guillotina.interfaces import IResource
 
 
 @configure.service(

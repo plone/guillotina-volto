@@ -1,7 +1,9 @@
 import json
+
 import pytest
 
 from guillotina_volto.behaviors.syndication import ISyndicationSettings
+
 
 pytestmark = pytest.mark.asyncio
 

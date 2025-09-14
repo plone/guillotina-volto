@@ -1,9 +1,10 @@
 from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
-from guillotina.utils import resolve_dotted_name
-from guillotina.schema import get_fields_in_order
-from guillotina.interfaces import ISchemaFieldSerializeToJson
 from guillotina.component import get_multi_adapter
+from guillotina.interfaces import ISchemaFieldSerializeToJson
+from guillotina.schema import get_fields_in_order
+from guillotina.utils import resolve_dotted_name
+
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.service(
@@ -33,7 +34,7 @@ async def get_users_schema(context, request):
         "user_roles",
         "user_permissions",
         "name",
-        "disabled"
+        "disabled",
     ]
     for name, field in get_fields_in_order(iface):
         all_names.append(name)
@@ -41,9 +42,7 @@ async def get_users_schema(context, request):
             continue
         if field.required:
             schema["required"].append(name)
-        serializer = get_multi_adapter(
-            (field, iface, request), ISchemaFieldSerializeToJson
-        )
+        serializer = get_multi_adapter((field, iface, request), ISchemaFieldSerializeToJson)
         schema["properties"][name] = await serializer()
         fields.append(name)
     schema["fieldsets"] = [{"fields": fields, "id": "default", "title": "default"}]

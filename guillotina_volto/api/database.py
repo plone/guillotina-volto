@@ -1,28 +1,28 @@
-from guillotina import configure, app_settings
-from guillotina.utils import get_registry
-from guillotina.interfaces import IAddons
-from guillotina_volto.interfaces.content import ISite
-from guillotina.api.storage import _get_storage_config
-from guillotina.utils import get_current_db
+from urllib.parse import urlparse
+from urllib.parse import urlunparse
+
 from guillotina import app_settings
+from guillotina import configure
+from guillotina.utils import get_current_db
 from guillotina.utils import get_object_url
-from urllib.parse import urlparse, urlunparse
+
+from guillotina_volto.interfaces.content import ISite
 
 
-def mask_dsn(dsn: str, placeholder: str = '***') -> str:
+def mask_dsn(dsn: str, placeholder: str = "***") -> str:
     """
     Return the same DSN but with the password replaced by `placeholder`.
     """
     p = urlparse(dsn)
     # p.username and p.password may be None if they’re missing
-    netloc = p.hostname or ''
+    netloc = p.hostname or ""
     if p.username:
         userinfo = f"{p.username}:{placeholder}"
         netloc = f"{userinfo}@{netloc}"
     if p.port:
         netloc = f"{netloc}:{p.port}"
 
-    return urlunparse((p.scheme, netloc, p.path, '', '', ''))
+    return urlunparse((p.scheme, netloc, p.path, "", "", ""))
 
 
 @configure.service(
@@ -47,7 +47,7 @@ async def get_database(context, request):
         "cache_size": None,
         "cache_length": None,
         "cache_length_bytes": None,
-        "cache_detail_length": []
+        "cache_detail_length": [],
     }
     path = get_object_url(context)
     for database_name, database_payload in app_settings["databases"].items():

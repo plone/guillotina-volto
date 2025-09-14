@@ -1,17 +1,17 @@
+from guillotina import addons
+from guillotina import task_vars
 from guillotina.commands import Command
 from guillotina.component import get_utility
-from guillotina.interfaces import IApplication
-from guillotina.interfaces import IDatabase
-from guillotina import task_vars
-from guillotina import addons
-from guillotina.transactions import transaction
 from guillotina.content import create_content_in_container
-from guillotina.exceptions import ConflictIdOnContainer
 from guillotina.contrib.dbusers.content.users import IUser
 from guillotina.contrib.workflows.interfaces import IWorkflow
+from guillotina.event import notify
 from guillotina.events import BeforeObjectRemovedEvent
 from guillotina.events import ObjectRemovedEvent
-from guillotina.event import notify
+from guillotina.exceptions import ConflictIdOnContainer
+from guillotina.interfaces import IApplication
+from guillotina.interfaces import IDatabase
+from guillotina.transactions import transaction
 
 
 class CMSCreateCommand(Command):
@@ -49,9 +49,7 @@ class CMSCreateCommand(Command):
             tm = task_vars.tm.get()
             root = await tm.get_root(txn=txn)
             try:
-                site = await create_content_in_container(
-                    root, "Site", arguments.name, check_security=False
-                )
+                site = await create_content_in_container(root, "Site", arguments.name, check_security=False)
                 await addons.install(site, "cms")
                 await addons.install(site, "dbusers")
 
@@ -66,9 +64,7 @@ class CMSCreateCommand(Command):
         async with transaction(db=db) as txn:
             await txn.refresh(site)
             groups = await site.async_get("groups")
-            obj = await create_content_in_container(
-                groups, "Group", "Managers", check_security=False
-            )
+            obj = await create_content_in_container(groups, "Group", "Managers", check_security=False)
             obj.user_roles = [
                 "guillotina.Manager",
                 "guillotina.ContainerAdmin",
@@ -79,9 +75,7 @@ class CMSCreateCommand(Command):
         async with transaction(db=db) as txn:
             await txn.refresh(site)
             users = await site.async_get("users")
-            obj: IUser = await create_content_in_container(
-                users, "User", "admin", check_security=False
-            )
+            obj: IUser = await create_content_in_container(users, "User", "admin", check_security=False)
             await obj.set_password("admin")
             obj.groups = ["Managers"]
 

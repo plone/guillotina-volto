@@ -1,13 +1,17 @@
-from guillotina import configure, app_settings
-from guillotina.utils import get_registry
-from guillotina.interfaces import IAddons
-from guillotina.response import ErrorResponse
+from guillotina import addons
+from guillotina import app_settings
+from guillotina import configure
 from guillotina import error_reasons
 from guillotina.i18n import MessageFactory
-from guillotina import addons
+from guillotina.interfaces import IAddons
+from guillotina.response import ErrorResponse
+from guillotina.utils import get_registry
+
 from guillotina_volto.interfaces.content import ISite
 
+
 _ = MessageFactory("guillotina")
+
 
 @configure.service(
     context=ISite,
@@ -31,7 +35,7 @@ async def get_addons(context, request):
                 "title": addon["title"],
                 "dependencies": addon["dependencies"],
                 "is_installed": False,
-                "upgrade_info": {"available": False}
+                "upgrade_info": {"available": False},
             }
         )
 

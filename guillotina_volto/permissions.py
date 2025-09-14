@@ -1,5 +1,6 @@
 from guillotina import configure
 
+
 configure.role("Contributor", "Contributor", "Can add content", False)
 configure.role("Editor", "Editor", "Can modify content", False)
 configure.role("Reader", "Reader", "Can view content", False)
@@ -7,12 +8,8 @@ configure.role("Reviewer", "Reviewer", "Can review content", False)
 configure.role("SiteAdministrator", "Site Administrator", "Can manage all content", False)
 configure.role("Manager", "Manager", "Can manage content", False)
 
-configure.permission(
-    "guillotina.ManageVersioning", "Ability to modify versioning on an object"
-)
-configure.permission(
-    "guillotina.ManageConstraints", "Allow to check and change type constraints"
-)
+configure.permission("guillotina.ManageVersioning", "Ability to modify versioning on an object")
+configure.permission("guillotina.ManageConstraints", "Allow to check and change type constraints")
 
 configure.permission("guillotina.AccessControlPanel", "Access control panel")
 
@@ -26,9 +23,7 @@ configure.grant(permission="guillotina.ManageVersioning", role="guillotina.Manag
 
 configure.grant(permission="guillotina.ManageConstraints", role="guillotina.Manager")
 
-configure.grant(
-    permission="guillotina.ManageConstraints", role="guillotina.ContainerAdmin"
-)
+configure.grant(permission="guillotina.ManageConstraints", role="guillotina.ContainerAdmin")
 
 configure.grant(permission="guillotina.ReviewContent", role="guillotina.Reviewer")
 
@@ -39,9 +34,7 @@ configure.grant(permission="guillotina.RequestReview", role="guillotina.Manager"
 configure.grant(permission="guillotina.RequestReview", role="guillotina.Owner")
 
 configure.grant(permission="guillotina.RequestReview", role="guillotina.ContainerAdmin")
-configure.grant(
-    permission="guillotina.AccessControlPanel", role="guillotina.ContainerAdmin"
-)
+configure.grant(permission="guillotina.AccessControlPanel", role="guillotina.ContainerAdmin")
 
 configure.grant(permission="guillotina.SearchContent", role="guillotina.Manager")
 
@@ -64,8 +57,6 @@ configure.grant(permission="guillotina.ModifyComments", role="guillotina.Owner")
 configure.grant(permission="guillotina.DeleteComments", role="guillotina.Owner")
 
 configure.grant(permission="guillotina.DeleteAllComments", role="guillotina.Owner")
-
-# Creem un rol que tingui els mateixos permisos que un owner, manager i container admin?
 
 # Contributor
 configure.grant(permission="guillotina.AddContent", role="Contributor")

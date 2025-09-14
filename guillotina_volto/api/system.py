@@ -1,14 +1,14 @@
-from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
-from guillotina.interfaces import IAbsoluteURL
-from guillotina.component import getMultiAdapter
-from importlib.metadata import version
 import platform
+from importlib.metadata import version
+
+from guillotina import configure
+from guillotina.component import getMultiAdapter
+from guillotina.interfaces import IAbsoluteURL
+
+from guillotina_volto.interfaces.content import ISite
 
 
-@configure.service(
-    context=ISite, method="GET", permission="guillotina.AccessContent", name="@system"
-)
+@configure.service(context=ISite, method="GET", permission="guillotina.AccessContent", name="@system")
 async def system(context, request):
 
     url = getMultiAdapter((context, request), IAbsoluteURL)()
@@ -18,5 +18,5 @@ async def system(context, request):
         "guillotina": version("guillotina"),
         "guillotina_volto": version("guillotina_volto"),
         "python_version": platform.python_version(),
-        "plone_restapi_version": "8.25.0", # This is for volto control panel compatibility
+        "plone_restapi_version": "8.25.0",  # This is for volto control panel compatibility
     }

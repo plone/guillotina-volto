@@ -1,7 +1,9 @@
-import pytest
 import json
-import asyncio
-from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS, NOT_POSTGRES
+
+import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -17,13 +19,9 @@ async def test_users(cms_requester):
         "name": "Foo",
         "password": "Foo12345",
     }
-    resp, status = await requester(
-        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
-    )
+    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
     assert status == 200
-    resp, status = await requester(
-        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
-    )
+    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
     assert status != 200
     resp, status = await requester("GET", "/db/guillotina/users/foo_user")
     assert status == 200

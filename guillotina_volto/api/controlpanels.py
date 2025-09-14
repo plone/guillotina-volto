@@ -1,15 +1,15 @@
+from guillotina import app_settings
 from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
+from guillotina.component import get_multi_adapter
+from guillotina.component import getMultiAdapter
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ISchemaFieldSerializeToJson
-from guillotina.component import getMultiAdapter
-from guillotina.component import get_multi_adapter
-from guillotina.contrib.email_validation.interfaces import IValidationSettings
-from guillotina.schema import get_fields_in_order
-from guillotina.utils import resolve_dotted_name
-from guillotina.utils import get_registry
-from guillotina import app_settings
 from guillotina.response import Response
+from guillotina.schema import get_fields_in_order
+from guillotina.utils import get_registry
+from guillotina.utils import resolve_dotted_name
+
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.service(
@@ -67,9 +67,7 @@ async def controlpanel_element(context, request):
         for name, field in get_fields_in_order(schemaObj):
             if field.required:
                 result["required"].append(name)
-            serializer = get_multi_adapter(
-                (field, schemaObj, request), ISchemaFieldSerializeToJson
-            )
+            serializer = get_multi_adapter((field, schemaObj, request), ISchemaFieldSerializeToJson)
             schema["properties"][name] = await serializer()
             data[name] = config.__getitem__(name) or field.default
             fields.append(name)

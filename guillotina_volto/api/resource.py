@@ -1,10 +1,14 @@
 from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
 from guillotina.api.content import DefaultGET
 from guillotina.interfaces import IResource
-from guillotina.utils import get_object_url, get_current_request
-from guillotina_volto.api.components import Actions, Breadcrumbs, Navigation
+from guillotina.utils import get_current_request
+from guillotina.utils import get_object_url
+
+from guillotina_volto.api.components import Actions
+from guillotina_volto.api.components import Breadcrumbs
+from guillotina_volto.api.components import Navigation
 from guillotina_volto.api.types import Types
+
 
 @configure.service(
     context=IResource,
@@ -33,30 +37,14 @@ class DefaultGETResource(DefaultGET):
         if expansions:
             expansions = expansions.split(",")
         components = {
-            "actions": {
-                "@id": f"{full_url}/@actions"
-            },
-            "aliases": {
-                "@id": f"{full_url}/@aliases"
-            },
-            "breadcrumbs": {
-                "@id": f"{full_url}/@breadcrumbs"
-            },
-            "contextnavigation": {
-                "@id": f"{full_url}/@contextnavigation"
-            },
-            "navigation": {
-                "@id": f"{full_url}/@navigation"
-            },
-            "navroot": {
-                "@id": f"{full_url}/@navroot"
-            },
-            "types": {
-                "@id": f"{full_url}/@types"
-            },
-            "workflow": {
-                "@id": f"{full_url}/@workflow"
-            }
+            "actions": {"@id": f"{full_url}/@actions"},
+            "aliases": {"@id": f"{full_url}/@aliases"},
+            "breadcrumbs": {"@id": f"{full_url}/@breadcrumbs"},
+            "contextnavigation": {"@id": f"{full_url}/@contextnavigation"},
+            "navigation": {"@id": f"{full_url}/@navigation"},
+            "navroot": {"@id": f"{full_url}/@navroot"},
+            "types": {"@id": f"{full_url}/@types"},
+            "workflow": {"@id": f"{full_url}/@workflow"},
         }
         for expand in expansions:
             mapping_payload = mapping_expansions.get(expand, None)

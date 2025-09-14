@@ -1,11 +1,12 @@
 from guillotina import configure
-from guillotina.interfaces import IResource
-from guillotina_volto.interfaces import ICMSLayer
-from guillotina.utils import get_behavior
-from guillotina_volto.interfaces import ICMSBehavior
-from guillotina.interfaces import IAbsoluteURL
 from guillotina.component import getMultiAdapter
+from guillotina.interfaces import IAbsoluteURL
+from guillotina.interfaces import IResource
+from guillotina.utils import get_behavior
 from guillotina.utils import get_current_container
+
+from guillotina_volto.interfaces import ICMSBehavior
+from guillotina_volto.interfaces import ICMSLayer
 
 
 @configure.service(

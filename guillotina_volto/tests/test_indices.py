@@ -1,5 +1,6 @@
 import pytest
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -10,13 +11,6 @@ async def test_indices(cms_requester):
     assert "title" in resp["types"]["Item"]
     assert "text" in resp["types"]["Item"]["title"]
 
-    assert (
-        "guillotina.behaviors.dublincore.IDublinCore" in resp["behaviors"]
-    )  # noqa
-    assert (
-        "tags" in resp["behaviors"]["guillotina.behaviors.dublincore.IDublinCore"]
-    )  # noqa
-    assert (
-        "keyword"
-        in resp["behaviors"]["guillotina.behaviors.dublincore.IDublinCore"]["tags"]
-    )  # noqa
+    assert "guillotina.behaviors.dublincore.IDublinCore" in resp["behaviors"]  # noqa
+    assert "tags" in resp["behaviors"]["guillotina.behaviors.dublincore.IDublinCore"]  # noqa
+    assert "keyword" in resp["behaviors"]["guillotina.behaviors.dublincore.IDublinCore"]["tags"]  # noqa

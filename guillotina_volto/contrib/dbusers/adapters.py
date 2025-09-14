@@ -1,9 +1,9 @@
-from guillotina.contrib.dbusers.content.users import IUserManager
+import re
+
 from guillotina import app_settings
 from guillotina import configure
+from guillotina.contrib.dbusers.content.users import IUserManager
 from guillotina.interfaces import IIDChecker
-
-import re
 
 
 # from https://github.com/theskumar/python-usernames/blob/master/usernames/validators.py

@@ -1,9 +1,11 @@
 import base64
 import json
 
-from guillotina.utils import resolve_path
-from guillotina_volto.behaviors.image import IImageAttachment
 import pytest
+from guillotina.utils import resolve_path
+
+from guillotina_volto.behaviors.image import IImageAttachment
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -66,9 +68,7 @@ async def test_fourohfour_when_invalid_scale(cms_requester):
 
 async def test_get_scales_on_image_content(cms_requester):
     requester = cms_requester
-    image_path = resolve_path(
-        "guillotina:static/assets/apple-touch-icon-144x144.png"
-    )
+    image_path = resolve_path("guillotina:static/assets/apple-touch-icon-144x144.png")
     with open(image_path, "rb") as fi:
         image_data = base64.b64encode(fi.read()).decode("utf-8")
     _, status = await requester(
@@ -92,8 +92,6 @@ async def test_get_scales_on_image_content(cms_requester):
     resp, status = await requester("GET", "/db/guillotina/logo.png")
     assert status == 200
 
-    resp, status = await requester(
-        "GET", "/db/guillotina/logo.png/@@images/image/mini"
-    )
+    resp, status = await requester("GET", "/db/guillotina/logo.png/@@images/image/mini")
     assert status == 200
     assert len(resp) > 0

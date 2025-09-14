@@ -1,5 +1,6 @@
 from guillotina.configure import _base_decorator
 from guillotina.configure import register_configuration_handler
+
 from guillotina_volto import app_settings
 
 

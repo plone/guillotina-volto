@@ -1,11 +1,12 @@
 from guillotina import configure
+from guillotina.behaviors.dublincore import IDublinCore
+from guillotina.component import get_utility
+from guillotina.content import load_cached_schema
 from guillotina.interfaces import IApplicationInitializedEvent
 from guillotina.interfaces import IResourceFactory
-from guillotina.component import get_utility
-from guillotina.behaviors.dublincore import IDublinCore
+
 from guillotina_volto.interfaces.base import ICMSBehavior
 from guillotina_volto.interfaces.blocks import IBlocks
-from guillotina.content import load_cached_schema
 
 
 @configure.subscriber(for_=IApplicationInitializedEvent)

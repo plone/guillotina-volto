@@ -1,6 +1,9 @@
-import pytest
 import json
-from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS, NOT_POSTGRES
+
+import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
+
 
 pytestmark = pytest.mark.asyncio
 
@@ -18,10 +21,7 @@ async def test_permissions_site_managers_group(cms_requester):
     admin_token = resp["token"]
 
     resp, status = await requester(
-        "GET",
-        "/db/guillotina/@items",
-        authenticated=False,
-        headers={"Authorization": f"Bearer {admin_token}"}
+        "GET", "/db/guillotina/@items", authenticated=False, headers={"Authorization": f"Bearer {admin_token}"}
     )
     assert status == 200
 
@@ -30,15 +30,16 @@ async def test_permissions_site_managers_group(cms_requester):
         "/db/guillotina/",
         data=json.dumps({"@type": "Document", "title": "Document 1", "id": "doc2"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {admin_token}"}
+        headers={"Authorization": f"Bearer {admin_token}"},
     )
     assert status == 201
-    
+
     resp, status = await requester(
-        "PATCH", "/db/guillotina/",
+        "PATCH",
+        "/db/guillotina/",
         data=json.dumps({"title": "Container edited by admin"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {admin_token}"}
+        headers={"Authorization": f"Bearer {admin_token}"},
     )
     assert status == 204
 
@@ -47,11 +48,9 @@ async def test_permissions_site_managers_group(cms_requester):
         "username": "foo_user",
         "name": "Foo",
         "password": "Foo12345",
-        "user_groups": ["managers"]
+        "user_groups": ["managers"],
     }
-    resp, status = await requester(
-        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
-    )
+    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
     assert status == 200
 
     resp, status = await requester(
@@ -67,15 +66,16 @@ async def test_permissions_site_managers_group(cms_requester):
         "/db/guillotina/",
         data=json.dumps({"@type": "Document", "title": "Document 3", "id": "doc3"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 201
 
     resp, status = await requester(
-        "PATCH", "/db/guillotina/",
+        "PATCH",
+        "/db/guillotina/",
         data=json.dumps({"title": "Container edited by second user"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 204
 
@@ -94,10 +94,7 @@ async def test_permissions_site_managers_group(cms_requester):
     assert status == 200
 
     resp, status = await requester(
-        "GET",
-        "/db/guillotina_volto/",
-        authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        "GET", "/db/guillotina_volto/", authenticated=False, headers={"Authorization": f"Bearer {token}"}
     )
     assert status == 401
 
@@ -106,7 +103,7 @@ async def test_permissions_site_managers_group(cms_requester):
         "/db/guillotina_volto/",
         data=json.dumps({"@type": "Document", "title": "Document 3", "id": "doc3"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 401
 
@@ -118,18 +115,16 @@ async def test_permissions_create_site_admins_group(cms_requester):
     resp, status = await requester(
         "POST",
         "/db/guillotina/@groups",
-        data=json.dumps({
-            "@type": "Group",
-            "title": "Site Admins",
-            "groupname": "site_admins",
-            "id": "site_admins",
-            "description": "Site Admins Group",
-            "roles": [
-                "guillotina.Manager",
-                "guillotina.ContainerAdmin",
-                "guillotina.Owner"
-            ]
-        }),
+        data=json.dumps(
+            {
+                "@type": "Group",
+                "title": "Site Admins",
+                "groupname": "site_admins",
+                "id": "site_admins",
+                "description": "Site Admins Group",
+                "roles": ["guillotina.Manager", "guillotina.ContainerAdmin", "guillotina.Owner"],
+            }
+        ),
     )
     assert status == 200
 
@@ -138,11 +133,9 @@ async def test_permissions_create_site_admins_group(cms_requester):
         "username": "foo_user",
         "name": "Foo",
         "password": "Foo12345",
-        "user_groups": ["site_admins"]
+        "user_groups": ["site_admins"],
     }
-    resp, status = await requester(
-        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
-    )
+    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
     assert status == 200
 
     resp, status = await requester(
@@ -151,21 +144,22 @@ async def test_permissions_create_site_admins_group(cms_requester):
         data=json.dumps({"login": "foo_user", "password": "Foo12345"}),
     )
     assert status == 200
-    token = resp["token"]   
+    token = resp["token"]
 
     resp, status = await requester(
         "POST",
         "/db/guillotina/",
         data=json.dumps({"@type": "Document", "title": "Document 1", "id": "doc2"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 201
 
     resp, status = await requester(
-        "PATCH", "/db/guillotina/",
+        "PATCH",
+        "/db/guillotina/",
         data=json.dumps({"title": "Container edited by admin"}),
         authenticated=False,
-        headers={"Authorization": f"Bearer {token}"}
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 204

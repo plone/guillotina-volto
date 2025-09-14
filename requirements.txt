@@ -1,6 +1,8 @@
 guillotina>=7.0.5
 diff-match-patch==20121119
-Pillow
+# Conditional Pillow versions
+pillow==10.4.0; python_version < '3.11'
+pillow==11.1.0; python_version >= '3.11'
 plone.scale>=3.0.1
 guillotina_linkintegrity>=5.0.2
 jinja2==2.11.3

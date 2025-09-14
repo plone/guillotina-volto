@@ -3,24 +3,19 @@ from guillotina import configure
 from guillotina._cache import FACTORY_CACHE
 from guillotina._cache import PERMISSIONS_CACHE
 from guillotina.api.service import Service
-from guillotina.component import getMultiAdapter
+from guillotina.api.types import Read
 from guillotina.component import query_utility
-from guillotina.component import queryUtility
 from guillotina.interfaces import IAbsoluteURL
-from guillotina_volto.interfaces import ISite
-from guillotina.interfaces import IFactorySerializeToJson
 from guillotina.interfaces import IPermission
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceFactory
-from guillotina.interfaces import IAsyncContainer
 from guillotina.response import HTTPNotFound
-from guillotina.utils import get_security_policy
 from guillotina.utils import get_current_request
-from guillotina.component import get_multi_adapter
-from guillotina.api.types import Read
+from guillotina.utils import get_security_policy
 
 # from guillotina.interfaces import IConstrainTypes
 from guillotina_volto.interfaces import ICMSConstrainTypes
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(
@@ -91,14 +86,10 @@ class Types(Service):
                     permission = query_utility(IPermission, name=factory.add_permission)
                     PERMISSIONS_CACHE[factory.add_permission] = permission
 
-                if permission is not None and not policy.check_permission(
-                    permission.id, self.context
-                ):
+                if permission is not None and not policy.check_permission(permission.id, self.context):
                     add = False
             if add:
-                result.append(
-                    {"@id": base_url + "/@types/" + id, "addable": True, "title": id}
-                )
+                result.append({"@id": base_url + "/@types/" + id, "addable": True, "title": id})
         return result
 
 

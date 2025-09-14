@@ -2,8 +2,10 @@ import json
 
 from guillotina import schema
 from guillotina.directives import index_field
-from guillotina_volto.directives import fieldset
 from zope.interface import Interface
+
+from guillotina_volto.directives import fieldset
+
 
 DISCUSSION_SCHEMA = json.dumps(
     {
@@ -57,9 +59,7 @@ class ICMSBehavior(Interface):
 
     index_field("hidden_navigation", store=True, type="boolean")
     fieldset("hidden_navigation", "settings")
-    hidden_navigation = schema.Bool(
-        title="Should be hidden on navigation", required=False, default=False
-    )
+    hidden_navigation = schema.Bool(title="Should be hidden on navigation", required=False, default=False)
 
     index_field("language", store=True, type="keyword")
     fieldset("language", "categorization")
@@ -75,16 +75,12 @@ class ICMSBehavior(Interface):
     )
 
     fieldset("allow_discussion", "settings")
-    allow_discussion = schema.Bool(
-        title="Allow discussion", required=False, default=False
-    )
+    allow_discussion = schema.Bool(title="Allow discussion", required=False, default=False)
 
     # not absolute positioning, just a relative positioning
     # based on ordered numbers. It won't be numbers like 1,2,3,4,5,etc
     index_field("position_in_parent", type="int")
-    position_in_parent = schema.Int(
-        title="Position in parent", default=-1, required=False
-    )
+    position_in_parent = schema.Int(title="Position in parent", default=-1, required=False)
 
     comments = schema.Dict(
         title="Comments list field",

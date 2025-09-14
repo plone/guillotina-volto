@@ -1,7 +1,10 @@
-from guillotina import schema
-from guillotina_volto.utils import get_default_logo
-from zope.interface import Interface
 import json
+
+from guillotina import schema
+from zope.interface import Interface
+
+from guillotina_volto.utils import get_default_logo
+
 
 MENU_LAYOUT = json.dumps({"type": "object", "properties": {}})
 
@@ -35,9 +38,7 @@ class IImagingSettings(Interface):
 
 class IMenu(Interface):
 
-    definition = schema.JSONField(
-        title="Menu definition", required=False, schema=MENU_LAYOUT, defaultFactory=list
-    )
+    definition = schema.JSONField(title="Menu definition", required=False, schema=MENU_LAYOUT, defaultFactory=list)
 
     logo = schema.Text(title="Logo", required=False, defaultFactory=get_default_logo)
 

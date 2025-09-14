@@ -1,14 +1,13 @@
 from guillotina import configure
 from guillotina.api.service import Service
-from guillotina_volto.interfaces import ISite
-from guillotina.response import ErrorResponse
 from guillotina.content import create_content_in_container
-from guillotina.utils import get_current_request
+from guillotina.contrib.dbusers.services.users import ListUsers
 from guillotina.event import notify
 from guillotina.events import ObjectAddedEvent
-from guillotina.contrib.dbusers.services.users import ListUsers
-from guillotina.component import query_utility
-from guillotina.interfaces.catalog import ICatalogUtility
+from guillotina.response import ErrorResponse
+from guillotina.utils import get_current_request
+
+from guillotina_volto.interfaces import ISite
 from guillotina_volto.utils import Search
 
 
@@ -43,9 +42,7 @@ class CreateUser(Service):
             payload_user["user_permissions"] = payload.get("user_permissions", [])
         except KeyError:
             raise ErrorResponse("Wrong key", status=412)
-        user_obj = await create_content_in_container(
-            users_folder, "User", id_=payload["username"], **payload_user
-        )
+        user_obj = await create_content_in_container(users_folder, "User", id_=payload["username"], **payload_user)
         await notify(ObjectAddedEvent(user_obj, users_folder, payload=payload_user))
 
 

@@ -1,8 +1,9 @@
 from guillotina import configure
 from guillotina.api.service import Service
-from guillotina_volto.interfaces import ISite
-from guillotina.interfaces import IAbsoluteURL
 from guillotina.component import getMultiAdapter
+from guillotina.interfaces import IAbsoluteURL
+
+from guillotina_volto.interfaces import ISite
 
 
 @configure.service(

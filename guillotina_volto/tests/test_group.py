@@ -1,7 +1,9 @@
-import pytest
 import json
-import asyncio
-from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS, NOT_POSTGRES
+
+import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
+
 
 pytestmark = pytest.mark.asyncio
 

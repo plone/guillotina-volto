@@ -7,6 +7,7 @@ from guillotina.tests import utils
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.ordering import get_last_child_position
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -41,7 +42,6 @@ async def test_get_max_position_in_folder(cms_requester):
         ),
     )
 
-    
     root = await utils.get_root(db=requester.db)
     container = await root.async_get("guillotina")
     # TODO: In database the info exists, but when we get them, we don't get the position_in_parent

@@ -1,5 +1,6 @@
 import pytest
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -10,9 +11,7 @@ async def test_addon_get(cms_requester):
     assert response["items"][0]["is_installed"] is True
 
 
-@pytest.mark.parametrize(
-    "cms_requester", [["cms", "dbusers"]], indirect=True
-)
+@pytest.mark.parametrize("cms_requester", [["cms", "dbusers"]], indirect=True)
 async def test_addons_install(cms_requester):
     response, status = await cms_requester("GET", "/db/guillotina/@addons")
     assert status == 200
