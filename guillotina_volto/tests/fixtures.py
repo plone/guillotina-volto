@@ -59,8 +59,10 @@ async def app_client(event_loop, db, request):
 
 def get_db_settings_volto(node):
     db_settings = get_db_settings(node)
+    print(db_settings)
     db_settings["storages"]["db"] = {"dsn": {"storage": "postgresql", "password": "postgres", "scheme": "postgres"}}
     db_settings["databases"]["db"]["dsn"]["password"] = "postgres"
+    db_settings["databases"]["db-custom"]["dsn"]["password"] = "postgres"
     return db_settings
 
 
