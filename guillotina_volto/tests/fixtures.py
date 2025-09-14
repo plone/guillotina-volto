@@ -1,4 +1,5 @@
 import json
+import os
 
 import pytest_asyncio
 from async_asgi_testclient import TestClient
@@ -11,6 +12,9 @@ from guillotina.tests.fixtures import GuillotinaDBAsgiRequester
 from guillotina.tests.fixtures import _clear_dbs
 from guillotina.tests.fixtures import clear_task_vars
 from guillotina.tests.fixtures import get_db_settings
+
+
+DATABASE = os.environ.get("DATABASE", "DUMMY")
 
 
 def base_settings_configurator(settings):
@@ -50,11 +54,20 @@ testing.configure_with(base_settings_configurator)
 @pytest_asyncio.fixture(scope="function")
 async def app_client(event_loop, db, request):
     globalregistry.reset()
-    app = make_app(settings=get_db_settings(request.node), loop=event_loop)
+    app = make_app(settings=get_db_settings_volto(request.node), loop=event_loop)
     async with TestClient(app, timeout=90) as client:
         await _clear_dbs(app.app.root)
         yield app, client
     clear_task_vars()
+
+
+def get_db_settings_volto(node):
+    db_settings = get_db_settings(node)
+    db_settings["storages"]["db"] = {"dsn": {"storage": "postgresql", "password": "postgres", "scheme": "postgres"}}
+    if DATABASE == "postgres":
+        db_settings["databases"]["db"]["dsn"]["password"] = "postgres"
+        db_settings["databases"]["db-custom"]["dsn"]["password"] = "postgres"
+    return db_settings
 
 
 class GuillotinaVoltoDBAsgiRequester(GuillotinaDBAsgiRequester):
