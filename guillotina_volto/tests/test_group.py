@@ -10,6 +10,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
+@pytest.mark.skip(reason="Not implemented in guillotina 7.0.5, implemented in next version")
 async def test_groups(cms_requester):
     requester = cms_requester
     resp, status = await requester("GET", "/db/guillotina/@groups")

@@ -10,6 +10,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
+@pytest.mark.skip(reason="Not implemented in guillotina 7.0.5, implemented in next version")
 async def test_permissions_site_managers_group(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -110,6 +111,7 @@ async def test_permissions_site_managers_group(cms_requester):
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
+@pytest.mark.skip(reason="Not implemented in guillotina 7.0.5, implemented in next version")
 async def test_permissions_create_site_admins_group(cms_requester):
     requester = cms_requester
     resp, status = await requester(
