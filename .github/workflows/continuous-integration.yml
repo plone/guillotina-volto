@@ -25,9 +25,9 @@ jobs:
           pip install $(grep -P 'flake8|black|isort' contrib-requirements.txt)
       - name: Run pre-checks
         run: |
-          flake8 guillotina --config=setup.cfg
-          isort -c -rc guillotina/
-          black --check --verbose guillotina
+          flake8 guillotina_volto --config=setup.cfg
+          isort -c -rc guillotina_volto/
+          black --check --verbose guillotina_volto
   # Job to run tests
   tests:
     runs-on: ubuntu-latest
