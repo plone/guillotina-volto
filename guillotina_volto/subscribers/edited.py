@@ -2,6 +2,10 @@ from guillotina import configure
 from guillotina.interfaces import IBeforeObjectModifiedEvent
 from guillotina.interfaces import IObjectModifiedEvent
 from guillotina.interfaces import IResource
+from guillotina.utils import get_behavior
+from guillotina_volto.interfaces import ICMSBehavior
+from guillotina.utils import get_authenticated_user_id
+from datetime import datetime
 
 from guillotina_volto.interfaces import IDiffCalculator
 from guillotina_volto.interfaces import IVersioning
@@ -26,3 +30,21 @@ async def object_modified(object, event):
             version_behavior.diffs.append(object._v_temporal_versioning)
             version_behavior.register()
             del object._v_temporal_versioning
+
+
+@configure.subscriber(for_=(IResource, IObjectModifiedEvent))
+async def modify_history(context, event):
+    payload = {}
+    bhr = await get_behavior(context, ICMSBehavior)
+    last_key = list(bhr.history.keys())[-1]
+    next_key = str(int(last_key) + 1)
+    for key, value in event.payload.items():
+        payload[key] = value
+    bhr.history[next_key] = {}
+    bhr.history[next_key]["data"] = payload
+    bhr.history[next_key]["actor"] = get_authenticated_user_id()
+    bhr.history[next_key]["time"] = datetime.utcnow().timestamp()
+    bhr.history[next_key]["type"] = context.type_name
+    bhr.history[next_key]["title"] = "Object modified"
+    bhr.history[next_key]["comments"] = ""
+    bhr.register()
