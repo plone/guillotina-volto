@@ -15,6 +15,8 @@ from guillotina import error_reasons
 from guillotina.event import notify
 from guillotina.events import BeforeObjectModifiedEvent
 from guillotina.events import ObjectModifiedEvent
+from guillotina.interfaces import IResourceSerializeToJson
+from guillotina.component import get_multi_adapter
 
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.interfaces import ICMSLayer
@@ -127,3 +129,24 @@ async def history_patch(context, request):
     await deserializer(final_values)
     final_values["_v_history"] = version
     await notify(ObjectModifiedEvent(context, payload=final_values))
+
+
+@configure.service(
+    context=IResource,
+    layer=ICMSLayer,
+    name="@history/{history}",
+    method="GET",
+    permission="guillotina.SeePermissions",
+)
+async def history_get_version(context, request):
+    history_version = request.matchdict.get("history")
+    bhr = await get_behavior(context, ICMSBehavior)
+    serializer = get_multi_adapter((context, request), IResourceSerializeToJson)
+    result = await serializer()
+    if history_version not in bhr.history:
+        raise HTTPBadRequest(content={"message": "History not found"})
+    version_changes = bhr.history[history_version]["data"]
+    for key_to_change, value_to_change in version_changes.items():
+        if key_to_change in result:
+            result[key_to_change] = value_to_change
+    return result

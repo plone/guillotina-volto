@@ -124,3 +124,7 @@ async def test_history_creation(cms_requester):
     )
     assert status == 200
     assert resp["title"] == "Document 2"
+
+    resp, status = await requester("GET", "/db/guillotina/doc1/@history/2")
+    assert status == 200
+    assert resp["title"] == "Document 3"
