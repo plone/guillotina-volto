@@ -86,8 +86,41 @@ async def test_history_creation(cms_requester):
     )
 
     resp, status = await requester(
+        "GET",
+        "/db/guillotina/doc1/@history",
+    )
+    assert status == 200
+    assert len(resp) == 5
+
+    resp, status = await requester(
         "PATCH",
         "/db/guillotina/doc1/@history",
         data=json.dumps({"version": "0"}),
     )
     assert status == 200
+    resp, status = await requester(
+        "GET",
+        "/db/guillotina/doc1",
+    )
+    assert status == 200
+    assert resp["guillotina.behaviors.dublincore.IDublinCore"]["description"] is None
+    assert resp["title"] == "Document 1"
+    resp, status = await requester(
+        "GET",
+        "/db/guillotina/doc1/@history",
+    )
+    assert status == 200
+    assert len(resp) == 6
+
+    resp, status = await requester(
+        "PATCH",
+        "/db/guillotina/doc1/@history",
+        data=json.dumps({"version": "1"}),
+    )
+    assert status == 200
+    resp, status = await requester(
+        "GET",
+        "/db/guillotina/doc1",
+    )
+    assert status == 200
+    assert resp["title"] == "Document 2"

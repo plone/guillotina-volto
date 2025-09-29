@@ -1,3 +1,5 @@
+import json
+
 from guillotina import configure
 from guillotina.component import getMultiAdapter
 from guillotina.interfaces import IAbsoluteURL
@@ -5,6 +7,14 @@ from guillotina.interfaces import IResource
 from guillotina.utils import get_behavior
 from guillotina.utils import get_current_container
 from guillotina.response import HTTPBadRequest
+from guillotina.component import query_multi_adapter
+from guillotina.tests.utils import make_mocked_request
+from guillotina.interfaces import IResourceDeserializeFromJson
+from guillotina.response import ErrorResponse
+from guillotina import error_reasons
+from guillotina.event import notify
+from guillotina.events import BeforeObjectModifiedEvent
+from guillotina.events import ObjectModifiedEvent
 
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.interfaces import ICMSLayer
@@ -64,16 +74,56 @@ async def history(context, request):
 )
 async def history_patch(context, request):
     bhr = await get_behavior(context, ICMSBehavior)
-    container = get_current_container()
     payload = await request.json()
     if "version" not in payload:
         raise HTTPBadRequest(content={"message": "Needs to pass version"})
-    version = payload["version"]
+    version = str(payload["version"])
     final_values = {}
+    # Calculate the final payload to send to the defaultPATCH
     for key, value in reversed(list(bhr.history.items())):
+        if key == "0":
+            # This is the first version ever created
+            for key_final_data, value_final_data in final_values.items():
+                if "." in key_final_data:
+                    for key_behavior, value_behavior in final_values[
+                        key_final_data
+                    ].items():
+                        # We've came across a behavior
+                        final_values[key_final_data][key_behavior] = value["data"][
+                            key_final_data
+                        ][key_behavior]
+                else:
+                    try:
+                        final_values[key_final_data] = value["data"][key_final_data]
+                    except KeyError:
+                        # Key not found in the object. This case is
+                        # when doing a patch with a key value that
+                        # does not exist within the object
+                        pass
+            break
+        for key_data, value_data in value["data"].items():
+            final_values[key_data] = value_data
         if key == version:
-            # Apply changes here
-            pass
-        else:
-            # calculate values here
-            pass
+            break
+    # Apply changes
+    path = request.path.split("/@history")[0]
+    fake_request = make_mocked_request(
+        method="PATCH",
+        path=path,
+        headers=request.headers,
+        payload=json.dumps(final_values).encode("utf-8"),
+    )
+    deserializer = query_multi_adapter(
+        (context, fake_request), IResourceDeserializeFromJson
+    )
+    if deserializer is None:
+        raise ErrorResponse(
+            "DeserializationError",
+            "Cannot deserialize type {}".format(context.type_name),
+            status=412,
+            reason=error_reasons.DESERIALIZATION_FAILED,
+        )
+    await notify(BeforeObjectModifiedEvent(context, payload=final_values))
+    await deserializer(final_values)
+    final_values["_v_history"] = version
+    await notify(ObjectModifiedEvent(context, payload=final_values))

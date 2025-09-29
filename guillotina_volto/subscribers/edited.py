@@ -40,11 +40,15 @@ async def modify_history(context, event):
     next_key = str(int(last_key) + 1)
     for key, value in event.payload.items():
         payload[key] = value
+    title = "Object modified"
+    if "_v_history" in event.payload:
+        version = event.payload["_v_history"]
+        title = f"Reverted to revision {version}"
     bhr.history[next_key] = {}
     bhr.history[next_key]["data"] = payload
     bhr.history[next_key]["actor"] = get_authenticated_user_id()
     bhr.history[next_key]["time"] = datetime.utcnow().timestamp()
     bhr.history[next_key]["type"] = context.type_name
-    bhr.history[next_key]["title"] = "Object modified"
-    bhr.history[next_key]["comments"] = ""
+    bhr.history[next_key]["title"] = title
+    bhr.history[next_key]["comments"] = title
     bhr.register()

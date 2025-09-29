@@ -23,7 +23,7 @@ async def object_created(context, event):
     await bhr.load(create=True)
     payload = {
         "actor": get_authenticated_user_id(),
-        "comments": "",
+        "comments": "Initial version",
         "time": datetime.utcnow().timestamp(),
         "type": context.type_name,
         "title": "Object created",
