@@ -44,6 +44,7 @@ async def modify_history(context, event):
     if "_v_history" in event.payload:
         version = event.payload["_v_history"]
         title = f"Reverted to revision {version}"
+        del payload["_v_history"]
     bhr.history[next_key] = {}
     bhr.history[next_key]["data"] = payload
     bhr.history[next_key]["actor"] = get_authenticated_user_id()
