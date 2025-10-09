@@ -53,6 +53,7 @@ class IBlocks(Interface):
         required=False,
         defaultFactory=ContextBlocksLayoutFactory(),
         schema=LAYOUT_SCHEMA,
+        widget="json",
         # missing_value={"items": []},
     )
 
@@ -62,6 +63,7 @@ class IBlocks(Interface):
         defaultFactory=ContextBlocksFactory(),
         # missing_value={},
         schema=DATA_SCHEMA,
+        widget="json",
     )
 
 

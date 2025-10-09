@@ -16,19 +16,12 @@ async def test_history_creation(cms_requester):
 
     resp, status = await requester("GET", "/db/guillotina/doc1")
     assert status == 200
-    assert (
-        resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"]
-        is not None
-    )
-    assert (
-        resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["0"]["actor"]
-        == "root"
-    )
+    assert resp["guillotina.contrib.workflows.interfaces.IWorkflowBehavior"]["history"] is not None
+    assert resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["0"]["actor"] == "root"
     assert isinstance(
         resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["0"]["data"],
         dict,
     )
-
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/doc1",
@@ -37,18 +30,13 @@ async def test_history_creation(cms_requester):
     assert status == 204
     resp, status = await requester("GET", "/db/guillotina/doc1")
     assert status == 200
-    assert (
-        resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["1"]["actor"]
-        == "root"
-    )
-    assert resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["1"][
-        "data"
-    ] == {"title": "Document 2"}
+    assert resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["1"]["actor"] == "root"
+    assert resp["guillotina_volto.interfaces.base.ICMSBehavior"]["history"]["1"]["data"] == {"title": "Document 2"}
 
     resp, status = await requester("GET", "/db/guillotina/doc1/@history")
     assert status == 200
     assert len(resp) == 2
-    assert resp[0]["type"] == "Document"
+    assert resp[0]["type"] == "versioning"
     assert resp[0]["transition_title"] == "Object created"
     assert resp[1]["transition_title"] == "Object modified"
     resp, status = await requester(
@@ -68,9 +56,7 @@ async def test_history_creation(cms_requester):
         "/db/guillotina/doc1",
         data=json.dumps(
             {
-                "guillotina.behaviors.dublincore.IDublinCore": {
-                    "description": "Foo description 3"
-                },
+                "guillotina.behaviors.dublincore.IDublinCore": {"description": "Foo description 3"},
             }
         ),
     )
@@ -80,10 +66,7 @@ async def test_history_creation(cms_requester):
         "/db/guillotina/doc1",
     )
     assert status == 200
-    assert (
-        resp["guillotina.behaviors.dublincore.IDublinCore"]["description"]
-        == "Foo description 3"
-    )
+    assert resp["guillotina.behaviors.dublincore.IDublinCore"]["description"] == "Foo description 3"
 
     resp, status = await requester(
         "GET",
@@ -128,3 +111,17 @@ async def test_history_creation(cms_requester):
     resp, status = await requester("GET", "/db/guillotina/doc1/@history/2")
     assert status == 200
     assert resp["title"] == "Document 3"
+
+    resp, status = await requester("POST", "/db/guillotina/doc1/@workflow/publish", data=json.dumps({}))
+    assert status == 200
+
+    resp, status = await requester(
+        "GET",
+        "/db/guillotina/doc1/@history",
+    )
+    assert status == 200
+    assert resp[7]["type"] == "workflow"
+    assert resp[7]["action"] == "publish"
+    assert resp[7]["state_title"] == "Public"
+    assert resp[7]["review_state"] == "public"
+    assert len(resp) == 8

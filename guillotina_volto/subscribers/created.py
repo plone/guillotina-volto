@@ -1,15 +1,19 @@
-from guillotina import configure
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IObjectAddedEvent
-from guillotina.utils import get_behavior
-from guillotina_volto.interfaces import ICMSBehavior
-from guillotina.component import get_multi_adapter
-from guillotina.interfaces import IResourceSerializeToJson
-from guillotina.utils import get_current_request
-from guillotina.utils import get_authenticated_user_id
 from datetime import datetime
-from guillotina.event import notify
-from guillotina.events import ObjectModifiedEvent
+
+from dateutil.tz import tzutc
+from guillotina import configure
+from guillotina.component import get_multi_adapter
+from guillotina.interfaces import IObjectAddedEvent
+from guillotina.interfaces import IResource
+from guillotina.interfaces import IResourceSerializeToJson
+from guillotina.utils import get_authenticated_user_id
+from guillotina.utils import get_behavior
+from guillotina.utils import get_current_request
+
+from guillotina_volto.interfaces import ICMSBehavior
+
+
+_zone = tzutc()  # utz tz is much faster than local tz info
 
 
 @configure.subscriber(for_=(IResource, IObjectAddedEvent))
@@ -24,8 +28,8 @@ async def object_created(context, event):
     payload = {
         "actor": get_authenticated_user_id(),
         "comments": "Initial version",
-        "time": datetime.utcnow().timestamp(),
-        "type": context.type_name,
+        "time": datetime.now(tz=_zone),
+        "type": "versioning",
         "title": "Object created",
         "data": obj_serialized,
     }
