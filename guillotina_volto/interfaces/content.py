@@ -24,24 +24,21 @@ class IDocument(IFolder):
     pass
 
 
-class ICMSFolder(IFolder):
+class IPage(IFolder):
     pass
 
 
 class IImage(IItem, IHasImage):
-
     fieldset_field("image", "default")
     image = CloudImageFileField(title="Image", required=False, widget="file")
 
 
 class IFile(IItem):
-
     fieldset_field("file", "default")
     file = CloudFileField(title="File", required=False, widget="file")
 
 
 class IEvent(IItem):
-
     fieldset_field("start_date", "default")
     start_date = Datetime(title="Start date", required=False, widget="datetime")
 

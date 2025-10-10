@@ -16,7 +16,7 @@ async def test_navigation(cms_requester):
     resp, status = await requester(
         "POST",
         "/db/guillotina/",
-        data=json.dumps({"@type": "CMSFolder", "id": "folder1"}),
+        data=json.dumps({"@type": "Page", "id": "folder1"}),
     )
     assert status == 201
     resp, status = await requester(
@@ -31,5 +31,7 @@ async def test_navigation(cms_requester):
         data=json.dumps({"@type": "Document", "id": "doc2"}),
     )
     assert status == 201
-    resp, status = await requester("GET", "/db/guillotina/@navigation?expand.navigation.depth=2")
+    resp, status = await requester(
+        "GET", "/db/guillotina/@navigation?expand.navigation.depth=2"
+    )
     assert len(resp["items"][0]["items"]) == 2

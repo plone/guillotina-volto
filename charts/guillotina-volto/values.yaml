@@ -235,7 +235,7 @@ cms:
   - Container
   - Folder
   layouts:
-    CMSFolder:
+    Page:
       - listing_view
       - tabular_view
       - summary_view
@@ -283,7 +283,7 @@ cms:
         items:
           - tile1
           - tile2
-    CMSFolder:
+    Page:
       blocks:
         tile1:
           '@type': title

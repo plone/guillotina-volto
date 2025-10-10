@@ -25,7 +25,9 @@ app_settings = {
         "guillotina.contrib.dbusers",
     ],
     "available_blocks": {},
-    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
+    "commands": {
+        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
+    },
     "controlpanels": {
         "image_settings": {
             "title": "Validation settings",
@@ -47,12 +49,13 @@ app_settings = {
         "Contributor",
         "Editor",
         "Reader",
-        "Reviewer" "SiteAdministrator",
+        "Reviewer",
+        "SiteAdministrator",
         "Manager",
     ],
     "sharing_tab_roles": ["Contributor", "Editor", "Reader", "Reviewer"],
     "layouts": {
-        "CMSFolder": [
+        "Page": [
             "default",
             "listing_view",
             "tabular_view",

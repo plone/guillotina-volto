@@ -6,7 +6,7 @@ from .blocks import IBlockType  # noqa
 from .blocks import IDefaultBlocks  # noqa
 from .blocks import IDefaultBlocksLayout  # noqa
 from .constrains import ICMSConstrainTypes  # noqa
-from .content import ICMSFolder  # noqa
+from .content import IPage  # noqa
 from .content import IContentUtility  # noqa
 from .content import IDocument  # noqa
 from .content import IEvent  # noqa
