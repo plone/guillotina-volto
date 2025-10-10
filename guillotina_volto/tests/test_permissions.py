@@ -10,7 +10,9 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
-@pytest.mark.skip(reason="Not implemented in guillotina 7.0.5, implemented in next version")
+@pytest.mark.skip(
+    reason="Not implemented in guillotina 7.0.5, implemented in next version"
+)
 async def test_permissions_site_managers_group(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -22,7 +24,10 @@ async def test_permissions_site_managers_group(cms_requester):
     admin_token = resp["token"]
 
     resp, status = await requester(
-        "GET", "/db/guillotina/@items", authenticated=False, headers={"Authorization": f"Bearer {admin_token}"}
+        "GET",
+        "/db/guillotina/@items",
+        authenticated=False,
+        headers={"Authorization": f"Bearer {admin_token}"},
     )
     assert status == 200
 
@@ -51,7 +56,9 @@ async def test_permissions_site_managers_group(cms_requester):
         "password": "Foo12345",
         "user_groups": ["managers"],
     }
-    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
+    resp, status = await requester(
+        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
+    )
     assert status == 200
 
     resp, status = await requester(
@@ -95,7 +102,10 @@ async def test_permissions_site_managers_group(cms_requester):
     assert status == 200
 
     resp, status = await requester(
-        "GET", "/db/guillotina_volto/", authenticated=False, headers={"Authorization": f"Bearer {token}"}
+        "GET",
+        "/db/guillotina_volto/",
+        authenticated=False,
+        headers={"Authorization": f"Bearer {token}"},
     )
     assert status == 401
 
@@ -111,7 +121,9 @@ async def test_permissions_site_managers_group(cms_requester):
 
 @pytest.mark.app_settings(PG_CATALOG_SETTINGS)
 @pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
-@pytest.mark.skip(reason="Not implemented in guillotina 7.0.5, implemented in next version")
+@pytest.mark.skip(
+    reason="Not implemented in guillotina 7.0.5, implemented in next version"
+)
 async def test_permissions_create_site_admins_group(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -124,7 +136,11 @@ async def test_permissions_create_site_admins_group(cms_requester):
                 "groupname": "site_admins",
                 "id": "site_admins",
                 "description": "Site Admins Group",
-                "roles": ["guillotina.Manager", "guillotina.ContainerAdmin", "guillotina.Owner"],
+                "roles": [
+                    "guillotina.Manager",
+                    "guillotina.ContainerAdmin",
+                    "guillotina.Owner",
+                ],
             }
         ),
     )
@@ -137,7 +153,9 @@ async def test_permissions_create_site_admins_group(cms_requester):
         "password": "Foo12345",
         "user_groups": ["site_admins"],
     }
-    resp, status = await requester("POST", "/db/guillotina/@users", data=json.dumps(payload_user))
+    resp, status = await requester(
+        "POST", "/db/guillotina/@users", data=json.dumps(payload_user)
+    )
     assert status == 200
 
     resp, status = await requester(

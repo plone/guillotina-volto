@@ -2,7 +2,6 @@ import json
 
 from guillotina import configure
 from guillotina import error_reasons
-from guillotina.component import get_multi_adapter
 from guillotina.component import getMultiAdapter
 from guillotina.component import query_multi_adapter
 from guillotina.event import notify
@@ -11,7 +10,6 @@ from guillotina.events import ObjectModifiedEvent
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceDeserializeFromJson
-from guillotina.interfaces import IResourceSerializeToJson
 from guillotina.response import ErrorResponse
 from guillotina.response import HTTPBadRequest
 from guillotina.tests.utils import make_mocked_request
@@ -20,6 +18,7 @@ from guillotina.utils import get_current_container
 
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.interfaces import ICMSLayer
+from guillotina_volto.api.resource import DefaultGETResource
 
 
 @configure.service(
@@ -87,9 +86,13 @@ async def history_patch(context, request):
             # This is the first version ever created
             for key_final_data, value_final_data in final_values.items():
                 if "." in key_final_data:
-                    for key_behavior, value_behavior in final_values[key_final_data].items():
+                    for key_behavior, value_behavior in final_values[
+                        key_final_data
+                    ].items():
                         # We've came across a behavior
-                        final_values[key_final_data][key_behavior] = value["data"][key_final_data][key_behavior]
+                        final_values[key_final_data][key_behavior] = value["data"][
+                            key_final_data
+                        ][key_behavior]
                 else:
                     try:
                         final_values[key_final_data] = value["data"][key_final_data]
@@ -111,7 +114,9 @@ async def history_patch(context, request):
         headers=request.headers,
         payload=json.dumps(final_values).encode("utf-8"),
     )
-    deserializer = query_multi_adapter((context, fake_request), IResourceDeserializeFromJson)
+    deserializer = query_multi_adapter(
+        (context, fake_request), IResourceDeserializeFromJson
+    )
     if deserializer is None:
         raise ErrorResponse(
             "DeserializationError",
@@ -132,15 +137,15 @@ async def history_patch(context, request):
     method="GET",
     permission="guillotina.SeePermissions",
 )
-async def history_get_version(context, request):
-    history_version = request.matchdict.get("history")
-    bhr = await get_behavior(context, ICMSBehavior)
-    serializer = get_multi_adapter((context, request), IResourceSerializeToJson)
-    result = await serializer()
-    if history_version not in bhr.history:
-        raise HTTPBadRequest(content={"message": "History not found"})
-    version_changes = bhr.history[history_version]["data"]
-    for key_to_change, value_to_change in version_changes.items():
-        if key_to_change in result:
-            result[key_to_change] = value_to_change
-    return result
+class GetHistoryVersion(DefaultGETResource):
+    async def __call__(self):
+        bhr = await get_behavior(self.context, ICMSBehavior)
+        history_version = self.request.matchdict.get("history")
+        if history_version not in bhr.history:
+            raise HTTPBadRequest(content={"message": "History not found"})
+        full_response = await super().__call__()
+        version_changes = bhr.history[history_version]["data"]
+        for key_to_change, value_to_change in version_changes.items():
+            if key_to_change in full_response:
+                full_response[key_to_change] = value_to_change
+        return full_response
