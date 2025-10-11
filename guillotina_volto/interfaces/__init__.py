@@ -6,12 +6,12 @@ from .blocks import IBlockType  # noqa
 from .blocks import IDefaultBlocks  # noqa
 from .blocks import IDefaultBlocksLayout  # noqa
 from .constrains import ICMSConstrainTypes  # noqa
-from .content import IPage  # noqa
 from .content import IContentUtility  # noqa
 from .content import IDocument  # noqa
 from .content import IEvent  # noqa
 from .content import IFile  # noqa
 from .content import IImage  # noqa
+from .content import IPage  # noqa
 from .content import ISite  # noqa
 from .events import IWorkflowChangedEvent  # noqa
 from .following import IFollowing  # noqa

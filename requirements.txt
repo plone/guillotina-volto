@@ -1,4 +1,4 @@
-guillotina>=7.0.5
+guillotina>=7.0.6
 diff-match-patch==20121119
 # Conditional Pillow versions
 pillow==10.4.0; python_version < '3.11'
@@ -9,3 +9,4 @@ jinja2==2.11.3
 MarkupSafe==2.0.1
 pytz==2021.1
 redis[hiredis]>4.2.0rc1
+python-dateutil==2.9.0

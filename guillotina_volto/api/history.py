@@ -16,9 +16,9 @@ from guillotina.tests.utils import make_mocked_request
 from guillotina.utils import get_behavior
 from guillotina.utils import get_current_container
 
+from guillotina_volto.api.resource import DefaultGETResource
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.interfaces import ICMSLayer
-from guillotina_volto.api.resource import DefaultGETResource
 
 
 @configure.service(
@@ -86,13 +86,9 @@ async def history_patch(context, request):
             # This is the first version ever created
             for key_final_data, value_final_data in final_values.items():
                 if "." in key_final_data:
-                    for key_behavior, value_behavior in final_values[
-                        key_final_data
-                    ].items():
+                    for key_behavior, value_behavior in final_values[key_final_data].items():
                         # We've came across a behavior
-                        final_values[key_final_data][key_behavior] = value["data"][
-                            key_final_data
-                        ][key_behavior]
+                        final_values[key_final_data][key_behavior] = value["data"][key_final_data][key_behavior]
                 else:
                     try:
                         final_values[key_final_data] = value["data"][key_final_data]
@@ -114,9 +110,7 @@ async def history_patch(context, request):
         headers=request.headers,
         payload=json.dumps(final_values).encode("utf-8"),
     )
-    deserializer = query_multi_adapter(
-        (context, fake_request), IResourceDeserializeFromJson
-    )
+    deserializer = query_multi_adapter((context, fake_request), IResourceDeserializeFromJson)
     if deserializer is None:
         raise ErrorResponse(
             "DeserializationError",

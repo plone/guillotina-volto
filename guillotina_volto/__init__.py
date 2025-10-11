@@ -25,14 +25,12 @@ app_settings = {
         "guillotina.contrib.dbusers",
     ],
     "available_blocks": {},
-    "commands": {
-        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
-    },
+    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
         "language": {
             "title": "Language settings",
-            "schema": "guillotina_volto.controlpanels.ILanguageSettings"
-            "group": "general"
+            "schema": "guillotina_volto.controlpanels.ILanguageSettings",
+            "group": "general",
         },
         "image_settings": {
             "title": "Validation settings",

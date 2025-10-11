@@ -10,9 +10,7 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
         resp, status = await requester(
             "POST",
             path,
-            data=json.dumps(
-                {"@type": "Page", "title": "Folder" + str(fidx), "id": folder_id}
-            ),
+            data=json.dumps({"@type": "Page", "title": "Folder" + str(fidx), "id": folder_id}),
         )
         created += 1
         assert status == 201
@@ -25,9 +23,7 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
                     {
                         "@type": "Document",
                         "title": "Document " + str(idx),
-                        "@behaviors": [
-                            "guillotina_volto.interfaces.richtext.IRichText"
-                        ],
+                        "@behaviors": ["guillotina_volto.interfaces.richtext.IRichText"],
                         "guillotina_volto.interfaces.richtext.IRichText": {
                             "text": {
                                 "encoding": "utf-8",
