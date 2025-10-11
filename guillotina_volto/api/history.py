@@ -141,5 +141,13 @@ class GetHistoryVersion(DefaultGETResource):
         version_changes = bhr.history[history_version]["data"]
         for key_to_change, value_to_change in version_changes.items():
             if key_to_change in full_response:
-                full_response[key_to_change] = value_to_change
+                original_value = full_response[key_to_change]
+                # If both are dicts, merge them
+                if isinstance(original_value, dict) and isinstance(value_to_change, dict):
+                    merged_value = original_value.copy()
+                    merged_value.update(value_to_change)
+                    full_response[key_to_change] = merged_value
+                else:
+                    # Default: override
+                    full_response[key_to_change] = value_to_change
         return full_response
