@@ -23,15 +23,11 @@ app_settings = {
         "guillotina.contrib.mailer",
         "guillotina.contrib.swagger",
         "guillotina.contrib.dbusers",
+        "guillotina_volto.contrib.language",
     ],
     "available_blocks": {},
     "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
-        "language": {
-            "title": "Language settings",
-            "schema": "guillotina_volto.controlpanels.ILanguageSettings",
-            "group": "general",
-        },
         "image_settings": {
             "title": "Validation settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",

@@ -8,8 +8,10 @@ from guillotina.response import Response
 from guillotina.schema import get_fields_in_order
 from guillotina.utils import get_registry
 from guillotina.utils import resolve_dotted_name
+from guillotina.event import notify
 
 from guillotina_volto.interfaces.content import ISite
+from guillotina_volto.events import RegistryChangedEvent
 
 
 @configure.service(
@@ -87,7 +89,6 @@ async def controlpanel_element(context, request):
 async def patch_controlpanel_element(context, request):
     payload = await request.json()
     type_id = request.matchdict["type_id"]
-
     registry = await get_registry()
     controlpanels = app_settings.get("controlpanels", {})
     if type_id in controlpanels:
@@ -99,4 +100,5 @@ async def patch_controlpanel_element(context, request):
         for key, value in payload.items():
             if key in iface:
                 config.__setitem__(key, value)
+        await notify(RegistryChangedEvent(context, type_id))
     return Response(status=204)

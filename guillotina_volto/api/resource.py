@@ -45,6 +45,7 @@ class DefaultGETResource(DefaultGET):
             "navroot": {"@id": f"{full_url}/@navroot"},
             "types": {"@id": f"{full_url}/@types"},
             "workflow": {"@id": f"{full_url}/@workflow"},
+            "translations": {"@id": f"{full_url}/@translations"},
         }
         for expand in expansions:
             mapping_payload = mapping_expansions.get(expand, None)
