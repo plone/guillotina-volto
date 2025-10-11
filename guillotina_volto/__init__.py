@@ -29,6 +29,11 @@ app_settings = {
         "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
     },
     "controlpanels": {
+        "language": {
+            "title": "Language settings",
+            "schema": "guillotina_volto.controlpanels.ILanguageSettings"
+            "group": "general"
+        },
         "image_settings": {
             "title": "Validation settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
