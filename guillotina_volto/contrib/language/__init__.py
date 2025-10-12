@@ -25,3 +25,4 @@ def includeme(root, settings):
     configure.scan("guillotina_volto.contrib.language.interfaces")
     configure.scan("guillotina_volto.contrib.language.install")
     configure.scan("guillotina_volto.contrib.language.behaviors")
+    configure.scan("guillotina_volto.contrib.language.api")

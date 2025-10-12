@@ -13,6 +13,7 @@ from guillotina.utils import get_behavior
 from guillotina.utils import get_current_container
 from guillotina.utils import get_object_url
 from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
+from guillotina.utils import navigate_to
 
 
 @configure.subscriber(for_=(IRegistryChangedEvent))
@@ -38,16 +39,55 @@ async def registry_modified(event):
 async def resource_added(context, event):
     # Get the translation_of
     payload = event.payload
-    if "translation_of" in payload:
+    if payload is not None and "translation_of" in payload:
+        current_language = payload["language"]
         translation_of = payload["translation_of"]
         language = translation_of.strip("/").split("/")[0]
         container = get_current_container()
         full_url_container = get_object_url(container)
         payload = {
-            "@id": f"{full_url_container}/{translation_of}",
-            "language": language
+            "@id": f"{full_url_container}{translation_of}",
+            "language": language,
+            "path": translation_of
         }
         bhr = await get_behavior(context, ILanguageBehavior)
+        current_path = f"/{current_language}/{context.id}"
         # Update all the other transalations. Go over every related
         # one and update them all
+        if bhr.translations == []:
+            # I need to set this first before doing an append. WHY?
+            bhr.translations = []
         bhr.translations.append(payload)
+        payload_current_object = {
+            "@id": f"{full_url_container}{current_path}",
+            "language": current_language,
+            "path": current_path
+        }
+        obj_translated_of = await navigate_to(container, translation_of)
+        bhr_obj_translated_from = await get_behavior(obj_translated_of, ILanguageBehavior)
+        if bhr_obj_translated_from.translations == []:
+            bhr_obj_translated_from.translations = []
+        for translation in bhr_obj_translated_from.translations:
+            path = translation["path"]
+            language = translation["language"]
+            try:
+                obj_translated_of = await navigate_to(container, path)
+            except KeyError:
+                continue
+            payload = {
+                "@id": f"{full_url_container}/{path}",
+                "language": language,
+                "path": path
+            }
+            bhr.translations.append(payload)
+            bhr_obj_translated = await get_behavior(obj_translated_of, ILanguageBehavior)
+            await bhr_obj_translated.load()
+            if bhr_obj_translated.translations == []:
+                bhr_obj_translated.translations = []
+            bhr_obj_translated.translations.append(payload_current_object)
+            bhr_obj_translated.register()
+            obj_translated_of.register()
+        bhr_obj_translated_from.translations.append(payload_current_object)
+        bhr_obj_translated_from.register()
+        bhr.register()
+        context.register()
