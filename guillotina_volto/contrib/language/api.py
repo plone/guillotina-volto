@@ -22,11 +22,11 @@ from guillotina.utils import get_behavior
         }
     },
 )
-class GeetTransaltions(Service):
+class GetTranslations(Service):
     async def __call__(self):
-        results = {"items": [], "root": {}}
+        results = {"items": [], "root": {}, "@id": self.request.url}
         bhr_obj_translated = await get_behavior(self.context, ILanguageBehavior)
-        for translation in bhr_obj_translated.translations:
+        for translation in bhr_obj_translated.translations.values():
             payload = {
                 "@id": translation["@id"],
                 "language": translation["language"]
