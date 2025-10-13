@@ -413,7 +413,7 @@ values = {
     "ko": "한국어",
     "ko-kr": "한국어 (대한민국)",
     "ko-kp": "한국어 (조선민주주의인민공화국)",
-    "kk": "\ufed7\ufe8e\ufeaf\ufe8d\ufed7\ufeb8\ufe8e"
+    "kk": "\ufed7\ufe8e\ufeaf\ufe8d\ufed7\ufeb8\ufe8e",
 }
 
 

@@ -1,8 +1,6 @@
 from guillotina import configure
 from guillotina.api.service import Service
 from guillotina.component import get_multi_adapter
-from guillotina.event import notify
-from guillotina.events import ObjectVisitedEvent
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
 from guillotina.interfaces import IResourceSerializeToJson
@@ -187,10 +185,7 @@ class Actions(Service):
             "description": "Result results on navigation",
             "schema": {
                 "type": "object",
-                "properties": {
-                    "@id": "string",
-                    "navroot": "object"
-                },
+                "properties": {"@id": "string", "navroot": "object"},
             },
         }
     },

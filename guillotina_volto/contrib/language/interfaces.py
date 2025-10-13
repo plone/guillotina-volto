@@ -1,7 +1,9 @@
 from guillotina import schema
 from guillotina.interfaces import IFolder
 from zope.interface import Interface
+
 from guillotina_volto.directives import fieldset
+
 
 class ILanguageFolder(IFolder):
     pass
@@ -25,17 +27,14 @@ class ILanguageSettings(Interface):
         required=True,
         title="Available languages",
         description="The languages in which the site should be translatable.",
-        value_type=schema.Choice(
-            required=True,
-            source="available_languages"
-        )
+        value_type=schema.Choice(required=True, source="available_languages"),
     )
     fieldset("default_language", "general")
     default_language = schema.Choice(
         title="Site language",
         description="The language used for the content and the UI of this site.",
         required=True,
-        source="available_languages"
+        source="available_languages",
     )
     fieldset("set_cookie_always", "negotiation_scheme")
     set_cookie_always = schema.Bool(
