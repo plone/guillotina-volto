@@ -1,26 +1,25 @@
 from guillotina import configure
-from guillotina_volto.interfaces.events import IRegistryChangedEvent
-from guillotina.utils import get_registry
-from guillotina.interfaces import IAddons
-from guillotina.response import HTTPBadRequest
-from guillotina.utils import resolve_dotted_name
 from guillotina.content import create_content_in_container
 from guillotina.event import notify
 from guillotina.events import ObjectAddedEvent
-from guillotina.interfaces import IResource
-from guillotina.interfaces import IObjectAddedEvent
-from guillotina.utils import get_behavior
-from guillotina.utils import get_current_container
-from guillotina.utils import get_object_url
-from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
-from guillotina.utils import navigate_to
-from guillotina.interfaces import IObjectRemovedEvent
-from guillotina.utils import get_content_path
-from guillotina_volto.contrib.language.interfaces import ILanguageFolder
-from guillotina_volto.utils import Search
 from guillotina.events import ObjectModifiedEvent
-from guillotina_volto.interfaces import IPage
+from guillotina.interfaces import IAddons
+from guillotina.interfaces import IObjectAddedEvent
+from guillotina.interfaces import IObjectRemovedEvent
+from guillotina.interfaces import IResource
+from guillotina.utils import get_behavior
+from guillotina.utils import get_content_path
+from guillotina.utils import get_current_container
 from guillotina.utils import get_object_by_uid
+from guillotina.utils import get_object_url
+from guillotina.utils import get_registry
+from guillotina.utils import navigate_to
+from guillotina.utils import resolve_dotted_name
+
+from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
+from guillotina_volto.contrib.language.interfaces import ILanguageFolder
+from guillotina_volto.interfaces.events import IRegistryChangedEvent
+from guillotina_volto.utils import Search
 
 
 @configure.subscriber(for_=(IRegistryChangedEvent))
@@ -67,10 +66,7 @@ async def resource_added(context, event):
             bhr.translations = {}
         bhr.translations[translation_of] = payload
         await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))
-        payload_current_object = {
-            "@id": f"{full_url_container}{current_path}",
-            "language": current_language
-        }
+        payload_current_object = {"@id": f"{full_url_container}{current_path}", "language": current_language}
         obj_translated_of = await navigate_to(container, translation_of)
         bhr_obj_translated_from = await get_behavior(obj_translated_of, ILanguageBehavior)
         if bhr_obj_translated_from.translations == {}:
@@ -81,10 +77,7 @@ async def resource_added(context, event):
                 obj_translated_of = await navigate_to(container, path)
             except KeyError:
                 continue
-            payload = {
-                "@id": f"{full_url_container}{path}",
-                "language": language
-            }
+            payload = {"@id": f"{full_url_container}{path}", "language": language}
             bhr.translations[path] = payload
             bhr_obj_translated = await get_behavior(obj_translated_of, ILanguageBehavior)
             if bhr_obj_translated.translations == {}:
@@ -92,9 +85,13 @@ async def resource_added(context, event):
             bhr_obj_translated.translations[current_path] = payload_current_object
             bhr_obj_translated.register()
             obj_translated_of.register()
-            await notify(ObjectModifiedEvent(bhr_obj_translated, payload={"translations": bhr_obj_translated.translations}))
+            await notify(
+                ObjectModifiedEvent(bhr_obj_translated, payload={"translations": bhr_obj_translated.translations})
+            )
         bhr_obj_translated_from.translations[current_path] = payload_current_object
-        await notify(ObjectModifiedEvent(bhr_obj_translated_from, payload={"translations": bhr_obj_translated_from.translations}))
+        await notify(
+            ObjectModifiedEvent(bhr_obj_translated_from, payload={"translations": bhr_obj_translated_from.translations})
+        )
         bhr_obj_translated_from.register()
         bhr.register()
         context.register()

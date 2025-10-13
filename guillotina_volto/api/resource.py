@@ -30,7 +30,7 @@ class DefaultGETResource(DefaultGET):
             "breadcrumbs": {"class": Breadcrumbs, "root": False, "component": True},
             "navigation": {"class": Navigation, "root": False, "component": True},
             "types": {"class": Types, "root": False, "component": True},
-            "translations": {"class": GetTranslations, "root": False, "component": True}
+            "translations": {"class": GetTranslations, "root": False, "component": True},
         }
         full_response = await super().__call__()
         full_url = get_object_url(self.context)

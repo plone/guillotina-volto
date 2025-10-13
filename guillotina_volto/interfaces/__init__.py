@@ -13,8 +13,8 @@ from .content import IFile  # noqa
 from .content import IImage  # noqa
 from .content import IPage  # noqa
 from .content import ISite  # noqa
-from .events import IWorkflowChangedEvent  # noqa
 from .events import IRegistryChangedEvent  # noqa
+from .events import IWorkflowChangedEvent  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .image import IHasImage  # noqa

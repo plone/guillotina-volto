@@ -1,5 +1,6 @@
 from guillotina import configure
 from guillotina.content import Folder
+
 from guillotina_volto.contrib.language.interfaces import ILanguageFolder
 
 

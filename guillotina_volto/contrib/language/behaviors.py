@@ -1,11 +1,12 @@
-from zope.interface import Interface
 from guillotina import configure
 from guillotina import schema
-from guillotina.behaviors.properties import ContextProperty
 from guillotina.behaviors.instance import ContextBehavior
+from guillotina.behaviors.properties import ContextProperty
 from guillotina.directives import index_field
 from guillotina.interfaces import IResource
 from guillotina.utils import get_behavior
+from zope.interface import Interface
+
 
 TRANSLATIONS_SCHEMA = {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -13,22 +14,20 @@ TRANSLATIONS_SCHEMA = {
     "type": "object",
     "required": ["@id", "language", "path"],
     "properties": {
-        "@id": {
-            "type": "string",
-            "format": "uri",
-            "description": "The URL of the localized page"
-        },
+        "@id": {"type": "string", "format": "uri", "description": "The URL of the localized page"},
         "language": {
             "type": "string",
             "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
-            "description": "Language code (e.g. 'en', 'ca', 'it', 'en-US')"
+            "description": "Language code (e.g. 'en', 'ca', 'it', 'en-US')",
         },
     },
-    "additionalProperties": False
+    "additionalProperties": False,
 }
+
 
 class IMarkerLanguagebehavior(Interface):
     """Marker interface for content with dublin core."""
+
 
 class ILanguageBehavior(Interface):
     translations = schema.Dict(
@@ -36,10 +35,11 @@ class ILanguageBehavior(Interface):
         value_type=schema.JSONField(schema=TRANSLATIONS_SCHEMA),
         default={},
         defaultFactory=dict,
-        missing_value={}
+        missing_value={},
     )
     index_field("language", type="keyword")
     language = schema.TextLine()
+
 
 @configure.behavior(
     title="Language behavior",
@@ -57,7 +57,7 @@ class LanguageBehavior(ContextBehavior):
     field="translations",
     behavior="guillotina_volto.contrib.language.behaviors.ILanguageBehavior",
     type="text",
-    store=True
+    store=True,
 )
 async def last_creation_date_review(obj):
     bhr = await get_behavior(obj, ILanguageBehavior)

@@ -2,16 +2,16 @@ from guillotina import app_settings
 from guillotina import configure
 from guillotina.component import get_multi_adapter
 from guillotina.component import getMultiAdapter
+from guillotina.event import notify
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ISchemaFieldSerializeToJson
 from guillotina.response import Response
 from guillotina.schema import get_fields_in_order
 from guillotina.utils import get_registry
 from guillotina.utils import resolve_dotted_name
-from guillotina.event import notify
 
-from guillotina_volto.interfaces.content import ISite
 from guillotina_volto.events import RegistryChangedEvent
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.service(
@@ -61,15 +61,16 @@ async def controlpanel_element(context, request):
         schema = controlpanels[type_id].get("schema", None)
         if schema is None:
             return
-        schemaObj = resolve_dotted_name(schema)
-        config = registry.for_interface(schemaObj)
+        schema_obj = resolve_dotted_name(schema)
+        config = registry.for_interface(schema_obj)
         schema = {"properties": {}, "fieldsets": [], "required": []}
         data = {}
         fields = []
-        for name, field in get_fields_in_order(schemaObj):
+
+        for name, field in get_fields_in_order(schema_obj):
             if field.required:
-                result["required"].append(name)
-            serializer = get_multi_adapter((field, schemaObj, request), ISchemaFieldSerializeToJson)
+                schema["required"].append(name)
+            serializer = get_multi_adapter((field, schema_obj, request), ISchemaFieldSerializeToJson)
             schema["properties"][name] = await serializer()
             data[name] = config.__getitem__(name) or field.default
             fields.append(name)

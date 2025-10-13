@@ -1,6 +1,7 @@
 from guillotina import configure
 from guillotina.i18n import MessageFactory
 
+
 _ = MessageFactory("guillotina.contrib.language")
 
 app_settings = {
@@ -8,16 +9,12 @@ app_settings = {
         "language": {
             "title": "Language settings",
             "schema": "guillotina_volto.contrib.language.interfaces.ILanguageSettings",
-            "group": "general",
+            "group": "General",
         },
     },
-    "available_addons": {
-        "language": {
-            "title": "Multi language addons",
-            "dependencies": ""
-        }
-    }
+    "available_addons": {"language": {"title": "Multi language addons", "dependencies": ""}},
 }
+
 
 def includeme(root, settings):
     configure.scan("guillotina_volto.contrib.language.subscribers")
