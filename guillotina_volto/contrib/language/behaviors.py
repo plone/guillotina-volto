@@ -14,7 +14,11 @@ TRANSLATIONS_SCHEMA = {
     "type": "object",
     "required": ["@id", "language", "path"],
     "properties": {
-        "@id": {"type": "string", "format": "uri", "description": "The URL of the localized page"},
+        "@id": {
+            "type": "string",
+            "format": "uri",
+            "description": "The URL of the localized page",
+        },
         "language": {
             "type": "string",
             "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
