@@ -209,5 +209,4 @@ class Navroot(Service):
             result = await serializer(include=include, omit=omit)
         except TypeError:
             result = await serializer()
-        await notify(ObjectVisitedEvent(container))
         return {"@id": f"{full_url}/@navroot", "navroot": result}
