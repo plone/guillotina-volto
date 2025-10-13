@@ -22,17 +22,13 @@ async def test_controlpanels_languages(cms_requester):
         data=json.dumps(config),
     )
     assert status == 204
-    resp, status = await requester(
-        "GET", "/db/guillotina/@controlpanels/validation_settings"
-    )
+    resp, status = await requester("GET", "/db/guillotina/@controlpanels/validation_settings")
     assert status == 200
     assert resp["data"]["validation_url"] == "/@@AnotherValidationEndpoint"
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/@controlpanels/language",
-        data=json.dumps(
-            {"available_languages": ["en", "es", "ca"], "default_language": "ca"}
-        ),
+        data=json.dumps({"available_languages": ["en", "es", "ca"], "default_language": "ca"}),
     )
     assert status == 204
     resp, status = await requester("GET", "/db/guillotina/@controlpanels/language")
@@ -50,9 +46,7 @@ async def test_controlpanels_languages(cms_requester):
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/@controlpanels/language",
-        data=json.dumps(
-            {"available_languages": ["en", "es", "ca", "de"], "default_language": "ca"}
-        ),
+        data=json.dumps({"available_languages": ["en", "es", "ca", "de"], "default_language": "ca"}),
     )
     assert status == 204
     resp, status = await requester("GET", "/db/guillotina/en/@translations")
@@ -63,9 +57,7 @@ async def test_controlpanels_languages(cms_requester):
     resp, status = await requester(
         "POST",
         "/db/guillotina/es",
-        data=json.dumps(
-            {"@type": "Page", "id": "foo_page_es", "title": "Pàgina en espanol"}
-        ),
+        data=json.dumps({"@type": "Page", "id": "foo_page_es", "title": "Pàgina en espanol"}),
     )
     assert status == 201
 
@@ -206,14 +198,8 @@ async def test_controlpanels_languages(cms_requester):
         "/db/guillotina/ca/foo_page_ca?expand=translations,navroot",
     )
     assert status == 200
-    assert (
-        resp["@components"]["navroot"]["@id"]
-        == "http://localhost/db/guillotina/ca/foo_page_ca/@navroot"
-    )
-    assert (
-        resp["@components"]["navroot"]["navroot"]["@id"]
-        == "http://localhost/db/guillotina/ca"
-    )
+    assert resp["@components"]["navroot"]["@id"] == "http://localhost/db/guillotina/ca/foo_page_ca/@navroot"
+    assert resp["@components"]["navroot"]["navroot"]["@id"] == "http://localhost/db/guillotina/ca"
     assert resp["@components"]["translations"]["items"][0] == {
         "@id": "http://localhost/db/guillotina/en/foo_page_en",
         "language": "en",

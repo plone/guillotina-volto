@@ -1,20 +1,18 @@
 from guillotina import configure
+from guillotina.api.content import DefaultGET
 from guillotina.api.service import Service
-from guillotina.component import get_multi_adapter
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
-from guillotina.interfaces import IResourceSerializeToJson
 from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
 from guillotina.utils import get_current_container
 from guillotina.utils import get_object_url
-from guillotina.api.content import DefaultGET
 
+from guillotina_volto.contrib.language.interfaces import ILanguageFolder
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import ISite
-from guillotina_volto.utils import get_search_utility
 from guillotina_volto.utils import get_parent_by_interface
-from guillotina_volto.contrib.language.interfaces import ILanguageFolder
+from guillotina_volto.utils import get_search_utility
 
 
 @configure.service(
@@ -51,9 +49,7 @@ class Breadcrumbs(Service):
         result = []
         context = self.context
         while context is not None and not ISite.providedBy(context):
-            result.append(
-                {"title": context.title, "@id": IAbsoluteURL(context, self.request)()}
-            )
+            result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
             context = getattr(context, "__parent__", None)
         result.reverse()
 
@@ -121,9 +117,7 @@ class Navigation(Service):
                 "@name": brain.get("uuid"),
                 "description": "",
             }
-            pending_dict.setdefault(brain.get("parent_uuid"), []).append(
-                brain_serialization
-            )
+            pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
 
         parent_uuid = container.uuid
         if parent_uuid not in pending_dict:

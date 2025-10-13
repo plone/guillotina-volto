@@ -1,7 +1,6 @@
 from guillotina import configure
 from guillotina import schema
 from guillotina.behaviors.instance import ContextBehavior
-from guillotina.behaviors.properties import ContextProperty
 from guillotina.directives import index_field
 from guillotina.interfaces import IResource
 from guillotina.utils import get_behavior
