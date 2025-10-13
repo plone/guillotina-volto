@@ -95,7 +95,11 @@ class Navigation(Service):
     async def __call__(self):
         search = get_search_utility()
         container = find_container(self.context)
-        depth = get_content_depth(container)
+        context_to_search = container
+        parent_language_folder = get_parent_by_interface(self.context, ILanguageFolder)
+        if parent_language_folder is not None:
+            context_to_search = parent_language_folder
+        depth = get_content_depth(context_to_search)
         max_depth = None
         if "expand.navigation.depth" in self.request.query:
             max_depth = str(int(self.request.query["expand.navigation.depth"]) + depth)
@@ -119,7 +123,7 @@ class Navigation(Service):
             }
             pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
 
-        parent_uuid = container.uuid
+        parent_uuid = context_to_search.uuid
         if parent_uuid not in pending_dict:
             final_list = []
         else:

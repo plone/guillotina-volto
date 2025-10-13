@@ -61,12 +61,10 @@ class DefaultGETResource(DefaultGET):
         }
         parent_language_folder = get_parent_by_interface(self.context, ILanguageFolder)
         if parent_language_folder:
-            bhr = await get_behavior(parent_language_folder, ILanguageBehavior)
-            if bhr and bhr.language:
-                full_response["language"] = {
-                    "title": bhr.language.upper(),
-                    "token": bhr.language,
-                }
+            full_response["language"] = {
+                "title":parent_language_folder.title.upper(),
+                "token":parent_language_folder.id,
+            }
         for expand in expansions:
             mapping_payload = mapping_expansions.get(expand, None)
             if mapping_payload is None:
