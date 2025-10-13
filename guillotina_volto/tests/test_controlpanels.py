@@ -203,3 +203,8 @@ async def test_controlpanels_languages(cms_requester):
         "@id": "http://localhost/db/guillotina/en/foo_page_en",
         "language": "en",
     }
+    resp, status = await requester(
+        "GET",
+        "/db/guillotina/ca/@navroot",
+    )
+    assert status == 200

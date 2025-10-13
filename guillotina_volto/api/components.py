@@ -8,6 +8,7 @@ from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
 from guillotina.utils import get_current_container
 from guillotina.utils import get_object_url
+from guillotina.api.content import DefaultGET
 
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import ISite
@@ -48,7 +49,9 @@ class Breadcrumbs(Service):
         result = []
         context = self.context
         while context is not None and not ISite.providedBy(context):
-            result.append({"title": context.title, "@id": IAbsoluteURL(context, self.request)()})
+            result.append(
+                {"title": context.title, "@id": IAbsoluteURL(context, self.request)()}
+            )
             context = getattr(context, "__parent__", None)
         result.reverse()
 
@@ -116,7 +119,9 @@ class Navigation(Service):
                 "@name": brain.get("uuid"),
                 "description": "",
             }
-            pending_dict.setdefault(brain.get("parent_uuid"), []).append(brain_serialization)
+            pending_dict.setdefault(brain.get("parent_uuid"), []).append(
+                brain_serialization
+            )
 
         parent_uuid = container.uuid
         if parent_uuid not in pending_dict:
@@ -148,7 +153,12 @@ class Actions(Service):
             "object": [
                 {"id": "view", "title": "View", "url": None},
                 {"id": "add", "title": "Add", "url": None},
-                {"icon": "toolbar-action/edit", "id": "edit", "title": "Edit", "url": None},
+                {
+                    "icon": "toolbar-action/edit",
+                    "id": "edit",
+                    "title": "Edit",
+                    "url": None,
+                },
                 {"id": "folderContents", "title": "Contents", "url": None},
                 {"id": "history", "title": "History", "url": None},
                 {"id": "contentrules", "title": "Rules", "url": None},
@@ -190,18 +200,8 @@ class Actions(Service):
         }
     },
 )
-class Navroot(Service):
+class Navroot(DefaultGET):
     async def __call__(self):
+        full_response = await super().__call__()
         full_url = get_object_url(self.context)
-        container = get_current_container()
-        serializer = get_multi_adapter((container, self.request), IResourceSerializeToJson)
-        include = omit = []
-        if self.request.query.get("include"):
-            include = self.request.query.get("include").split(",")
-        if self.request.query.get("omit"):
-            omit = self.request.query.get("omit").split(",")
-        try:
-            result = await serializer(include=include, omit=omit)
-        except TypeError:
-            result = await serializer()
-        return {"@id": f"{full_url}/@navroot", "navroot": result}
+        return {"@id": f"{full_url}/@navroot", "navroot": full_response}

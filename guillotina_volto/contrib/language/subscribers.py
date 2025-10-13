@@ -36,6 +36,7 @@ async def registry_modified(event):
         config = registry.for_interface(schemaObj)
         available_languages = config.__getitem__("available_languages")
         site = event.site
+        language_folder_path = get_object_url(site)
         for language in available_languages:
             result = await site.async_contains(language)
             lan_folder = None
@@ -49,7 +50,6 @@ async def registry_modified(event):
             bhr = await get_behavior(lan_folder, ILanguageBehavior)
             if bhr.translations == {}:
                 bhr.translations = {}
-            language_folder_path = get_content_path(lan_folder)
             for other_language in available_languages:
                 if other_language != language:
                     payload_translation = {
