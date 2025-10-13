@@ -1,9 +1,15 @@
 from guillotina import configure
 from guillotina.api.service import Service
+from guillotina.component import get_multi_adapter
+from guillotina.event import notify
+from guillotina.events import ObjectVisitedEvent
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import IResource
+from guillotina.interfaces import IResourceSerializeToJson
 from guillotina.utils import find_container
 from guillotina.utils import get_content_depth
+from guillotina.utils import get_current_container
+from guillotina.utils import get_object_url
 
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import ISite
@@ -168,3 +174,40 @@ class Actions(Service):
                 {"id": "logout", "title": "Log out", "url": None},
             ],
         }
+
+
+@configure.service(
+    context=IResource,
+    method="GET",
+    permission="guillotina.AccessContent",
+    name="@navroot",
+    summary="Navigation view",
+    responses={
+        "200": {
+            "description": "Result results on navigation",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "@id": "string",
+                    "navroot": "object"
+                },
+            },
+        }
+    },
+)
+class Navroot(Service):
+    async def __call__(self):
+        full_url = get_object_url(self.context)
+        container = get_current_container()
+        serializer = get_multi_adapter((container, self.request), IResourceSerializeToJson)
+        include = omit = []
+        if self.request.query.get("include"):
+            include = self.request.query.get("include").split(",")
+        if self.request.query.get("omit"):
+            omit = self.request.query.get("omit").split(",")
+        try:
+            result = await serializer(include=include, omit=omit)
+        except TypeError:
+            result = await serializer()
+        await notify(ObjectVisitedEvent(container))
+        return {"@id": f"{full_url}/@navroot", "navroot": result}
