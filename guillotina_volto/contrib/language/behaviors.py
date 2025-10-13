@@ -52,11 +52,7 @@ class ILanguageBehavior(Interface):
     for_="guillotina.interfaces.IResource",
 )
 class LanguageBehavior(ContextBehavior):
-    language = ContextProperty("language", None)
-
-    def __init__(self, context):
-        self.__dict__["context"] = context
-        super(LanguageBehavior, self).__init__(context)
+    pass
 
 
 @index_field.with_accessor(

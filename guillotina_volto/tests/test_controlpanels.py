@@ -218,3 +218,4 @@ async def test_controlpanels_languages(cms_requester):
         "@id": "http://localhost/db/guillotina/en/foo_page_en",
         "language": "en",
     }
+    assert resp["language"] == {"title": "CA", "token": "ca"}

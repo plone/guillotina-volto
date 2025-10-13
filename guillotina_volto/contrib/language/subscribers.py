@@ -50,6 +50,7 @@ async def registry_modified(event):
             bhr = await get_behavior(lan_folder, ILanguageBehavior)
             if bhr.translations == {}:
                 bhr.translations = {}
+            bhr.language = language
             for other_language in available_languages:
                 if other_language != language:
                     payload_translation = {
@@ -78,6 +79,7 @@ async def resource_added(context, event):
             "language": language,
         }
         bhr = await get_behavior(context, ILanguageBehavior)
+        bhr.language = current_language
         # Update all the other transalations. Go over every related
         # one and update them all
         if bhr.translations == {}:
@@ -95,6 +97,7 @@ async def resource_added(context, event):
         bhr_obj_translated_from = await get_behavior(
             obj_translated_of, ILanguageBehavior
         )
+        bhr_obj_translated_from.language = language
         if bhr_obj_translated_from.translations == {}:
             bhr_obj_translated_from.translations = {}
         for path, translation in bhr_obj_translated_from.translations.items():
