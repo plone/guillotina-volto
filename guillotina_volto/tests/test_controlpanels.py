@@ -86,6 +86,13 @@ async def test_controlpanels_languages(cms_requester):
 
     resp, status = await requester(
         "GET",
+        "/db/guillotina/ca/foo_page_ca/@navroot",
+    )
+    assert status == 200
+    assert resp["navroot"]["@name"] == "ca"
+
+    resp, status = await requester(
+        "GET",
         "/db/guillotina/es/foo_page_es/@translations",
     )
     assert status == 200
@@ -196,15 +203,18 @@ async def test_controlpanels_languages(cms_requester):
     assert resp["items"][0]["paths_indexed"] == ["/en/foo_page_en"]
     resp, status = await requester(
         "GET",
-        "/db/guillotina/ca/foo_page_ca?expand=translations",
+        "/db/guillotina/ca/foo_page_ca?expand=translations,navroot",
     )
     assert status == 200
+    assert (
+        resp["@components"]["navroot"]["@id"]
+        == "http://localhost/db/guillotina/ca/foo_page_ca/@navroot"
+    )
+    assert (
+        resp["@components"]["navroot"]["navroot"]["@id"]
+        == "http://localhost/db/guillotina/ca"
+    )
     assert resp["@components"]["translations"]["items"][0] == {
         "@id": "http://localhost/db/guillotina/en/foo_page_en",
         "language": "en",
     }
-    resp, status = await requester(
-        "GET",
-        "/db/guillotina/ca/@navroot",
-    )
-    assert status == 200

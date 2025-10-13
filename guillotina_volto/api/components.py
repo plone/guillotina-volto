@@ -13,6 +13,8 @@ from guillotina.api.content import DefaultGET
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import ISite
 from guillotina_volto.utils import get_search_utility
+from guillotina_volto.utils import get_parent_by_interface
+from guillotina_volto.contrib.language.interfaces import ILanguageFolder
 
 
 @configure.service(
@@ -200,8 +202,16 @@ class Actions(Service):
         }
     },
 )
-class Navroot(DefaultGET):
+class Navroot(Service):
     async def __call__(self):
-        full_response = await super().__call__()
+        language_folder = get_parent_by_interface(self.context, ILanguageFolder)
+        if language_folder is None:
+            container = get_current_container()
+            self.context = container
+        else:
+            self.context = language_folder
+        # We can not do super().__call__() since DefaultGETResource
+        # does that already
+        full_response = await DefaultGET.__call__(self)
         full_url = get_object_url(self.context)
         return {"@id": f"{full_url}/@navroot", "navroot": full_response}

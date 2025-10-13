@@ -7,9 +7,12 @@ from guillotina.utils import get_object_url
 from guillotina_volto.api.components import Actions
 from guillotina_volto.api.components import Breadcrumbs
 from guillotina_volto.api.components import Navigation
-from guillotina_volto.api.components import Navroot
 from guillotina_volto.api.types import Types
 from guillotina_volto.contrib.language.api import GetTranslations
+from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
+from guillotina_volto.api.components import Navroot
+
+from guillotina.utils import get_behavior
 
 
 @configure.service(
@@ -36,6 +39,7 @@ class DefaultGETResource(DefaultGET):
                 "root": False,
                 "component": True,
             },
+            "navroot": {"class": Navroot, "root": False, "component": True},
         }
         full_response = await super().__call__()
         full_url = get_object_url(self.context)
@@ -54,6 +58,12 @@ class DefaultGETResource(DefaultGET):
             "workflow": {"@id": f"{full_url}/@workflow"},
             "translations": {"@id": f"{full_url}/@translations"},
         }
+        bhr = await get_behavior(self.context, ILanguageBehavior)
+        if bhr and bhr.language:
+            full_response["language"] = {
+                "title": bhr.language.upper(),
+                "token": bhr.language,
+            }
         for expand in expansions:
             mapping_payload = mapping_expansions.get(expand, None)
             if mapping_payload is None:

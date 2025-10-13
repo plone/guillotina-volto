@@ -68,3 +68,15 @@ class Search:
             results = await coroutine_search(self.context, query_pg)
             results_total["items"] = results_total["items"] + results["items"]
         return results_total
+
+
+def get_parent_by_interface(content, interface):
+    """
+    Return the direct parent
+    """
+    while True:
+        if interface.providedBy(content):
+            return content
+        content = getattr(content, "__parent__", None)
+        if content is None:
+            return None
