@@ -30,9 +30,7 @@ async def registry_modified(event):
         # if "language" not in config["enabled"]:
         #     raise HTTPBadRequest(content={"message": "Language addon not installed"})
         site = event.site
-        schemaObj = resolve_dotted_name(
-            "guillotina_volto.contrib.language.interfaces.ILanguageSettings"
-        )
+        schemaObj = resolve_dotted_name("guillotina_volto.contrib.language.interfaces.ILanguageSettings")
         config = registry.for_interface(schemaObj)
         available_languages = config.__getitem__("available_languages")
         site = event.site
@@ -41,9 +39,7 @@ async def registry_modified(event):
             result = await site.async_contains(language)
             lan_folder = None
             if result is False:
-                lan_folder = await create_content_in_container(
-                    site, "LanguageFolder", language, check_security=False
-                )
+                lan_folder = await create_content_in_container(site, "LanguageFolder", language, check_security=False)
                 await notify(ObjectAddedEvent(lan_folder, site))
             else:
                 lan_folder = await site.async_get(language)
@@ -110,6 +106,4 @@ async def language_folder_deleted(context, event):
             bhr.translations.pop(key_to_delete, None)
         bhr.register()
         obj.register()
-        await notify(
-            ObjectModifiedEvent(bhr, payload={"translations": bhr.translations})
-        )
+        await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))

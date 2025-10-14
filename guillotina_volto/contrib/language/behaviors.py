@@ -80,17 +80,13 @@ class LanguageBehavior(ContextBehavior):
             # I need to set this first before doing an append. WHY?
             self.translations = {}
         self.translations[translation_of] = payload
-        await notify(
-            ObjectModifiedEvent(self, payload={"translations": self.translations})
-        )
+        await notify(ObjectModifiedEvent(self, payload={"translations": self.translations}))
         payload_current_object = {
             "@id": f"{full_url_container}{current_path}",
             "language": current_language,
         }
         obj_translated_of = await navigate_to(container, translation_of)
-        bhr_obj_translated_from = await get_behavior(
-            obj_translated_of, ILanguageBehavior
-        )
+        bhr_obj_translated_from = await get_behavior(obj_translated_of, ILanguageBehavior)
         bhr_obj_translated_from.language = language
         if bhr_obj_translated_from.translations == {}:
             bhr_obj_translated_from.translations = {}
@@ -111,9 +107,7 @@ class LanguageBehavior(ContextBehavior):
                 continue
             payload = {"@id": f"{full_url_container}{path}", "language": language}
             self.translations[path] = payload
-            bhr_obj_translated = await get_behavior(
-                obj_translated_of, ILanguageBehavior
-            )
+            bhr_obj_translated = await get_behavior(obj_translated_of, ILanguageBehavior)
             if bhr_obj_translated.translations == {}:
                 bhr_obj_translated.translations = {}
             bhr_obj_translated.translations[current_path] = payload_current_object

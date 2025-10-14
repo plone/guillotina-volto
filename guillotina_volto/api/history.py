@@ -57,13 +57,13 @@ async def history(context, request):
 
         data = hist_data.get("data", {})
         if type_ == "versioning":
-            value["may_revert"] = False
+            value["may_revert"] = int(ident) < (len(bhr.history.items()) - 1)
             value["version"] = int(ident)
         elif type_ == "workflow":
             value["state_title"] = data.get("state_title")
             value["review_state"] = data.get("review_state")
         result.append(value)
-    return result
+    return reversed(result)
 
 
 @configure.service(

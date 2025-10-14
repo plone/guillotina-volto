@@ -31,9 +31,7 @@ class DeleteTranslations(Service):
                 break
         bhr.register()
         self.context.register()
-        await notify(
-            ObjectModifiedEvent(bhr, payload={"translations": bhr.translations})
-        )
+        await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))
 
 
 @configure.service(
@@ -76,9 +74,7 @@ class GetTranslations(Service):
             payload = {"@id": translation["@id"], "language": translation["language"]}
             results["items"].append(payload)
         search_instance = Search()
-        results_folders = await search_instance.search_raw(
-            unrestricted=False, query={"type_name": "LanguageFolder"}
-        )
+        results_folders = await search_instance.search_raw(unrestricted=False, query={"type_name": "LanguageFolder"})
         for result in results_folders["items"]:
             results["root"][result["@name"]] = result["@id"]
         return results
