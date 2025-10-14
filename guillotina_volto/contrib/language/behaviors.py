@@ -97,7 +97,14 @@ class LanguageBehavior(ContextBehavior):
         for path, translation in bhr_obj_translated_from.translations.items():
             language = translation["language"]
             if language == current_language:
-                raise HTTPBadRequest(content={"message": "translation already added"})
+                raise HTTPBadRequest(
+                    content={
+                        "error": {
+                            "message": "translation already added",
+                            "type": "BadRequest",
+                        }
+                    }
+                )
             try:
                 obj_translated_of = await navigate_to(container, path)
             except KeyError:
