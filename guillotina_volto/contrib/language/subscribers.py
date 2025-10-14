@@ -30,7 +30,9 @@ async def registry_modified(event):
         # if "language" not in config["enabled"]:
         #     raise HTTPBadRequest(content={"message": "Language addon not installed"})
         site = event.site
-        schemaObj = resolve_dotted_name("guillotina_volto.contrib.language.interfaces.ILanguageSettings")
+        schemaObj = resolve_dotted_name(
+            "guillotina_volto.contrib.language.interfaces.ILanguageSettings"
+        )
         config = registry.for_interface(schemaObj)
         available_languages = config.__getitem__("available_languages")
         site = event.site
@@ -39,7 +41,9 @@ async def registry_modified(event):
             result = await site.async_contains(language)
             lan_folder = None
             if result is False:
-                lan_folder = await create_content_in_container(site, "LanguageFolder", language, check_security=False)
+                lan_folder = await create_content_in_container(
+                    site, "LanguageFolder", language, check_security=False
+                )
                 await notify(ObjectAddedEvent(lan_folder, site))
             else:
                 lan_folder = await site.async_get(language)
@@ -62,66 +66,8 @@ async def resource_added(context, event):
     # Get the translation_of
     payload = event.payload
     if payload is not None and "translation_of" in payload:
-        current_language = payload["language"]
-        current_path = get_content_path(context)
-        current_language = current_path.strip("/").split("/")[0]
-        translation_of = payload["translation_of"]
-        language = translation_of.strip("/").split("/")[0]
-
-        container = get_current_container()
-        full_url_container = get_object_url(container)
-        payload = {
-            "@id": f"{full_url_container}{translation_of}",
-            "language": language,
-        }
         bhr = await get_behavior(context, ILanguageBehavior)
-        bhr.language = current_language
-        # Update all the other transalations. Go over every related
-        # one and update them all
-        if bhr.translations == {}:
-            # I need to set this first before doing an append. WHY?
-            bhr.translations = {}
-        bhr.translations[translation_of] = payload
-        await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))
-        payload_current_object = {
-            "@id": f"{full_url_container}{current_path}",
-            "language": current_language,
-        }
-        obj_translated_of = await navigate_to(container, translation_of)
-        bhr_obj_translated_from = await get_behavior(obj_translated_of, ILanguageBehavior)
-        bhr_obj_translated_from.language = language
-        if bhr_obj_translated_from.translations == {}:
-            bhr_obj_translated_from.translations = {}
-        for path, translation in bhr_obj_translated_from.translations.items():
-            language = translation["language"]
-            try:
-                obj_translated_of = await navigate_to(container, path)
-            except KeyError:
-                continue
-            payload = {"@id": f"{full_url_container}{path}", "language": language}
-            bhr.translations[path] = payload
-            bhr_obj_translated = await get_behavior(obj_translated_of, ILanguageBehavior)
-            if bhr_obj_translated.translations == {}:
-                bhr_obj_translated.translations = {}
-            bhr_obj_translated.translations[current_path] = payload_current_object
-            bhr_obj_translated.register()
-            obj_translated_of.register()
-            await notify(
-                ObjectModifiedEvent(
-                    bhr_obj_translated,
-                    payload={"translations": bhr_obj_translated.translations},
-                )
-            )
-        bhr_obj_translated_from.translations[current_path] = payload_current_object
-        await notify(
-            ObjectModifiedEvent(
-                bhr_obj_translated_from,
-                payload={"translations": bhr_obj_translated_from.translations},
-            )
-        )
-        bhr_obj_translated_from.register()
-        bhr.register()
-        context.register()
+        await bhr.link_translation(payload["translation_of"])
 
 
 @configure.subscriber(for_=(IResource, IObjectRemovedEvent))
@@ -164,4 +110,6 @@ async def language_folder_deleted(context, event):
             bhr.translations.pop(key_to_delete, None)
         bhr.register()
         obj.register()
-        await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))
+        await notify(
+            ObjectModifiedEvent(bhr, payload={"translations": bhr.translations})
+        )
