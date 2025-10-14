@@ -1,10 +1,37 @@
 from guillotina import configure
 from guillotina.api.service import Service
+from guillotina.event import notify
+from guillotina.events import ObjectModifiedEvent
 from guillotina.interfaces import IResource
 from guillotina.utils import get_behavior
 
 from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
 from guillotina_volto.utils import Search
+
+
+@configure.service(
+    context=IResource,
+    name="@translations",
+    permission="guillotina.AccessContent",
+    summary="Get available translations",
+    method="DELETE",
+    responses={
+        "200": {
+            "description": "Get all the translations related to the object",
+        }
+    },
+)
+class DeleteTranslations(Service):
+    async def __call__(self):
+        payload = await self.request.json()
+        bhr = await get_behavior(self.context, ILanguageBehavior)
+        for translation_key, translation_value in bhr.translations.items():
+            if translation_value["language"] == payload["language"]:
+                bhr.translations.pop(translation_key, None)
+                break
+        bhr.register()
+        self.context.register()
+        await notify(ObjectModifiedEvent(bhr, payload={"translations": bhr.translations}))
 
 
 @configure.service(
