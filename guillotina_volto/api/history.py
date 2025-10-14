@@ -86,13 +86,9 @@ async def history_patch(context, request):
             # This is the first version ever created
             for key_final_data, value_final_data in final_values.items():
                 if "." in key_final_data:
-                    for key_behavior, value_behavior in final_values[
-                        key_final_data
-                    ].items():
+                    for key_behavior, value_behavior in final_values[key_final_data].items():
                         # We've came across a behavior
-                        final_values[key_final_data][key_behavior] = value["data"][
-                            key_final_data
-                        ][key_behavior]
+                        final_values[key_final_data][key_behavior] = value["data"][key_final_data][key_behavior]
                 else:
                     try:
                         final_values[key_final_data] = value["data"][key_final_data]
@@ -114,9 +110,7 @@ async def history_patch(context, request):
         headers=request.headers,
         payload=json.dumps(final_values).encode("utf-8"),
     )
-    deserializer = query_multi_adapter(
-        (context, fake_request), IResourceDeserializeFromJson
-    )
+    deserializer = query_multi_adapter((context, fake_request), IResourceDeserializeFromJson)
     if deserializer is None:
         raise ErrorResponse(
             "DeserializationError",
@@ -149,9 +143,7 @@ class GetHistoryVersion(DefaultGETResource):
             if key_to_change in full_response:
                 original_value = full_response[key_to_change]
                 # If both are dicts, merge them
-                if isinstance(original_value, dict) and isinstance(
-                    value_to_change, dict
-                ):
+                if isinstance(original_value, dict) and isinstance(value_to_change, dict):
                     merged_value = original_value.copy()
                     merged_value.update(value_to_change)
                     full_response[key_to_change] = merged_value

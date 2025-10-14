@@ -5,7 +5,6 @@ from guillotina.utils import get_behavior
 
 from guillotina_volto.contrib.language.behaviors import ILanguageBehavior
 from guillotina_volto.utils import Search
-from guillotina.response import HTTPBadRequest
 
 
 @configure.service(
@@ -28,9 +27,7 @@ class GetTranslations(Service):
             payload = {"@id": translation["@id"], "language": translation["language"]}
             results["items"].append(payload)
         search_instance = Search()
-        results_folders = await search_instance.search_raw(
-            unrestricted=False, query={"type_name": "LanguageFolder"}
-        )
+        results_folders = await search_instance.search_raw(unrestricted=False, query={"type_name": "LanguageFolder"})
         for result in results_folders["items"]:
             results["root"][result["@name"]] = result["@id"]
         return results

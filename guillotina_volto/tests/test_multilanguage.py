@@ -11,18 +11,14 @@ async def test_multilanguage_get_language(cms_requester):
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/@controlpanels/language",
-        data=json.dumps(
-            {"available_languages": ["en", "es", "ca"], "default_language": "ca"}
-        ),
+        data=json.dumps({"available_languages": ["en", "es", "ca"], "default_language": "ca"}),
     )
     assert status == 204
 
     resp, status = await requester(
         "POST",
         "/db/guillotina/ca",
-        data=json.dumps(
-            {"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}
-        ),
+        data=json.dumps({"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}),
     )
     assert status == 201
     resp, status = await requester("GET", "/db/guillotina/ca")
@@ -38,9 +34,7 @@ async def test_not_multilanguage_no_language(cms_requester):
     resp, status = await requester(
         "POST",
         "/db/guillotina",
-        data=json.dumps(
-            {"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}
-        ),
+        data=json.dumps({"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}),
     )
     assert status == 201
     resp, status = await requester("GET", "/db/guillotina/foo_page_ca")
@@ -53,23 +47,17 @@ async def test_multilanguage_navigation(cms_requester):
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/@controlpanels/language",
-        data=json.dumps(
-            {"available_languages": ["en", "es", "ca"], "default_language": "ca"}
-        ),
+        data=json.dumps({"available_languages": ["en", "es", "ca"], "default_language": "ca"}),
     )
     assert status == 204
     resp, status = await requester(
         "POST",
         "/db/guillotina/ca",
-        data=json.dumps(
-            {"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}
-        ),
+        data=json.dumps({"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}),
     )
     assert status == 201
 
-    resp, status = await requester(
-        "GET", "/db/guillotina/ca/?expand=navigation&expand.navigation.depth=1"
-    )
+    resp, status = await requester("GET", "/db/guillotina/ca/?expand=navigation&expand.navigation.depth=1")
     assert status == 200
     assert len(resp["@components"]["navigation"]["items"]) == 1
 
@@ -86,17 +74,13 @@ async def test_multilanguage_locator(cms_requester):
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/@controlpanels/language",
-        data=json.dumps(
-            {"available_languages": ["en", "es", "ca"], "default_language": "ca"}
-        ),
+        data=json.dumps({"available_languages": ["en", "es", "ca"], "default_language": "ca"}),
     )
     assert status == 204
     resp, status = await requester(
         "POST",
         "/db/guillotina/ca",
-        data=json.dumps(
-            {"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}
-        ),
+        data=json.dumps({"@type": "Page", "id": "foo_page_ca", "title": "Pàgina en català"}),
     )
     assert status == 201
 

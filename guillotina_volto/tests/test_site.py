@@ -48,3 +48,14 @@ async def test_validate_install_site(cms_requester):
         "GET", "/db/guillotina/@users/admin", headers={"Authorization": f"Bearer {admin_token}"}
     )
     assert status == 200
+
+
+async def test_get_querystring(cms_requester):
+    response, status = await cms_requester("GET", "/db/guillotina/@querystring")
+    assert status == 200
+    assert len(response['indexes']) == 7
+    assert len(response['sortable_indexes']) == 5
+    assert 'values' in response['indexes']['type_name']
+    assert 'values' in response['indexes']['review_state']
+    assert 'values' not in response['indexes']['id']
+

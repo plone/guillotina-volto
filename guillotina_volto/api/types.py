@@ -65,14 +65,15 @@ from guillotina_volto.interfaces import ISite
     },
 )
 class Types(Service):
-    async def __call__(self):
+
+    @staticmethod
+    def get_local_types(context):
         result = []
         request = get_current_request()
-        base_url = IAbsoluteURL(self.context, request)()
-        constrains = ICMSConstrainTypes(self.context, None)
+        base_url = IAbsoluteURL(context, request)()
+        constrains = ICMSConstrainTypes(context, None)
 
         policy = get_security_policy()
-
         for id, factory in FACTORY_CACHE.items():
             add = True
             if constrains is not None:
@@ -86,11 +87,14 @@ class Types(Service):
                     permission = query_utility(IPermission, name=factory.add_permission)
                     PERMISSIONS_CACHE[factory.add_permission] = permission
 
-                if permission is not None and not policy.check_permission(permission.id, self.context):
+                if permission is not None and not policy.check_permission(permission.id, context):
                     add = False
             if add:
                 result.append({"@id": base_url + "/@types/" + id, "addable": True, "title": id})
         return result
+
+    async def __call__(self):
+        return Types.get_local_types(self.context)
 
 
 @configure.service(

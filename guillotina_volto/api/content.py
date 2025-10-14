@@ -198,26 +198,18 @@ async def _iter_copyable_content(context, request):
             path = item[container_len:]
             ob = await navigate_to(container, path.strip("/"))
             if ob is None:
-                raise HTTPPreconditionFailed(
-                    content={"reason": "Could not find content", "source": item}
-                )
+                raise HTTPPreconditionFailed(content={"reason": "Could not find content", "source": item})
         elif "/" in item:
             ob = await navigate_to(container, item.strip("/"))
             if ob is None:
-                raise HTTPPreconditionFailed(
-                    content={"reason": "Could not find content", "source": item}
-                )
+                raise HTTPPreconditionFailed(content={"reason": "Could not find content", "source": item})
         else:
             try:
                 ob = await get_object_by_uid(item)
             except KeyError:
-                raise HTTPPreconditionFailed(
-                    content={"reason": "Could not find content", "source": item}
-                )
+                raise HTTPPreconditionFailed(content={"reason": "Could not find content", "source": item})
         if not policy.check_permission("guillotina.DuplicateContent", ob):
-            raise HTTPPreconditionFailed(
-                content={"reason": "Invalid permission", "source": item}
-            )
+            raise HTTPPreconditionFailed(content={"reason": "Invalid permission", "source": item})
         yield ob
 
 
@@ -232,9 +224,7 @@ async def _iter_copyable_content(context, request):
             "name": "body",
             "in": "body",
             "type": "object",
-            "schema": {
-                "properties": {"source": {"type": "array", "items": {"type": "string"}}}
-            },
+            "schema": {"properties": {"source": {"type": "array", "items": {"type": "string"}}}},
             "required": ["source"],
         }
     ],
@@ -259,9 +249,7 @@ async def copy_content(context, request):
             "name": "body",
             "in": "body",
             "type": "object",
-            "schema": {
-                "properties": {"source": {"type": "array", "items": {"type": "string"}}}
-            },
+            "schema": {"properties": {"source": {"type": "array", "items": {"type": "string"}}}},
             "required": ["source"],
         }
     ],
@@ -300,11 +288,7 @@ class SharingGET(Service):
     async def set_roles_for_context(self, context, acquired=False):
         prinrole = IPrincipalRoleMap(context)
         for pr_id, permissions in prinrole._bycol.items():
-            local_roles = [
-                p
-                for p, s in permissions.items()
-                if s.get_name() == "Allow" and p in self.all_role_ids
-            ]
+            local_roles = [p for p, s in permissions.items() if s.get_name() == "Allow" and p in self.all_role_ids]
             # If none of the local roles are configurable from the sharing tab,
             # just go to the next principal
             if not local_roles:
@@ -549,9 +533,7 @@ class SharingPOST(Service):
                 if v is False:
                     setting = "Unset"
                 if setting:
-                    prinrole.append(
-                        {"principal": principal, "role": k, "setting": setting}
-                    )
+                    prinrole.append({"principal": principal, "role": k, "setting": setting})
 
         self.all_roles = await get_app_sharing_roles()
         self.all_role_ids = [i["id"] for i in self.all_roles]
@@ -561,9 +543,7 @@ class SharingPOST(Service):
 
         perminhe = list()
         for role_id in self.all_role_ids:
-            perminhe.append(
-                {"permission": role_id, "setting": "Allow" if inherit else "Deny"}
-            )
+            perminhe.append({"permission": role_id, "setting": "Allow" if inherit else "Deny"})
 
         data_to_apply = {"perminhe": perminhe}
 
