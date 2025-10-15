@@ -13,6 +13,7 @@ from . import images  # noqa
 from . import menu  # noqa
 from . import resource  # noqa
 from . import roles  # noqa
+from . import search  # noqa
 from . import site  # noqa
 from . import system  # noqa
 from . import theme  # noqa

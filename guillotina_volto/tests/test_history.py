@@ -63,9 +63,9 @@ async def test_history_creation(cms_requester):
     resp, status = await requester("GET", "/db/guillotina/doc1/@history")
     assert status == 200
     assert len(resp) == 2
-    assert resp[0]["type"] == "versioning"
-    assert resp[0]["transition_title"] == "Object created"
-    assert resp[1]["transition_title"] == "Object modified"
+    assert resp[1]["type"] == "versioning"
+    assert resp[1]["transition_title"] == "Object created"
+    assert resp[0]["transition_title"] == "Object modified"
     resp, status = await requester(
         "PATCH",
         "/db/guillotina/doc1",
@@ -147,10 +147,10 @@ async def test_history_creation(cms_requester):
         "/db/guillotina/doc1/@history",
     )
     assert status == 200
-    assert resp[7]["type"] == "workflow"
-    assert resp[7]["action"] == "publish"
-    assert resp[7]["state_title"] == "Public"
-    assert resp[7]["review_state"] == "public"
+    assert resp[0]["type"] == "workflow"
+    assert resp[0]["action"] == "publish"
+    assert resp[0]["state_title"] == "Public"
+    assert resp[0]["review_state"] == "public"
     assert len(resp) == 8
 
     resp, status = await requester(

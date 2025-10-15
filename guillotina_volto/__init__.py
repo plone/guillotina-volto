@@ -29,18 +29,18 @@ app_settings = {
     "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
         "image_settings": {
-            "title": "Validation settings",
-            "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
-            "group": "General",
+            "title": "Image settings",
+            "schema": "guillotina_volto.interfaces.registry.IImagingSettings",
+            "group": "Content",
         },
         "validation_settings": {
-            "title": "Image settings",
+            "title": "Validation settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
             "group": "General",
         },
         "usergroup": {
             "title": "User group settings",
-            "schema": "guillotina_volto.controlpanels.IUserGroupSettings",
+            "schema": "guillotina_volto.interfaces.registry.IUserGroupSettings",
             "group": "Users",
         },
     },
@@ -74,11 +74,9 @@ app_settings = {
         "Image": ["document_view", "layout_view", "default"],
     },
     "workflows_content": {
-        "guillotina.interfaces.IResource": "guillotina_basic",
         "guillotina_volto.content.site.ISite": "guillotina_basic",
         "guillotina_volto.content.document.IDocument": "guillotina_basic",
-        "guillotina_volto.content.image.IImage": "guillotina_basic",
-        "guillotina_volto.content.folder.IFolder": "guillotina_basic",
+        "guillotina_volto.content.folder.IPage": "guillotina_basic",
     },
     "default_blocks": {
         "Document": {

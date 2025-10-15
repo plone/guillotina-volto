@@ -23,7 +23,6 @@ class DefaultJSONSummarySerializer(object):
         self.request = request
 
     async def __call__(self):
-
         summary = json_compatible(
             {
                 "@id": IAbsoluteURL(self.context)(),

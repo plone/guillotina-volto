@@ -61,13 +61,16 @@ async def controlpanel_element(context, request):
         schema = controlpanels[type_id].get("schema", None)
         if schema is None:
             return
+        result["group"] = controlpanels[type_id].get("group", "General")
+        result["title"] = controlpanels[type_id].get("title", "Validations Settings")
         schema_obj = resolve_dotted_name(schema)
         config = registry.for_interface(schema_obj)
         schema = {"properties": {}, "fieldsets": [], "required": []}
         data = {}
         fields = []
-
         for name, field in get_fields_in_order(schema_obj):
+            if field.extra_values.get("hide_in_fieldset", False):
+                continue
             if field.required:
                 schema["required"].append(name)
             serializer = get_multi_adapter((field, schema_obj, request), ISchemaFieldSerializeToJson)
