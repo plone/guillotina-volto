@@ -26,7 +26,9 @@ app_settings = {
         "guillotina_volto.contrib.language",
     ],
     "available_blocks": {},
-    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
+    "commands": {
+        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
+    },
     "controlpanels": {
         "image_settings": {
             "title": "Image settings",
@@ -120,6 +122,7 @@ app_settings = {
         "Item",
         "Container",
         "Folder",
+        "LanguageFolder",
     ],
     "default_allow_discussion": False,
     "allow_discussion_types": [],
