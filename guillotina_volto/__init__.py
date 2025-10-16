@@ -26,9 +26,7 @@ app_settings = {
         "guillotina_volto.contrib.language",
     ],
     "available_blocks": {},
-    "commands": {
-        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
-    },
+    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
         "image_settings": {
             "title": "Image settings",
@@ -73,12 +71,13 @@ app_settings = {
         "Event": ["document_view", "layout_view", "default"],
         "Link": ["document_view", "layout_view", "default"],
         "File": ["document_view", "layout_view", "default"],
-        "Image": ["document_view", "layout_view", "default"],
+        "Image": ["image_view", "document_view", "layout_view", "default"],
     },
     "workflows_content": {
         "guillotina_volto.content.site.ISite": "guillotina_basic",
         "guillotina_volto.content.document.IDocument": "guillotina_basic",
-        "guillotina_volto.content.folder.IPage": "guillotina_basic",
+        "guillotina_volto.content.page.IPage": "guillotina_basic",
+        "guillotina_volto.contrib.language.interfaces.ILanguageFolder": "guillotina_basic",
     },
     "default_blocks": {
         "Document": {

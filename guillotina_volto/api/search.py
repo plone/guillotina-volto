@@ -26,5 +26,7 @@ async def volto_search_get(context, request):
     for item in data["items"]:
         item["@type"] = item.get("type_name", None)
         item["UID"] = item.get("uuid", None)
+        item["Title"] = item.get("title", None)
+        item["Description"] = item.get("description", None)
 
     return data

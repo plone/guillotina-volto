@@ -3,6 +3,7 @@ import datetime
 from guillotina import configure
 from guillotina.api.content import DefaultGET
 from guillotina.api.service import Service
+from guillotina.catalog.utils import iter_indexes
 from guillotina.interfaces import IResource
 from guillotina.utils import get_current_request
 from guillotina.utils import get_object_url
@@ -125,7 +126,13 @@ class QuerystringSearchPOST(Service):
                 operation = item_query["o"]
                 value = item_query["v"]
 
-                if operation == "string.absolutePath":
+                if field == "SearchableText":
+                    oring = {}
+                    for index_name, idx_data in iter_indexes():
+                        if idx_data["type"] in ("text", "searchabletext"):
+                            oring["{}__in".format(index_name)] = value
+                    query["__or"] = oring
+                elif operation == "string.absolutePath":
                     query["path"] = value
                 elif operation == "string.relativePath":
                     query["path__in"] = value

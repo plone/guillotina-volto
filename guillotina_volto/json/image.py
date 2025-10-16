@@ -12,7 +12,7 @@ from guillotina_volto.interfaces import IImagingSettings
 
 
 @configure.value_serializer(for_=IImageFile)
-def json_converter(value):
+async def json_converter(value):
     if value is None:
         return value
 
@@ -21,6 +21,9 @@ def json_converter(value):
     settings = registry.for_interface(IImagingSettings)
     scales = {}
     url = get_url(request, request.path)
+
+    if request.method == "POST":
+        url = url + "/" + value.filename.lower().replace(" ", "-")
     # TODO: VIRUALHOSTMONSTER
     for size, dimension in settings["allowed_sizes"].items():
         width, _, height = dimension.partition(":")

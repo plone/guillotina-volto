@@ -9,6 +9,9 @@ from guillotina_volto.interfaces import ICMSBehavior
 
 
 def default_layout(context=None, name=None):
+    layouts = app_settings["layouts"].get(context.type_name, [])
+    if len(layouts) > 0:
+        return layouts[0]
     return "document_view"
 
 

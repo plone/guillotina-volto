@@ -119,6 +119,25 @@ class QuerystringGET(Service):
             "vocabulary": None,
         },
         {
+            "name": "SearchableText",
+            "type": "text",
+            "attr": "searchabletext",
+            "title": "SearchableText",
+            "description": "An item's title and description",
+            "group": "Text",
+            "enabled": True,
+            "sortable": False,
+            "operators": {
+                "string.contains": {
+                    "title": "Contains",
+                    "description": "",
+                    "operation": "contains",
+                    "widget": "StringWidget",
+                }
+            },
+            "vocabulary": None,
+        },
+        {
             "name": "id",
             "type": "string",
             "attr": "id",
