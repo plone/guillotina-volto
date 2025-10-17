@@ -2,7 +2,7 @@ databases:
   db:
     storage: postgresql
     transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@gcms_dev_pg:5432/guillotina
+    dsn: postgresql://postgres:secret@127.0.0.1:5434/guillotina
     read_only: false
     pool_size: 100
 asgi_server: uvicorn

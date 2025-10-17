@@ -46,9 +46,9 @@ down:
 	docker-compose down
 
 tests:
-	DATABASE=postgres pytest --cov=guillotina_volto -s -x -v guillotina_volto/
+	DATABASE=postgres pytest --cov=guillotina_volto -s -x -v guillotina_volto/tests
 
-start-local-config:
+start:
 	guillotina serve-reload -c config-local.yaml --port 8081
 
 format:

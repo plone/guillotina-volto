@@ -1,18 +1,30 @@
----
 databases:
   db:
     storage: postgresql
     transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@localhost:5432/guillotina
+    dsn: postgresql://postgres:postgres@localhost:5431/guillotinaVolto
     read_only: false
     pool_size: 100
 store_json: true
 applications:
-  - guillotina_volto
+  - guillotina.contrib.workflows
+  - guillotina.contrib.vocabularies
+  - guillotina.contrib.dbusers
+  - guillotina.contrib.mailer
+  - guillotina.contrib.email_validation
   - guillotina.contrib.cache
+  - guillotina.contrib.catalog.pg
+  - guillotina_volto
+mailer:
+  utility: guillotina.contrib.mailer.utility.PrintingMailerUtility
+host: 0.0.0.0
 address: 8081
 static:
-  favicon.png: static/favicon.png
+  - favicon.png: static/favicon.png
+  - assets: guillotina:static/assets
+  - swagger_static: guillotina.contrib.swagger:static
+container_types:
+  - Site
 root_user:
   password: root
 auth_extractors:
@@ -22,6 +34,9 @@ auth_extractors:
 auth_token_validators:
   - guillotina.auth.validators.SaltedHashPasswordValidator
   - guillotina.auth.validators.JWTValidator
+# redis:
+#   host: localhost
+#   port: 6379
 jwt:
   secret: secret
   algorithm: HS256
@@ -30,7 +45,7 @@ jsapps:
   +manage: guillotina:static/gmi
 cors:
   allow_origin:
-    - "*"
+    - '*'
   allow_methods:
     - GET
     - POST
@@ -38,9 +53,40 @@ cors:
     - HEAD
     - PATCH
     - OPTIONS
+    - PUT
   allow_headers:
-    - "*"
+    - '*'
   expose_headers:
-    - "*"
+    - '*'
   allow_credentials: true
   max_age: 3660
+allow_register: true
+global_disallowed_types:
+  - User
+  - UserManager
+  - Group
+  - GroupManager
+  - Item
+  - Container
+  - Folder
+default_blocks:
+  Document:
+    blocks:
+      tile1:
+        '@type': title
+      tile2:
+        '@type': slate
+    blocks_layout:
+      items:
+      - tile1
+      - tile2
+  Container:
+    blocks:
+      tile1:
+        '@type': title
+      tile2:
+        '@type': slate
+    blocks_layout:
+      items:
+        - tile1
+        - tile2
