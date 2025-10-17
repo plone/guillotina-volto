@@ -1,11 +1,15 @@
 import json
 
 import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
 
 
 pytestmark = pytest.mark.asyncio
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_multilanguage_get_language(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -29,6 +33,8 @@ async def test_multilanguage_get_language(cms_requester):
     assert resp["language"] == {"title": "CA", "token": "ca"}
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_not_multilanguage_no_language(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -42,6 +48,8 @@ async def test_not_multilanguage_no_language(cms_requester):
     assert "language" not in resp
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_multilanguage_navigation(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -69,6 +77,8 @@ async def test_multilanguage_navigation(cms_requester):
     assert len(resp["@components"]["navigation"]["items"]) == 1
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_multilanguage_locator(cms_requester):
     requester = cms_requester
     resp, status = await requester(

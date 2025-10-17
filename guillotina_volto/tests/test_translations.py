@@ -1,11 +1,15 @@
 import json
 
 import pytest
+from guillotina.tests.test_catalog import NOT_POSTGRES
+from guillotina.tests.test_catalog import PG_CATALOG_SETTINGS
 
 
 pytestmark = pytest.mark.asyncio
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_unlink_translations(cms_requester):
     requester = cms_requester
     resp, status = await requester(
@@ -60,6 +64,8 @@ async def test_unlink_translations(cms_requester):
     assert status == 200
 
 
+@pytest.mark.app_settings(PG_CATALOG_SETTINGS)
+@pytest.mark.skipif(NOT_POSTGRES, reason="Only PG")
 async def test_link_translations(cms_requester):
     requester = cms_requester
     resp, status = await requester(

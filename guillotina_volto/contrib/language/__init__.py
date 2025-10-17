@@ -12,7 +12,7 @@ app_settings = {
             "group": "General",
         },
     },
-    "available_addons": {"language": {"title": "Multi language addons", "dependencies": ""}},
+    "available_addons": {},
 }
 
 
