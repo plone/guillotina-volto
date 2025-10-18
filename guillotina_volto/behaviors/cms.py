@@ -1,13 +1,17 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 from guillotina.behaviors.instance import AnnotationBehavior
 from guillotina.behaviors.properties import ContextProperty
-from guillotina_volto.interfaces import ICMSBehavior
-from guillotina.utils import iter_parents
 from guillotina.interfaces import IFolder
+from guillotina.utils import iter_parents
+
+from guillotina_volto.interfaces import ICMSBehavior
 
 
 def default_layout(context=None, name=None):
+    layouts = app_settings["layouts"].get(context.type_name, [])
+    if len(layouts) > 0:
+        return layouts[0]
     return "document_view"
 
 
@@ -49,6 +53,4 @@ class CMS(AnnotationBehavior):
     def del_allow_discussion(self):
         self._allow_discussion = None
 
-    allow_discussion = property(
-        get_allow_discussion, set_allow_discussion, del_allow_discussion
-    )
+    allow_discussion = property(get_allow_discussion, set_allow_discussion, del_allow_discussion)

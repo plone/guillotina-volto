@@ -1,14 +1,17 @@
+from guillotina import app_settings
 from guillotina import configure
-from guillotina_volto.interfaces.content import ISite
+from guillotina.component import get_multi_adapter
+from guillotina.component import getMultiAdapter
+from guillotina.event import notify
 from guillotina.interfaces import IAbsoluteURL
 from guillotina.interfaces import ISchemaFieldSerializeToJson
-from guillotina.component import getMultiAdapter
-from guillotina.component import get_multi_adapter
-from guillotina.contrib.email_validation.interfaces import IValidationSettings
+from guillotina.response import Response
 from guillotina.schema import get_fields_in_order
-from guillotina.utils import resolve_dotted_name
 from guillotina.utils import get_registry
-from guillotina import app_settings
+from guillotina.utils import resolve_dotted_name
+
+from guillotina_volto.events import RegistryChangedEvent
+from guillotina_volto.interfaces.content import ISite
 
 
 @configure.service(
@@ -22,7 +25,7 @@ async def controlpanel(context, request):
     url = getMultiAdapter((context, request), IAbsoluteURL)()
 
     result = []
-    for item, value in app_settings.get("controlpanels", {}):
+    for item, value in app_settings.get("controlpanels", {}).items():
         result.append(
             {
                 "@id": f"{url}/@controlpanels/{item}",
@@ -50,6 +53,7 @@ async def controlpanel_element(context, request):
         "group": "General",
         "title": "Validations Settings",
         "data": {},
+        "items": [],
     }
 
     controlpanels = app_settings.get("controlpanels", {})
@@ -57,19 +61,21 @@ async def controlpanel_element(context, request):
         schema = controlpanels[type_id].get("schema", None)
         if schema is None:
             return
-        schemaObj = resolve_dotted_name(schema)
-        config = registry.for_interface(schemaObj)
+        result["group"] = controlpanels[type_id].get("group", "General")
+        result["title"] = controlpanels[type_id].get("title", "Validations Settings")
+        schema_obj = resolve_dotted_name(schema)
+        config = registry.for_interface(schema_obj)
         schema = {"properties": {}, "fieldsets": [], "required": []}
         data = {}
         fields = []
-        for name, field in get_fields_in_order(schemaObj):
+        for name, field in get_fields_in_order(schema_obj):
+            if field.extra_values.get("hide_in_fieldset", False):
+                continue
             if field.required:
-                result["required"].append(name)
-            serializer = get_multi_adapter(
-                (field, schemaObj, request), ISchemaFieldSerializeToJson
-            )
+                schema["required"].append(name)
+            serializer = get_multi_adapter((field, schema_obj, request), ISchemaFieldSerializeToJson)
             schema["properties"][name] = await serializer()
-            data[name] = config.__getitem__(name)
+            data[name] = config.__getitem__(name) or field.default
             fields.append(name)
         schema["fieldsets"] = [{"fields": fields, "id": "default", "title": "default"}]
         result["schema"] = schema
@@ -84,18 +90,19 @@ async def controlpanel_element(context, request):
     permission="guillotina.AccessControlPanel",
     name="@controlpanels/{type_id}",
 )
-async def controlpanel_element(context, request):
+async def patch_controlpanel_element(context, request):
     payload = await request.json()
     type_id = request.matchdict["type_id"]
-
     registry = await get_registry()
     controlpanels = app_settings.get("controlpanels", {})
     if type_id in controlpanels:
         schema = controlpanels[type_id].get("schema", None)
         if schema is None:
             return
-        config = registry.for_interface(schema)
+        iface = resolve_dotted_name(schema)
+        config = registry.for_interface(iface)
         for key, value in payload.items():
-            if key in schema:
+            if key in iface:
                 config.__setitem__(key, value)
-    return
+        await notify(RegistryChangedEvent(context, type_id))
+    return Response(status=204)

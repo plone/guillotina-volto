@@ -1,12 +1,12 @@
+import logging
+
 from guillotina import configure
 from guillotina.behaviors.instance import AnnotationBehavior
 from guillotina.interfaces import IFileCleanup
 from guillotina.interfaces import IResource
+
 from guillotina_volto.interfaces import IVersioning
 from guillotina_volto.interfaces import IVersioningMarker
-
-
-import logging
 
 
 logger = logging.getLogger("guillotina_versioning")
@@ -27,9 +27,7 @@ class VersioningFileCleanup:
         return True
 
 
-@configure.behavior(
-    title="Versioning", provides=IVersioning, marker=IVersioningMarker, for_=IResource
-)
+@configure.behavior(title="Versioning", provides=IVersioning, marker=IVersioningMarker, for_=IResource)
 class Versioning(AnnotationBehavior):
     auto_serialize = False
     __annotations_data_key__ = "metadata"

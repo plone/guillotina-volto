@@ -19,15 +19,11 @@ async def db_initialized(event):
     Initialize additional pg indexes
     """
     storage = event.database.storage
-    if not IPostgresStorage.providedBy(storage) or ICockroachStorage.providedBy(
-        storage
-    ):
+    if not IPostgresStorage.providedBy(storage) or ICockroachStorage.providedBy(storage):
         return
 
     # create json data indexes
     async with storage.lock:
         for statement in statements:
             async with storage.pool.acquire() as conn:
-                await conn.execute(
-                    statement.format(storage._objects_table_name)
-                )
+                await conn.execute(statement.format(storage._objects_table_name))

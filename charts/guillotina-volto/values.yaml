@@ -235,7 +235,7 @@ cms:
   - Container
   - Folder
   layouts:
-    CMSFolder:
+    Page:
       - listing_view
       - tabular_view
       - summary_view
@@ -268,8 +268,7 @@ cms:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1
@@ -279,19 +278,17 @@ cms:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1
           - tile2
-    CMSFolder:
+    Page:
       blocks:
         tile1:
           '@type': title
         tile2:
-          '@type': text
-          text: null
+          '@type': slate
       blocks_layout:
         items:
           - tile1

@@ -7,6 +7,7 @@ from guillotina.tests import utils
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.ordering import get_last_child_position
 
+
 pytestmark = pytest.mark.asyncio
 
 
@@ -15,43 +16,44 @@ pytestmark = pytest.mark.asyncio
     reason="Not for dummy db",
 )
 async def test_get_max_position_in_folder(cms_requester):
-    async with cms_requester as requester:
-        await requester(
-            "POST",
-            "/db/guillotina/",
-            data=json.dumps(
-                {
-                    "@type": "Item",
-                    "title": "Item1",
-                    "id": "item1",
-                    "@behaviors": [ICMSBehavior.__identifier__],
-                }
-            ),
-        )
-        await requester(
-            "POST",
-            "/db/guillotina/",
-            data=json.dumps(
-                {
-                    "@type": "Item",
-                    "title": "Item2",
-                    "id": "item2",
-                    "@behaviors": [ICMSBehavior.__identifier__],
-                }
-            ),
-        )
+    requester = cms_requester
+    await requester(
+        "POST",
+        "/db/guillotina/",
+        data=json.dumps(
+            {
+                "@type": "Item",
+                "title": "Item1",
+                "id": "item1",
+                "@behaviors": [ICMSBehavior.__identifier__],
+            }
+        ),
+    )
+    await requester(
+        "POST",
+        "/db/guillotina/",
+        data=json.dumps(
+            {
+                "@type": "Item",
+                "title": "Item2",
+                "id": "item2",
+                "@behaviors": [ICMSBehavior.__identifier__],
+            }
+        ),
+    )
 
-        root = await utils.get_root(db=requester.db)
-        container = await root.async_get("guillotina")
-        pos = await get_last_child_position(container)
-        assert pos > 1
+    root = await utils.get_root(db=requester.db)
+    container = await root.async_get("guillotina")
+    # TODO: In database the info exists, but when we get them, we don't get the position_in_parent
+    pos = await get_last_child_position(container)
+    assert pos > 1
 
-        resp1, status = await requester("GET", "/db/guillotina/item1")
-        resp2, status = await requester("GET", "/db/guillotina/item2")
-        assert (
-            resp2[ICMSBehavior.__identifier__]["position_in_parent"]
-            > resp1[ICMSBehavior.__identifier__]["position_in_parent"]  # noqa
-        )
+    resp1, status = await requester("GET", "/db/guillotina/item1")
+    resp2, status = await requester("GET", "/db/guillotina/item2")
+    assert (
+        resp2[ICMSBehavior.__identifier__]["position_in_parent"]
+        > resp1[ICMSBehavior.__identifier__]["position_in_parent"]  # noqa
+    )
 
 
 # @pytest.mark.skipif(os.environ.get('DATABASE', 'DUMMY') in ('cockroachdb', 'DUMMY'),

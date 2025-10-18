@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from guillotina import configure
 from guillotina.addons import Addon
+from guillotina.behaviors.dublincore import IDublinCore
 from guillotina.interfaces import ILayers
 from guillotina.utils import get_registry
+
 from guillotina_volto.behaviors.image import IImageAttachment
 from guillotina_volto.behaviors.syndication import ISyndicationSettings
+from guillotina_volto.interfaces import IBlocks
 from guillotina_volto.interfaces import ICMSBehavior
 from guillotina_volto.interfaces import IImagingSettings
 from guillotina_volto.interfaces import IMenu
-from guillotina_volto.interfaces import IBlocks
-from guillotina.behaviors.dublincore import IDublinCore
 
 
 CMS_LAYER = "guillotina_volto.interfaces.ICMSLayer"

@@ -1,12 +1,11 @@
 from guillotina import configure
 from guillotina.utils import get_registry
-from guillotina_volto.interfaces import ISite
+
 from guillotina_volto.interfaces import IMenu
+from guillotina_volto.interfaces import ISite
 
 
-@configure.service(
-    context=ISite, method="GET", permission="guillotina.ViewContent", name="@menu"
-)
+@configure.service(context=ISite, method="GET", permission="guillotina.ViewContent", name="@menu")
 async def menu(context, request):
 
     registry = await get_registry()
@@ -14,9 +13,7 @@ async def menu(context, request):
     return {"value": settings["definition"]}
 
 
-@configure.service(
-    context=ISite, method="GET", permission="guillotina.ViewContent", name="@logo"
-)
+@configure.service(context=ISite, method="GET", permission="guillotina.ViewContent", name="@logo")
 async def logo(context, request):
 
     registry = await get_registry()

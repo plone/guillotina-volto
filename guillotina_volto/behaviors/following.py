@@ -4,13 +4,12 @@ from guillotina.behaviors.instance import AnnotationBehavior
 from guillotina.behaviors.properties import FunctionProperty
 from guillotina.interfaces import IResource
 from guillotina.utils import get_authenticated_user_id
+
 from guillotina_volto.interfaces import IFollowing
 from guillotina_volto.interfaces import IFollowingMarker
 
 
-@configure.behavior(
-    title="Following", provides=IFollowing, marker=IFollowingMarker, for_=IResource
-)
+@configure.behavior(title="Following", provides=IFollowing, marker=IFollowingMarker, for_=IResource)
 class Following(AnnotationBehavior):
     __local__properties__ = ("favorite",)
 

@@ -10,9 +10,7 @@ from guillotina_volto.ordering import get_next_order
 from guillotina_volto.ordering import supports_ordering
 
 
-@configure.subscriber(
-    for_=(IResource, IObjectAddedEvent), priority=1001
-)  # after indexing
+@configure.subscriber(for_=(IResource, IObjectAddedEvent), priority=1001)  # after indexing
 async def cms_object_added(obj, event):
     cms = query_adapter(obj, ICMSBehavior)
     if cms is not None:

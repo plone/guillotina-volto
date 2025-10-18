@@ -1,6 +1,7 @@
+from guillotina import app_settings
 from guillotina import configure
 from guillotina.interfaces import IIDGenerator
-from guillotina import app_settings
+
 from guillotina_volto.interfaces import ICMSLayer
 
 
@@ -33,8 +34,6 @@ class IDGenerator(object):
         if new_id:
             if new_id[0] in ("_", "@"):
                 new_id = new_id[1:]
-            return "".join(
-                l for l in new_id if l in app_settings["valid_id_characters"]
-            )
+            return "".join(valid_char for valid_char in new_id if valid_char in app_settings["valid_id_characters"])
         else:
             return None

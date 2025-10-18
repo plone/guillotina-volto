@@ -1,5 +1,7 @@
-from zope.interface import implementer
 from guillotina.events import ObjectEvent
+from zope.interface import implementer
+
+from guillotina_volto.interfaces import IRegistryChangedEvent
 from guillotina_volto.interfaces import IWorkflowChangedEvent
 
 
@@ -13,3 +15,12 @@ class WorkflowChangedEvent(ObjectEvent):
         self.workflow = workflow
         self.action = action
         self.comments = comments
+
+
+@implementer(IRegistryChangedEvent)
+class RegistryChangedEvent(object):
+    """Registry has been changed."""
+
+    def __init__(self, site, id_):
+        self.id_ = id_
+        self.site = site

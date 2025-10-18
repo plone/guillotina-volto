@@ -4,25 +4,35 @@ services:
     build: .
     image: guillotina_volto:local
     ports:
-      - '8081:8081'
+      - '8080:8080'
     volumes:
       - .:/usr/src/app
+      - ./config-dockercompose.yaml:/usr/src/app/config-dockercompose.yaml:ro
       - logvolume01:/var/log
+    command: ["guillotina", "-c", "config-dockercompose.yaml"]
     links:
       - postgres
   guillotina-local:
     build: .
     image: guillotina_volto:local
     ports:
-      - '8081:8081'
+      - '8080:8080'
     volumes:
       - .:/usr/src/app
       - ../guillotina:/usr/src/guillotina
       - logvolume01:/var/log
     links:
       - postgres
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - guillotina
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/conf.d/default.conf
   postgres:
-    image: postgres:12
+    image: postgres:15
     container_name: gcms_dev_pg
     environment:
       POSTGRES_USER: postgres
@@ -30,7 +40,7 @@ services:
       POSTGRES_INITDB_ARGS: --data-checksums
       POSTGRES_DB: guillotina
     ports:
-      - '5432:5432'
+      - '5434:5432'
     volumes:
       - postgres_data_cms:/var/lib/postgresql/data
 

@@ -1,8 +1,9 @@
-from guillotina import configure
 from guillotina import app_settings
+from guillotina import configure
 from guillotina.interfaces import IResource
-from guillotina_volto.interfaces import IDefaultBlocksLayout
+
 from guillotina_volto.interfaces import IDefaultBlocks
+from guillotina_volto.interfaces import IDefaultBlocksLayout
 
 
 @configure.adapter(for_=IResource, provides=IDefaultBlocksLayout)
@@ -14,9 +15,7 @@ class DefaultBlocksLayout:
         default_blocks = app_settings.get("default_blocks", None)
         default_result = {"items": []}
         if default_blocks is not None and self.context.type_name in default_blocks:
-            return default_blocks[self.context.type_name].get(
-                "blocks_layout", default_result
-            )
+            return default_blocks[self.context.type_name].get("blocks_layout", default_result)
         else:
             return default_result
 

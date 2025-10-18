@@ -2,7 +2,7 @@ databases:
   db:
     storage: postgresql
     transaction_strategy: dbresolve_readcommitted
-    dsn: postgresql://postgres:secret@gcms_dev_pg:5432/guillotina
+    dsn: postgresql://postgres:secret@127.0.0.1:5434/guillotina
     read_only: false
     pool_size: 100
 asgi_server: uvicorn
@@ -19,7 +19,7 @@ applications:
 mailer:
   utility: guillotina.contrib.mailer.utility.PrintingMailerUtility
 host: 0.0.0.0
-address: 8081
+address: 8080
 static:
   - favicon.png: static/favicon.png
   - assets: guillotina:static/assets
@@ -76,28 +76,20 @@ default_blocks:
       tile1:
         '@type': title
       tile2:
-        '@type': description
-      tile3:
-        text: null
-        '@type': text
+        '@type': slate
     blocks_layout:
       items:
       - tile1
       - tile2
-      - tile3
   Container:
     blocks:
       tile1:
         '@type': title
       tile2:
-        '@type': description
-      tile3:
-        text: null
-        '@type': text
+        '@type': slate
     blocks_layout:
       items:
         - tile1
         - tile2
-        - tile3
 allow_discussion_types:
   - Document

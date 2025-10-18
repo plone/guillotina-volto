@@ -20,7 +20,7 @@ init: start-dependencies
 	docker-compose run -e INIT=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml
 
 start: start-dependencies
-	docker-compose run --service-ports guillotina guillotina -c config-dockercompose.yaml
+	docker-compose up --no-deps --force-recreate --abort-on-container-exit guillotina
 
 purge: start-dependencies ## Deletes and resets the DB
 	docker-compose run -e INIT=True -e PURGE=True -e START=False --service-ports guillotina guillotina -c config-dockercompose.yaml
@@ -41,3 +41,17 @@ stop-dependencies: ## Starts dependencies (PG, ES, Redis)
 docker:
 	docker build -t plone/guillotina_volto:latest .
 	docker push plone/guillotina_volto:latest
+
+down:
+	docker-compose down
+
+tests:
+	DATABASE=postgres pytest --cov=guillotina_volto -s -x -v guillotina_volto/tests
+
+start:
+	guillotina serve-reload -c config-local.yaml --port 8081
+
+format:
+	flake8 guillotina_volto --config=setup.cfg
+	isort guillotina_volto/
+	black guillotina_volto

@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
-from guillotina.configure import service
+import logging
+
 from guillotina.behaviors.dublincore import IDublinCore
-from guillotina_volto.interfaces import IVersioning
+from guillotina.configure import service
 from guillotina.interfaces import IResource
 
-import logging
+from guillotina_volto.interfaces import IVersioning
 
 
 logger = logging.getLogger("guillotina_versioning")
@@ -62,9 +63,7 @@ async def get_versions(context, request):
         start = int(start)
     batch_size = size
     while current_annotation_index >= 0 and len(items) < size:
-        annotation = await diffs.get_annotation(
-            context, current_annotation_index, create=False
-        )
+        annotation = await diffs.get_annotation(context, current_annotation_index, create=False)
         if annotation is not None:
             end = max(start - batch_size, 0)
             for idx, item in enumerate(reversed(annotation["items"][end:start])):

@@ -7,9 +7,10 @@ from guillotina.schema import Object
 from guillotina.schema._field import _validate_fields
 from guillotina.schema.exceptions import WrongContainedType
 from guillotina.utils import execute
+from zope.interface import implementer
+
 from guillotina_volto.fields.interfaces import IRichTextField
 from guillotina_volto.fields.interfaces import IRichTextFieldSchema
-from zope.interface import implementer
 
 
 try:
@@ -31,9 +32,7 @@ class RichTextFieldValue(object):
 @implementer(IRichTextField)
 class RichTextField(Object):
     def __init__(self, *args, **kwargs):
-        super(RichTextField, self).__init__(
-            *args, schema=IRichTextFieldSchema, **kwargs
-        )
+        super(RichTextField, self).__init__(*args, schema=IRichTextFieldSchema, **kwargs)
 
     def _validate(self, value):
         if isinstance(value, RichTextFieldValue):
@@ -60,10 +59,7 @@ def field_deserializer(field, value, context):
                 setattr(new_obj, key, get_adapter(f, IJSONToValue, args=[val, context]))
             else:
                 setattr(new_obj, key, None)
-    if (
-        new_obj.data is not None
-        and "guillotina_linkintegrity" in app_settings["applications"]
-    ):
+    if new_obj.data is not None and "guillotina_linkintegrity" in app_settings["applications"]:
         execute.after_request(li.update_links_from_html(context, new_obj.data))
 
     return new_obj

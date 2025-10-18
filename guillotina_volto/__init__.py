@@ -3,8 +3,12 @@ import glob
 
 import yaml
 from guillotina import configure
+from guillotina import directives
+from guillotina.contrib.dbusers.content.users import IUser
 from guillotina.i18n import MessageFactory
 
+
+directives.index_field.apply(IUser, "user_name", type="text")  # pylint: disable=E1101
 
 _ = MessageFactory("guillotina_volto")
 
@@ -19,32 +23,38 @@ app_settings = {
         "guillotina.contrib.mailer",
         "guillotina.contrib.swagger",
         "guillotina.contrib.dbusers",
+        "guillotina_volto.contrib.language",
     ],
     "available_blocks": {},
-    "commands": {
-        "create-container": "guillotina_volto.commands.create.CMSCreateCommand"
-    },
+    "commands": {"create-container": "guillotina_volto.commands.create.CMSCreateCommand"},
     "controlpanels": {
         "image_settings": {
             "title": "Image settings",
+            "schema": "guillotina_volto.interfaces.registry.IImagingSettings",
+            "group": "Content",
+        },
+        "validation_settings": {
+            "title": "Validation settings",
             "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
             "group": "General",
         },
-        "validation_settings": {
-            "title": "Image settings",
-            "schema": "guillotina.contrib.email_validation.interfaces.IValidationSettings",
-            "group": "General",
+        "usergroup": {
+            "title": "User group settings",
+            "schema": "guillotina_volto.interfaces.registry.IUserGroupSettings",
+            "group": "Users",
         },
     },
     "available_roles": [
-        "guillotina.Contributor",
-        "guillotina.Editor",
-        "guillotina.Reader",
-        "guillotina.Reviewer",
-        "guillotina.Owner",
+        "Contributor",
+        "Editor",
+        "Reader",
+        "Reviewer",
+        "SiteAdministrator",
+        "Manager",
     ],
+    "sharing_tab_roles": ["Contributor", "Editor", "Reader", "Reviewer"],
     "layouts": {
-        "CMSFolder": [
+        "Page": [
             "default",
             "listing_view",
             "tabular_view",
@@ -61,18 +71,17 @@ app_settings = {
         "Event": ["document_view", "layout_view", "default"],
         "Link": ["document_view", "layout_view", "default"],
         "File": ["document_view", "layout_view", "default"],
-        "Image": ["document_view", "layout_view", "default"],
+        "Image": ["image_view", "document_view", "layout_view", "default"],
     },
     "workflows_content": {
-        "guillotina.interfaces.IResource": "guillotina_basic",
         "guillotina_volto.content.site.ISite": "guillotina_basic",
         "guillotina_volto.content.document.IDocument": "guillotina_basic",
-        "guillotina_volto.content.image.IImage": "guillotina_basic",
-        "guillotina_volto.content.folder.IFolder": "guillotina_basic",
+        "guillotina_volto.content.page.IPage": "guillotina_basic",
+        "guillotina_volto.contrib.language.interfaces.ILanguageFolder": "guillotina_basic",
     },
     "default_blocks": {
         "Document": {
-            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "text"}},
+            "blocks": {"tile1": {"@type": "title"}, "tile2": {"@type": "slate"}},
             "blocks_layout": {"items": ["tile1", "tile2"]},
         },
         "Site": {
@@ -112,6 +121,7 @@ app_settings = {
         "Item",
         "Container",
         "Folder",
+        "LanguageFolder",
     ],
     "default_allow_discussion": False,
     "allow_discussion_types": [],
@@ -139,6 +149,7 @@ def includeme(root, settings):
     configure.scan("guillotina_volto.install")
     configure.scan("guillotina_volto.subscribers")
     configure.scan("guillotina_volto.blocks")
+    configure.scan("guillotina_volto.contrib.dbusers.adapters")
 
     if "guillotina_elasticsearch" in settings.get("applications", []):
         if "load_utilities" not in settings:

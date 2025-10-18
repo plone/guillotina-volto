@@ -1,8 +1,8 @@
+from guillotina import configure
 from guillotina import error_reasons
 from guillotina.content import get_cached_factory
-from guillotina.response import ErrorResponse
-from guillotina import configure
 from guillotina.interfaces import IResource
+from guillotina.response import ErrorResponse
 
 
 @configure.service(

@@ -5,13 +5,14 @@ from guillotina.interfaces import IResourceSerializeToJson
 from guillotina.interfaces import IResourceSerializeToJsonSummary
 from guillotina.json.serialize_content import SerializeToJson
 from guillotina.json.serialize_value import json_compatible
+from guillotina.profile import profilable
+
 from guillotina_volto.interfaces import ICMSLayer
 from guillotina_volto.interfaces import IFile
+from guillotina_volto.interfaces import IImage
 
 
-@configure.adapter(
-    for_=(IResource, ICMSLayer), provides=IResourceSerializeToJsonSummary
-)
+@configure.adapter(for_=(IResource, ICMSLayer), provides=IResourceSerializeToJsonSummary)
 class DefaultJSONSummarySerializer(object):
     """Default ISerializeToJsonSummary adapter.
 
@@ -24,18 +25,19 @@ class DefaultJSONSummarySerializer(object):
         self.request = request
 
     async def __call__(self):
+        data = {
+            "@id": IAbsoluteURL(self.context)(),
+            "@type": self.context.type_name,
+            "@name": self.context.__name__,
+            "@uid": self.context.uuid,
+            "UID": self.context.uuid,
+            "title": self.context.title,
+        }
+        if hasattr(self.context, "preview_image_link") and self.context.preview_image_link is not None:
+            data["image_scales"] = {"preview_image_link": [self.context.preview_image_link["image_scales"]["image"][0]]}
+            data["image_field"] = "preview_image_link"
 
-        summary = json_compatible(
-            {
-                "@id": IAbsoluteURL(self.context)(),
-                "@type": self.context.type_name,
-                "@name": self.context.__name__,
-                "@uid": self.context.uuid,
-                "UID": self.context.uuid,
-                "title": self.context.title,
-            }
-        )
-        return summary
+        return json_compatible(data)
 
 
 @configure.adapter(for_=(IFile, ICMSLayer), provides=IResourceSerializeToJson)
@@ -47,3 +49,13 @@ class FileJSONSerializer(SerializeToJson):
                 IAbsoluteURL(self.context)(), data["file"]["filename"]
             )
         return data
+
+
+@configure.adapter(for_=(IImage, ICMSLayer), provides=IResourceSerializeToJsonSummary)
+class SerializeFolderToJson(SerializeToJson):
+    @profilable
+    async def __call__(self, include=None, omit=None):
+        include = include or []
+        omit = omit or []
+        result = await super(SerializeFolderToJson, self).__call__(include=include, omit=omit)
+        return result

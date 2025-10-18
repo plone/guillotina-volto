@@ -1,12 +1,12 @@
-# -*- encoding: utf-8 -*-
 from guillotina import configure
 from guillotina.content import Folder
-from guillotina_volto.interfaces import ICMSFolder
+
+from guillotina_volto.contrib.language.interfaces import ILanguageFolder
 
 
 @configure.contenttype(
-    type_name="CMSFolder",
-    schema=ICMSFolder,
+    type_name="LanguageFolder",
+    schema=ILanguageFolder,
     behaviors=[
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
@@ -14,5 +14,5 @@ from guillotina_volto.interfaces import ICMSFolder
         "guillotina_volto.interfaces.blocks.IBlocks",
     ],
 )
-class CMSFolder(Folder):
+class LanguageFolder(Folder):
     pass

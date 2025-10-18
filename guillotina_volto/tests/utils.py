@@ -1,5 +1,5 @@
-import json
 import asyncio
+import json
 
 
 async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
@@ -10,9 +10,7 @@ async def add_content(requester, num_folders=2, num_items=10, base_id="cms-"):
         resp, status = await requester(
             "POST",
             path,
-            data=json.dumps(
-                {"@type": "CMSFolder", "title": "Folder" + str(fidx), "id": folder_id}
-            ),
+            data=json.dumps({"@type": "Page", "title": "Folder" + str(fidx), "id": folder_id}),
         )
         created += 1
         assert status == 201

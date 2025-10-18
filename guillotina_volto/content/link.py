@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 from guillotina import configure
-from guillotina.content import Item
-from guillotina.interfaces import IItem
 from guillotina import schema
-from guillotina_volto import _
+from guillotina.content import Item
 from guillotina.directives import index_field
+from guillotina.interfaces import IItem
+
+from guillotina_volto import _
 
 
 class ILink(IItem):
