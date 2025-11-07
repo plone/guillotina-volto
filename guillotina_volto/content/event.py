@@ -1,9 +1,7 @@
 # -*- encoding: utf-8 -*-
 from guillotina import configure
 from guillotina.content import Item
-
 from guillotina_volto.interfaces import IEvent
-
 
 @configure.contenttype(
     type_name="Event",
@@ -12,6 +10,7 @@ from guillotina_volto.interfaces import IEvent
         "guillotina.behaviors.dublincore.IDublinCore",
         "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
+        "guillotina_volto.interfaces.image.IImagePreviewLinkAttachment"
     ],
     allowed_types=["Image", "File"],  # dynamically calculated
 )

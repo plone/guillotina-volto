@@ -5,30 +5,34 @@ from guillotina.utils import get_current_request
 from guillotina.utils import get_url
 from guillotina.utils import to_str
 from zope.interface import alsoProvides
+from guillotina.utils import get_content_path
 
 from guillotina_volto.fields.interfaces import ICloudImageFileField
 from guillotina_volto.fields.interfaces import IImageFile
 from guillotina_volto.interfaces import IImagingSettings
 
 
-@configure.value_serializer(for_=IImageFile)
-async def json_converter(value):
-    if value is None:
-        return value
-
+def get_image_data(value, context):
+    base_path = ""
     request = get_current_request()
+    if context is not None:
+        base_path = get_content_path(context)
+    else:
+        base_path = get_url(request, request.path)
+
     registry = task_vars.registry.get()
     settings = registry.for_interface(IImagingSettings)
     scales = {}
-    url = get_url(request, request.path)
 
-    if request.method == "POST":
-        url = url + "/" + value.filename.lower().replace(" ", "-")
+    # if request.method == "POST":
+    #     import pdb; pdb.set_trace()
+    # if request.method == "POST" and context is None:
+    #     base_path = base_path + "/" + value.filename.lower().replace(" ", "-")
     # TODO: VIRUALHOSTMONSTER
     for size, dimension in settings["allowed_sizes"].items():
         width, _, height = dimension.partition(":")
         scales[size] = {
-            "download": url + "/@@images/image/" + size,
+            "download": base_path + "/@@images/image/" + size,
             "height": height,
             "width": width,
         }
@@ -39,9 +43,17 @@ async def json_converter(value):
         "size": value.size,
         "extension": value.extension,
         "md5": value.md5,
-        "download": f"{url}/@download/image",
+        "download": f"{base_path}/@download/image",
         "scales": scales,
+        "base_path": base_path,
     }
+
+@configure.value_serializer(for_=IImageFile)
+async def json_converter(value):
+    if value is None:
+        return value
+
+    return get_image_data(value, None)
 
 
 @configure.value_deserializer(ICloudImageFileField)

@@ -18,6 +18,8 @@ from .events import IWorkflowChangedEvent  # noqa
 from .following import IFollowing  # noqa
 from .following import IFollowingMarker  # noqa
 from .image import IHasImage  # noqa
+from .image import IImagePreviewLinkAttachment  # noqa
+from .image import IHasImagePreview  # noqa
 from .pubsub import IPubSubUtility  # noqa
 from .registry import ICustomTheme  # noqa
 from .registry import IImagingSettings  # noqa

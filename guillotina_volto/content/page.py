@@ -13,6 +13,7 @@ from guillotina_volto.interfaces import IPage
         "guillotina.contrib.workflows.interfaces.IWorkflowBehavior",
         "guillotina_volto.interfaces.base.ICMSBehavior",
         "guillotina_volto.interfaces.blocks.IBlocks",
+        "guillotina_volto.interfaces.image.IImagePreviewLinkAttachment"
     ],
 )
 class Page(Folder):

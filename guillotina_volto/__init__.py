@@ -77,6 +77,7 @@ app_settings = {
         "guillotina_volto.content.site.ISite": "guillotina_basic",
         "guillotina_volto.content.document.IDocument": "guillotina_basic",
         "guillotina_volto.content.page.IPage": "guillotina_basic",
+        "guillotina_volto.content.page.IEvent": "guillotina_basic",
         "guillotina_volto.contrib.language.interfaces.ILanguageFolder": "guillotina_basic",
     },
     "default_blocks": {

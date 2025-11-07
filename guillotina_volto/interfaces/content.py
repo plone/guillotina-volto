@@ -32,46 +32,20 @@ class IDocument(IFolder):
 
 
 class IPage(IFolder):
-    index_field("preview_caption_link", store=True, type="text")
-    fieldset_field("preview_caption_link", "preview_image")
-    preview_caption_link = TextLine(title="Preview image caption", required=False)
-    index_field("preview_image_link", store=True, type="object")
-    fieldset_field("preview_image_link", "preview_image")
-    preview_image_link = JSONField(
-        title="Preview image",
-        description="Select an image that will be used in listing and teaser blocks.",
-        required=False,
-        widgetOptions={
-            "frontendOptions": {"widget": "object_browser", "widgetProps": {"mode": "image", "return": "single"}}
-        },
-    )
-
-
-@index.with_accessor(IPage, "image_field", type="text")
-async def get_image_field(ob):
-    return "preview_image_link"
-
-
-@index.with_accessor(IPage, "image_scales", type="object")
-async def get_image_scales(ob):
-    if ob.preview_image_link is not None and "image_scales" in ob.preview_image_link:
-        return {"preview_image_link": [ob.preview_image_link["image_scales"]["image"][0]]}
-
-
-@index.with_accessor(IPage, "hasPreviewImage", type="boolean")
-def get_has_preview_image(ob):
-    return ob.preview_image_link is not None
-
+    pass
 
 class IImage(IItem, IHasImage):
     fieldset_field("image", "default")
     image = CloudImageFileField(title="Image", required=False, widget="file")
 
-    index_field("image_field", store=True, type="text")
+    index_field("image_field", store=True, type="text") ## No ho indexa sino hi ha valor, revisar
     image_field = TextLine(title="Image field", required=False, readonly=True, missing_value="image")
 
+@index.with_accessor(IImage, "image_field", type="text", field="image")
+async def get_image_field_image_type(ob):
+    return "image"
 
-@index.with_accessor(IImage, "image_scales", type="object")
+@index.with_accessor(IImage, "image_scales", type="object", field="image")
 async def get_image_scales_image_type(ob):
     if ob.image is not None:
         task_request = task_vars.request.get()
